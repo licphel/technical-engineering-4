@@ -1,0 +1,17 @@
+{
+  "type": "ten4:induction_furnace",
+  "inputs": [
+    {
+      "item": "minecraft:quartz"
+    },
+    {
+      "item": "ten4:cable"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:cable_quartz"
+    }
+  ],
+  "time": 50
+}

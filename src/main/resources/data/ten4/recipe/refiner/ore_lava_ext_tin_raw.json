@@ -1,0 +1,23 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item_tag": "c:raw_materials/tin"
+    },
+    {
+      "amount": 10,
+      "fluid": "minecraft:lava"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 2,
+      "item": "ten4:tin_ingot"
+    },
+    {
+      "item": "ten4:tin_ingot",
+      "chance": 0.25
+    }
+  ],
+  "time": 200
+}

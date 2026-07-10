@@ -1,0 +1,6 @@
+{
+  "parent": "ten4:block/pipe/pco",
+  "textures": {
+    "texture": "ten4:block/machine/pipe"
+  }
+}

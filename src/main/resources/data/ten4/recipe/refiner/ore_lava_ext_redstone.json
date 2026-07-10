@@ -1,0 +1,28 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item_tag": "c:ores/redstone"
+    },
+    {
+      "amount": 20,
+      "fluid": "minecraft:lava"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 5,
+      "item": "minecraft:redstone"
+    },
+    {
+      "chance": 0.75,
+      "item": "minecraft:redstone",
+      "count": 2
+    },
+    {
+      "item": "minecraft:redstone",
+      "chance": 0.45
+    }
+  ],
+  "time": 200
+}

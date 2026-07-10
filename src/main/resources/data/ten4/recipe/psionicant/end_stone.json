@@ -1,0 +1,17 @@
+{
+  "type": "ten4:psionicant",
+  "inputs": [
+    {
+      "item_tag": "c:stone"
+    },
+    {
+      "item": "minecraft:chorus_fruit"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:end_stone"
+    }
+  ],
+  "time": 100
+}

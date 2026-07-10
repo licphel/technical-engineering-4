@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/nickel"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:nickel_dust"
+    }
+  ],
+  "time": 100
+}

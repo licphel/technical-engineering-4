@@ -1,0 +1,18 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item": "ten4:redstone_ai"
+    },
+    {
+      "amount": 20,
+      "fluid": "ten4:liquid_bizarrerie"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:redstone_ai_advanced"
+    }
+  ],
+  "time": 200
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EBE",
+    "DAD",
+    "EBE"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:redstone"
+    },
+    "B": {
+      "tag": "c:gears/copper"
+    },
+    "D": {
+      "tag": "c:glass"
+    },
+    "E": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "ten4:augmented_levelup"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AA ",
+    " AA",
+    "AA "
+  ],
+  "key": {
+    "A": {
+      "tag": "c:ingots/tin"
+    }
+  },
+  "result": {
+    "item": "ten4:mould_string"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item": "minecraft:magma_block"
+    }
+  ],
+  "outputs": [
+    {
+      "amount": 100,
+      "fluid": "minecraft:lava"
+    }
+  ],
+  "time": 100
+}

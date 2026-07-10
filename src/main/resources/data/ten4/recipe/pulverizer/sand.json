@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "c:gravel"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "time": 120
+}

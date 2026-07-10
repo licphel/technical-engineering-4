@@ -1,0 +1,8 @@
+{
+  "itemGroup.ten4.block": "Technical Engineering IV - Blocks",
+  "itemGroup.ten4.device": "Technical Engineering IV - Devices",
+  "itemGroup.ten4.material": "Technical Engineering IV - Materials",
+  "itemGroup.ten4.tool": "Technical Engineering IV - Tools",
+
+  "ten4.gui.device.augment_label": "Augments"
+}

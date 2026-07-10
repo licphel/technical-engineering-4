@@ -1,0 +1,17 @@
+{
+  "type": "ten4:induction_furnace",
+  "inputs": [
+    {
+      "item": "ten4:pipe"
+    },
+    {
+      "item": "minecraft:obsidian"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:pipe_black"
+    }
+  ],
+  "time": 50
+}

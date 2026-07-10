@@ -1,0 +1,23 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item_tag": "c:ores/copper"
+    },
+    {
+      "amount": 20,
+      "fluid": "minecraft:lava"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 3,
+      "item": "minecraft:copper_ingot"
+    },
+    {
+      "item": "minecraft:copper_ingot",
+      "chance": 0.5
+    }
+  ],
+  "time": 300
+}

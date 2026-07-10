@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "c:ores/gold"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 2,
+      "item": "ten4:gold_dust"
+    },
+    {
+      "item": "minecraft:gravel",
+      "chance": 0.2
+    }
+  ],
+  "time": 180
+}

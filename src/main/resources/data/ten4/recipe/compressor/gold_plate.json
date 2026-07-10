@@ -1,0 +1,17 @@
+{
+  "type": "ten4:compressor",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/gold"
+    },
+    {
+      "item": "ten4:mould_plate"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:gold_plate"
+    }
+  ],
+  "time": 100
+}

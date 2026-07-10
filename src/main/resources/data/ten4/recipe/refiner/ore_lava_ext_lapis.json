@@ -1,0 +1,28 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item_tag": "c:ores/lapis"
+    },
+    {
+      "amount": 20,
+      "fluid": "minecraft:lava"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 3,
+      "item": "minecraft:lapis_lazuli"
+    },
+    {
+      "chance": 0.65,
+      "item": "minecraft:lapis_lazuli",
+      "count": 2
+    },
+    {
+      "item": "minecraft:lapis_lazuli",
+      "chance": 0.35
+    }
+  ],
+  "time": 200
+}

@@ -1,0 +1,18 @@
+{
+  "type": "ten4:compressor",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/chlorium",
+      "count": 4
+    },
+    {
+      "item": "ten4:mould_gear"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:chlorium_gear"
+    }
+  ],
+  "time": 100
+}

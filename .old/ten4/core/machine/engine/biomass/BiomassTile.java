@@ -1,0 +1,56 @@
+package ten4.core.machine.engine.biomass;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.fluids.FluidStack;
+import ten4.core.machine.engine.MatchFuel;
+import ten4.lib.tile.extension.CmTileEngine;
+import ten4.lib.tile.mac.IngredientType;
+import ten4.lib.wrapper.SlotCm;
+
+public class BiomassTile extends CmTileEngine
+{
+
+    public BiomassTile(BlockPos pos, BlockState state)
+    {
+
+        super(pos, state);
+
+        info.setCap(kFE(80));
+        setEfficiency(80);
+        addSlot(new SlotCm(this, 0, 43, 36));
+    }
+
+    public IngredientType slotType(int slot)
+    {
+        return IngredientType.INPUT;
+    }
+
+    public boolean valid(int slot, ItemStack stack)
+    {
+        return MatchFuel.matchFuelAndShrinkPlant(stack, true) > 0;
+    }
+
+    public IngredientType tankType(int tank)
+    {
+        return IngredientType.IGNORE;
+    }
+
+    public boolean valid(int slot, FluidStack stack)
+    {
+        return true;
+    }
+
+    public int inventorySize()
+    {
+        return 1;
+    }
+
+    @Override
+    public int matchFuelAndShrink(ItemStack stack, boolean simulate)
+    {
+        return MatchFuel.matchFuelAndShrinkPlant(stack, simulate);
+    }
+
+}

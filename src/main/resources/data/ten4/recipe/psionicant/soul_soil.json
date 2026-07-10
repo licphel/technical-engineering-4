@@ -1,0 +1,17 @@
+{
+  "type": "ten4:psionicant",
+  "inputs": [
+    {
+      "item": "minecraft:dirt"
+    },
+    {
+      "item": "minecraft:nether_wart"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:soul_soil"
+    }
+  ],
+  "time": 100
+}

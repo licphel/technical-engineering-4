@@ -1,0 +1,15 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item": "ten4:bizarrerie"
+    }
+  ],
+  "outputs": [
+    {
+      "amount": 100,
+      "fluid": "ten4:liquid_bizarrerie"
+    }
+  ],
+  "time": 50
+}

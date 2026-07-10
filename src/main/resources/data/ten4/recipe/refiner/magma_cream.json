@@ -1,0 +1,22 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "amount": 50,
+      "fluid": "minecraft:lava"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:magma_cream"
+    },
+    {
+      "amount": 50,
+      "fluid": "minecraft:water"
+    }
+  ],
+  "time": 200
+}

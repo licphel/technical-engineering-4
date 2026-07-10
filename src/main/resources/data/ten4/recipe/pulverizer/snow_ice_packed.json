@@ -1,0 +1,15 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item": "minecraft:packed_ice"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 4,
+      "item": "minecraft:snow_block"
+    }
+  ],
+  "time": 120
+}

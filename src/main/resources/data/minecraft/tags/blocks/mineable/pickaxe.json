@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "ten4:nickel_ore",
+    "ten4:tin_ore",
+    "ten4:deep_nickel_ore",
+    "ten4:deep_tin_ore",
+    "ten4:nickel_block",
+    "ten4:tin_block",
+    "ten4:raw_nickel_block",
+    "ten4:raw_tin_block",
+    "ten4:powered_tin_block",
+    "ten4:chlorium_block",
+    "#ten4:machines"
+  ]
+}

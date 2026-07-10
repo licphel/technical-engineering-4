@@ -1,0 +1,14 @@
+{
+  "type": "ten4:induction_furnace",
+  "inputs": [
+    {
+      "item_tag": "c:sand"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:glass"
+    }
+  ],
+  "time": 50
+}

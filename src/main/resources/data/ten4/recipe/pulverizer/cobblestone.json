@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "c:stone"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:cobblestone"
+    }
+  ],
+  "time": 120
+}

@@ -1,0 +1,17 @@
+{
+  "type": "ten4:induction_furnace",
+  "inputs": [
+    {
+      "item": "ten4:azure_glass"
+    },
+    {
+      "item": "ten4:cable"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:cable_azure"
+    }
+  ],
+  "time": 50
+}

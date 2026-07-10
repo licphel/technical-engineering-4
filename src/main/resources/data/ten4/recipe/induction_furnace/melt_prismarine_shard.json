@@ -1,0 +1,15 @@
+{
+  "type": "ten4:induction_furnace",
+  "inputs": [
+    {
+      "count": 2,
+      "item": "minecraft:prismarine_shard"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:prismarine_crystals"
+    }
+  ],
+  "time": 50
+}

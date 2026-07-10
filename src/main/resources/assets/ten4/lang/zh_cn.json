@@ -1,0 +1,8 @@
+{
+  "itemGroup.ten4.block": "科能工程 4 - 方块",
+  "itemGroup.ten4.device": "科能工程 4 - 机器",
+  "itemGroup.ten4.material": "科能工程 4 - 材料",
+  "itemGroup.ten4.tool": "科能工程 4 - 工具",
+
+  "ten4.gui.device.augment_label": "升级"
+}

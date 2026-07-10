@@ -1,0 +1,17 @@
+{
+  "type": "ten4:psionicant",
+  "inputs": [
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item_tag": "c:dyes/yellow"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:glowstone_dust"
+    }
+  ],
+  "time": 300
+}

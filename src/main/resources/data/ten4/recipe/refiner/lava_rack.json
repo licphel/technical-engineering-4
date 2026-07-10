@@ -1,0 +1,15 @@
+{
+  "type": "ten4:refiner",
+  "inputs": [
+    {
+      "item_tag": "c:netherrack"
+    }
+  ],
+  "outputs": [
+    {
+      "amount": 5,
+      "fluid": "minecraft:lava"
+    }
+  ],
+  "time": 80
+}

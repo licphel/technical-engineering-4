@@ -1,0 +1,22 @@
+package com.hypothetic.ten4.device;
+
+import com.hypothetic.ten4.lib.client.DeviceScreen;
+import com.hypothetic.ten4.lib.client.BuiltinComponents;
+import com.hypothetic.ten4.lib.container.ContainerMenu;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+
+public class HeatGeneratorScreen extends DeviceScreen {
+  public HeatGeneratorScreen(ContainerMenu menu, Inventory inv, Component title, ResourceLocation bg) {
+    super(menu, inv, title, bg);
+  }
+
+  @Override
+  protected void buildElements() {
+    super.buildElements();
+
+    add(BuiltinComponents.energyGauge(120, 18, menu.fieldsReader()));
+    add(BuiltinComponents.fuelGauge(80, 36, menu.fieldsReader()));
+  }
+}

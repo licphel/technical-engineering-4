@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "ten4:chlorium_dust"
+  },
+  "result": "ten4:chlorium_ingot",
+  "experience": 0,
+  "cookingtime": 200
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "ten4:nickel_dust"
+  },
+  "result": "ten4:nickel_ingot",
+  "experience": 0,
+  "cookingtime": 100
+}

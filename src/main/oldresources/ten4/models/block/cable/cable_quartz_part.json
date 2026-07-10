@@ -1,0 +1,6 @@
+{
+  "parent": "ten4:block/cable/ccp",
+  "textures": {
+    "texture": "ten4:block/machine/cable_quartz"
+  }
+}

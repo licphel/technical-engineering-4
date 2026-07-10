@@ -1,0 +1,17 @@
+{
+  "type": "ten4:induction_furnace",
+  "inputs": [
+    {
+      "item": "ten4:pipe"
+    },
+    {
+      "item_tag": "c:dusts/powered_tin"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:pipe_white"
+    }
+  ],
+  "time": 50
+}

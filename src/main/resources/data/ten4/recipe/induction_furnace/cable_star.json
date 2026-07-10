@@ -1,0 +1,17 @@
+{
+  "type": "ten4:induction_furnace",
+  "inputs": [
+    {
+      "item": "ten4:bizarrerie"
+    },
+    {
+      "item": "ten4:cable"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:cable_star"
+    }
+  ],
+  "time": 50
+}

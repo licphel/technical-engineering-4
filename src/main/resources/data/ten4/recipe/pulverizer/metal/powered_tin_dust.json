@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/powered_tin"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:powered_tin_dust"
+    }
+  ],
+  "time": 100
+}

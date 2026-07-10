@@ -1,0 +1,7 @@
+{
+  "parent": "ten4:block/mac/engine",
+  "textures": {
+    "side": "ten4:block/machine/engine/engine_biomass",
+    "bot": "ten4:block/machine/engine/engine_biomass_bottom"
+  }
+}

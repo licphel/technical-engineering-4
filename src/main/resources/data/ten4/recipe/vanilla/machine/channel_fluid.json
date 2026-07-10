@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "CBC",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "tag": "c:glass"
+    },
+    "B": {
+      "item": "ten4:detector"
+    },
+    "C": {
+      "tag": "c:ingots/gold"
+    }
+  },
+  "result": {
+    "item": "ten4:channel_fluid",
+    "count": 2
+  }
+}
