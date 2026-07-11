@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.client;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.device.HeatGeneratorScreen;
-import com.hypothetic.ten4.device.PulverizerScreen;
+import com.hypothetic.ten4.core.device.HeatGeneratorScreen;
+import com.hypothetic.ten4.core.device.PulverizerScreen;
 import com.hypothetic.ten4.init.ModMenus;
 import com.hypothetic.ten4.lib.container.ContainerMenu;
 import net.minecraft.network.chat.Component;

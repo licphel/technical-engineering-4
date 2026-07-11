@@ -3,8 +3,9 @@ package com.hypothetic.ten4.lib.blockentity;
 import com.hypothetic.ten4.Ten4;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.StringRepresentable;
 
-public enum ComparatorMode {
+public enum ComparatorMode implements StringRepresentable {
   OFF,
   ENERGY,
   OUTPUT_ITEMS,
@@ -38,5 +39,10 @@ public enum ComparatorMode {
 
   public MutableComponent getDesc() {
     return Component.translatable(Ten4.getLangKey("misc.comparator_mode." + this + ".desc"));
+  }
+
+  @Override
+  public String getSerializedName() {
+    return toString();
   }
 }

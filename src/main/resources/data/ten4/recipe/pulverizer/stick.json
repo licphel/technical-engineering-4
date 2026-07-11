@@ -1,0 +1,15 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "minecraft:planks"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 2,
+      "item": "minecraft:stick"
+    }
+  ],
+  "time": 200
+}

@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "c:plates/gold"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:gold_dust"
+    }
+  ],
+  "time": 100
+}

@@ -5,7 +5,7 @@
   "ten4.creative_mode_tab.tool": "Technical Engineering IV - Tools",
 
   "ten4.misc.info_label": "Information",
-  "ten4.misc.sigmode_label": "Configurations",
+  "ten4.misc.sigmode_label": "Configs",
   "ten4.misc.io_label": "Input/Output",
   "ten4.misc.augment_label": "Augments",
 
@@ -32,9 +32,10 @@
   "ten4.misc.comparator_mode.output_fluid.desc": "Based on how full the output fluid tanks are.",
   "ten4.misc.comparator_mode.active.desc": "Output when active, otherwise not.",
 
-  "ten4.misc.request_rate": "Request Rate: ",
-  "ten4.misc.request_rate.desc": "The tick count between each two push and pull.",
+  "ten4.misc.request_interval": "Request Interval: ",
+  "ten4.misc.request_interval.desc": "The tick interval between each two push and pull.",
 
+  "ten4.misc.facemode": "Mode: ",
   "ten4.misc.facemode.off": "Off",
   "ten4.misc.facemode.passive_bipass": "Passive, Bi-pass",
   "ten4.misc.facemode.passive_input": "Passive, Input",
@@ -65,11 +66,27 @@
   "ten4.misc.north": "North Side",
   "ten4.misc.south": "South Side",
 
+  "ten4.misc.connection_type": "Connection Type: ",
+  "ten4.misc.connection_type.none": "None",
+  "ten4.misc.connection_type.normal": "Normal",
+  "ten4.misc.connection_type.push": "Push",
+  "ten4.misc.connection_type.pull": "Pull",
+
   "ten4.misc.enabled": "Enabled",
   "ten4.misc.disabled": "Disabled",
 
-  "ten4.device.pulverizer": "Pulverizer",
-  "ten4.device.pulverizer.desc": "Pulverizes ores and metals into dusts, packed ice into snow, etc.",
-  "ten4.device.heat_generator": "Heat Generator",
-  "ten4.device.heat_generator.desc": "Generates energy by burning fuels."
+  "ten4.pulverizer": "Pulverizer",
+  "ten4.pulverizer.desc": "Pulverizes ores and metals into dusts, packed ice into snow, etc.",
+  "ten4.heat_generator": "Heat Generator",
+  "ten4.heat_generator.desc": "Generates energy by burning fuels.",
+
+  "block.ten4.pulverizer": "Pulverizer",
+  "block.ten4.heat_generator": "Heat Generator",
+
+  "item.ten4.iron_dust": "Iron Dust",
+  "item.ten4.iron_plate": "Iron Plate",
+  "item.ten4.copper_dust": "Copper Dust",
+  "item.ten4.copper_plate": "Copper Plate",
+  "item.ten4.gold_dust": "Gold Dust",
+  "item.ten4.gold_plate": "Gold Plate"
 }

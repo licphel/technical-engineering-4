@@ -15,7 +15,7 @@ public final class BuiltinSyncedFields {
   public static final SyncedField<Integer> FLUID_FACES = SyncedField.ofInt("fluid_faces");
   public static final SyncedField<Boolean> STRICT_INPUT = SyncedField.ofBool("strict_input");
   public static final SyncedField<Integer> COMPARATOR_MODE = SyncedField.ofInt("comparator_mode");
-  public static final SyncedField<Integer> REQUEST_RATE = SyncedField.ofInt("request_rate");
+  public static final SyncedField<Integer> REQUEST_INTERVAL = SyncedField.ofInt("request_interval");
 
   private BuiltinSyncedFields() {
   }

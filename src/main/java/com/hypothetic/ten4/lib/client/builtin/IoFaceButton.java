@@ -1,5 +1,6 @@
 package com.hypothetic.ten4.lib.client.builtin;
 
+import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.lib.blockentity.FaceMode;
 import com.hypothetic.ten4.lib.blockentity.FaceModePacker;
 import com.hypothetic.ten4.lib.client.DeviceScreen;
@@ -11,6 +12,7 @@ import com.hypothetic.ten4.lib.util.RenderHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -88,7 +90,10 @@ class IoFaceButton extends Button {
   public void onCollectingTooltips(List<Component> tooltips) {
     super.onCollectingTooltips(tooltips);
 
-    tooltips.add(state.get(dir).getComponent());
+    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.facemode"));
+    mc.append(state.get(dir).getComponent());
+    tooltips.add(mc);
+    tooltips.add(Component.translatable(Ten4.getLangKey("misc." + relSide)).withStyle(ChatFormatting.GRAY));
     tooltips.add(state.get(dir).getDesc().withStyle(ChatFormatting.GRAY));
   }
 }

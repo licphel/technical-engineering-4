@@ -39,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public abstract class AbstractDeviceBlockEntity extends BlockEntity
-    implements IDropContent, IInfoProvider, IDirectionalEnergyProvider, IDirectionalFluidProvider, IDirectionalItemProvider, MenuProvider {
+    implements ILootProvider, IDescriptionProvider, IDirectionalEnergyProvider, IDirectionalFluidProvider, IDirectionalItemProvider, MenuProvider {
   public static final int BASE_ENERGY_CAPACITY = 10_000;
   public static final int BASE_FLUID_CAPACITY = 10_000;
   public static final int BASE_ITEM_TRANSPORTATION = 1;
@@ -82,7 +82,8 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
   protected SignalMode sigMode = SignalMode.IGNORE;
   protected boolean strictInput = false;
   protected ComparatorMode comparatorMode = ComparatorMode.ENERGY;
-  protected int requestRate = 1;
+  protected int requestInterval = 1;
+  protected int delayPushBuffer;
 
   public AbstractDeviceBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
@@ -96,7 +97,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     syncer.register(BuiltinSyncedFields.SIG_MODE);
     syncer.register(BuiltinSyncedFields.STRICT_INPUT);
     syncer.register(BuiltinSyncedFields.COMPARATOR_MODE);
-    syncer.register(BuiltinSyncedFields.REQUEST_RATE);
+    syncer.register(BuiltinSyncedFields.REQUEST_INTERVAL);
 
     syncer.seal();
     active = getBlockState().hasProperty(BuiltinBlockStates.ACTIVE)
@@ -185,12 +186,12 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     this.comparatorMode = comparatorMode;
   }
 
-  public int getRequestRate() {
-    return requestRate;
+  public int getRequestInterval() {
+    return requestInterval;
   }
 
-  public void setRequestRate(int v) {
-    requestRate = Math.max(1, v);
+  public void setRequestInterval(int v) {
+    requestInterval = Math.max(1, v);
   }
 
   @Override
@@ -305,11 +306,19 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     }
   }
 
+  protected void delayPushFor(int ticks) {
+    delayPushBuffer = ticks;
+  }
+
   protected void queuedPushPull() {
     if (level == null || level.isClientSide()) {
       return;
     }
-    if (level.getGameTime() % (requestRate = Math.max(1, requestRate)) != 0) {
+    if (delayPushBuffer > 0) {
+      delayPushBuffer--;
+      return;
+    }
+    if (level.getGameTime() % (requestInterval = Math.max(1, requestInterval)) != 0) {
       return;
     }
 
@@ -396,7 +405,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     syncer.set(BuiltinSyncedFields.FLUID_FACES, packFaces(fluidFaceConfig));
     syncer.set(BuiltinSyncedFields.SIG_MODE, sigMode.ordinal());
     syncer.set(BuiltinSyncedFields.ACTIVE, active);
-    syncer.set(BuiltinSyncedFields.REQUEST_RATE, requestRate);
+    syncer.set(BuiltinSyncedFields.REQUEST_INTERVAL, requestInterval);
     syncer.set(BuiltinSyncedFields.COMPARATOR_MODE, comparatorMode.ordinal());
     syncer.set(BuiltinSyncedFields.STRICT_INPUT, strictInput);
   }
@@ -433,9 +442,11 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     }
 
     sigMode = SignalMode.of(cfg.getInt("SigMode"));
-    requestRate = cfg.getInt("RequestRate");
+    requestInterval = cfg.getInt("RequestInterval");
     strictInput = cfg.getBoolean("StrictInput");
     comparatorMode = cfg.contains("ComparatorMode") ? ComparatorMode.of(cfg.getInt("ComparatorMode")) : ComparatorMode.ENERGY;
+
+    delayPushBuffer = tag.getInt("DelayPushBuffer");
   }
 
   @Override
@@ -454,10 +465,12 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     }
 
     cfg.putInt("SigMode", sigMode.ordinal());
-    cfg.putInt("RequestRate", requestRate);
+    cfg.putInt("RequestInterval", requestInterval);
     cfg.putBoolean("StrictInput", strictInput);
     cfg.putInt("ComparatorMode", comparatorMode.ordinal());
     tag.put("Configuration", cfg);
+
+    tag.putInt("DelayPushBuffer", delayPushBuffer);
   }
 
   public abstract int getBasicEfficiency();

@@ -18,7 +18,7 @@ public record DeviceConfigPayload(BlockPos pos, int key, int value) implements C
   public static final int SIGNAL_MODE = 0;
   public static final int STRICT_INPUT = 1;
   public static final int COMPARATOR_MODE = 2;
-  public static final int REQUEST_RATE = 3;
+  public static final int REQUEST_INTERVAL = 3;
   public static final StreamCodec<RegistryFriendlyByteBuf, DeviceConfigPayload> CODEC = new StreamCodec<>() {
     @Override
     public DeviceConfigPayload decode(RegistryFriendlyByteBuf buf) {
@@ -43,7 +43,7 @@ public record DeviceConfigPayload(BlockPos pos, int key, int value) implements C
             case SIGNAL_MODE -> device.setSigMode(SignalMode.of(pkt.value));
             case STRICT_INPUT -> device.setStrictInput(pkt.value != 0);
             case COMPARATOR_MODE -> device.setComparatorMode(ComparatorMode.of(pkt.value));
-            case REQUEST_RATE -> device.setRequestRate(pkt.value);
+            case REQUEST_INTERVAL -> device.setRequestInterval(pkt.value);
           }
         }
       }

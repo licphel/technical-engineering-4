@@ -3,10 +3,11 @@ package com.hypothetic.ten4.lib.blockentity;
 import com.hypothetic.ten4.Ten4;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.StringRepresentable;
 
 import java.util.List;
 
-public enum FaceMode {
+public enum FaceMode implements StringRepresentable {
   OFF,
   ACTIVE_INPUT,
   ACTIVE_OUTPUT,
@@ -65,5 +66,10 @@ public enum FaceMode {
       case 5 -> PASSIVE_BIPASS;
       default -> OFF;
     };
+  }
+
+  @Override
+  public String getSerializedName() {
+    return toString();
   }
 }

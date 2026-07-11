@@ -21,8 +21,8 @@ import java.util.function.Supplier;
 
 public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
   public static final int DEFAULT_TIME = 150;
-  private static final Codec<List<CombinedIngredient>> INGREDIENT_LIST_CODEC =
-      CombinedIngredient.CODEC.listOf();
+  private static final Codec<List<RecipeEntry>> INGREDIENT_LIST_CODEC =
+      RecipeEntry.CODEC.listOf();
   private final Supplier<RecipeType<?>> recipeType;
   private final MapCodec<ModRecipe> codec;
   private final StreamCodec<RegistryFriendlyByteBuf, ModRecipe> streamCodec;
@@ -37,11 +37,11 @@ public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
     this.streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
   }
 
-  private static List<CombinedIngredient> readIngredientList(JsonObject json, String key) {
-    List<CombinedIngredient> list = new ArrayList<>();
+  private static List<RecipeEntry> readIngredientList(JsonObject json, String key) {
+    List<RecipeEntry> list = new ArrayList<>();
     JsonArray arr = GsonHelper.getAsJsonArray(json, key);
     for (JsonElement e : arr) {
-      list.add(CombinedIngredient.fromJson(e.getAsJsonObject()));
+      list.add(RecipeEntry.fromJson(e.getAsJsonObject()));
     }
     return list;
   }
@@ -57,19 +57,19 @@ public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
   }
 
   public ModRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-    List<CombinedIngredient> inputs = readIngredientList(json, "inputs");
-    List<CombinedIngredient> outputs = readIngredientList(json, "outputs");
+    List<RecipeEntry> inputs = readIngredientList(json, "inputs");
+    List<RecipeEntry> outputs = readIngredientList(json, "outputs");
     int time = JsonParser.getIntOr(json, "time", DEFAULT_TIME);
     return createRecipe(inputs, outputs, time, recipeId);
   }
 
   private void toNetwork(RegistryFriendlyByteBuf buf, ModRecipe recipe) {
     buf.writeVarInt(recipe.inputs.size());
-    for (CombinedIngredient ing : recipe.inputs) {
+    for (RecipeEntry ing : recipe.inputs) {
       ing.writeTo(buf);
     }
     buf.writeVarInt(recipe.outputs.size());
-    for (CombinedIngredient ing : recipe.outputs) {
+    for (RecipeEntry ing : recipe.outputs) {
       ing.writeTo(buf);
     }
     buf.writeVarInt(recipe.time);
@@ -77,22 +77,22 @@ public class ModRecipeSerializer implements RecipeSerializer<ModRecipe> {
 
   private ModRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
     int inSize = buf.readVarInt();
-    List<CombinedIngredient> inputs = new ArrayList<>();
+    List<RecipeEntry> inputs = new ArrayList<>();
     for (int i = 0; i < inSize; i++) {
-      inputs.add(CombinedIngredient.fromNetwork(buf));
+      inputs.add(RecipeEntry.fromNetwork(buf));
     }
 
     int outSize = buf.readVarInt();
-    List<CombinedIngredient> outputs = new ArrayList<>();
+    List<RecipeEntry> outputs = new ArrayList<>();
     for (int i = 0; i < outSize; i++) {
-      outputs.add(CombinedIngredient.fromNetwork(buf));
+      outputs.add(RecipeEntry.fromNetwork(buf));
     }
 
     int time = buf.readVarInt();
     return createRecipe(inputs, outputs, time, null);
   }
 
-  private ModRecipe createRecipe(List<CombinedIngredient> inputs, List<CombinedIngredient> outputs,
+  private ModRecipe createRecipe(List<RecipeEntry> inputs, List<RecipeEntry> outputs,
                                  int time, @Nullable ResourceLocation id) {
     ModRecipe recipe = new ModRecipe(
         id != null ? id : Ten4.id("dynamic"),

@@ -3,11 +3,12 @@ package com.hypothetic.ten4.lib.blockentity.device;
 import com.hypothetic.ten4.lib.blockentity.ITickable;
 import com.hypothetic.ten4.lib.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.lib.container.sync.Syncer;
-import com.hypothetic.ten4.lib.recipe.CombinedIngredient;
+import com.hypothetic.ten4.lib.recipe.RecipeEntry;
 import com.hypothetic.ten4.lib.recipe.ModRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -49,20 +50,38 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   public int getComparatorSignal() {
     return switch (comparatorMode) {
       case OUTPUT_ITEMS -> {
-        int count = 0, max = 0;
-        for (int i : outputSlots) {
-          count += inventory.getStackInSlot(i).getCount();
-          max += inventory.getSlotLimit(i);
+        if (outputSlots.isEmpty()) {
+          yield  0;
         }
-        yield max > 0 ? (int) (14L * count / max) + 1 : 0;
+
+        float f = 0.0F;
+
+        for (int i : outputSlots) {
+          ItemStack itemstack = inventory.getItem(i);
+          if (!itemstack.isEmpty()) {
+            f += (float) itemstack.getCount() / (float) inventory.getSlotLimit(i);
+          }
+        }
+
+        f /= (float) outputSlots.size();
+        yield Mth.lerpDiscrete(f, 0, 15);
       }
       case OUTPUT_FLUID -> {
-        int amt = 0, max = 0;
-        for (int i : outputTanks) {
-          amt += fluidTanks.getTank(i).getFluidAmount();
-          max += fluidTanks.getTank(i).getCapacity();
+        if (outputTanks.isEmpty()) {
+          yield  0;
         }
-        yield max > 0 ? (int) (14L * amt / max) + 1 : 0;
+
+        float f = 0.0F;
+
+        for (int i : outputTanks) {
+          FluidStack s = fluidTanks.getFluidInTank(i);
+          if (!s.isEmpty()) {
+            f += (float) s.getAmount() / (float) fluidTanks.getTankCapacity(i);
+          }
+        }
+
+        f /= (float) outputTanks.size();
+        yield Mth.lerpDiscrete(f, 0, 15);
       }
       default -> super.getComparatorSignal();
     };
@@ -80,7 +99,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
 
     return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
         .anyMatch(h -> {
-          for (CombinedIngredient in : h.value().itemInputs()) {
+          for (RecipeEntry in : h.value().itemInputs()) {
             if (in.test(stack)) {
               return true;
             }
@@ -122,6 +141,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
 
       if (recipe == null || lastRecipe != recipe) {
         progress = 0;
+        setActive(false);
         setChanged();
         return;
       }
@@ -158,7 +178,8 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     if (recipe == null) {
       return true;
     }
-    for (ItemStack s : recipe.itemOutputs()) {
+    for (RecipeEntry entry : recipe.itemOutputs()) {
+      ItemStack s = entry.symbolItem();
       if (s.isEmpty()) {
         continue;
       }
@@ -166,7 +187,8 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
         return false;
       }
     }
-    for (FluidStack f : recipe.fluidOutputs()) {
+    for (RecipeEntry entry : recipe.fluidOutputs()) {
+      FluidStack f = entry.symbolFluid();
       if (f.isEmpty()) {
         continue;
       }
@@ -179,6 +201,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
 
   protected void finish() {
     assert recipe != null;
+    delayPushFor(2); // For comparator signal propagation
 
     for (ItemStack s : recipe.generateItems()) {
       if (!s.isEmpty()) {
@@ -212,7 +235,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   protected void shrinkInputs() {
     assert recipe != null;
 
-    for (CombinedIngredient in : recipe.itemInputs()) {
+    for (RecipeEntry in : recipe.itemInputs()) {
       int n = in.count();
       for (Integer i : inputSlots) {
         ItemStack s = inventory.getStackInSlot(i);
@@ -223,7 +246,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
         }
       }
     }
-    for (CombinedIngredient in : recipe.fluidInputs()) {
+    for (RecipeEntry in : recipe.fluidInputs()) {
       int n = in.count();
       for (Integer i : inputTanks) {
         FluidStack f = fluidTanks.getFluidInTank(i);
@@ -237,7 +260,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   }
 
   protected boolean doesRecipeMatch(ModRecipe r) {
-    for (CombinedIngredient in : r.itemInputs()) {
+    for (RecipeEntry in : r.itemInputs()) {
       boolean f = false;
       for (Integer i : inputSlots) {
         if (in.test(inventory.getStackInSlot(i))) {
@@ -249,7 +272,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
         return false;
       }
     }
-    for (CombinedIngredient in : r.fluidInputs()) {
+    for (RecipeEntry in : r.fluidInputs()) {
       boolean f = false;
       for (Integer i : inputTanks) {
         if (in.test(fluidTanks.getFluidInTank(i))) {

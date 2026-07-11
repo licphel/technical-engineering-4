@@ -4,8 +4,10 @@ import com.hypothetic.ten4.lib.client.render.gui.EnhancedGuiGraphics;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 
+import java.util.List;
+
 public class Panel extends UiComponent {
-  private static final float ANIM_SPEED = 0.4F;
+  private static final float ANIM_SPEED = 0.38F;
 
   private final UiComponent button;
   private final int expandedWidth, expandedHeight;
@@ -50,6 +52,10 @@ public class Panel extends UiComponent {
 
   public int currentHeight() {
     return (int) (collapsedHeight + (expandedHeight - collapsedHeight) * progress);
+  }
+
+  public int currentWidth() {
+    return collapsedWidth + (int) ((bodyWidth() - collapsedWidth) * progress);
   }
 
   public void toggle() {
@@ -124,9 +130,9 @@ public class Panel extends UiComponent {
     return mx >= ex && my >= y && mx <= ex + width && my <= y + currentHeight();
   }
 
-  public Rect2i getTakeUp() {
+  public List<Rect2i> getTakeUp() {
     int ex = effectiveX();
-    return new Rect2i(ex, y, x + width - ex, currentHeight());
+    return List.of(new Rect2i(ex, y, x + currentWidth() - ex, currentHeight()));
   }
 
   private int effectiveX() {

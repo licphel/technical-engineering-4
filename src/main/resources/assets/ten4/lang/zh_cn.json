@@ -24,8 +24,8 @@
   "ten4.misc.comparator_mode.output_fluid.desc": "由输出流体槽位的充盈程度决定。",
   "ten4.misc.comparator_mode.active.desc": "仅当活动时有输出，否则无输出。",
 
-  "ten4.misc.request_rate": "申请速度：",
-  "ten4.misc.request_rate.desc": "每两次申请输入/输出之间的 Tick 间隔。",
+  "ten4.misc.request_interval": "申请间隔：",
+  "ten4.misc.request_interval.desc": "每两次申请输入、输出之间的 Tick 间隔。",
 
   "ten4.misc.sigmode": "信号模式：",
   "ten4.misc.sigmode.ignore": "忽略",
@@ -35,6 +35,7 @@
   "ten4.misc.sigmode.low_level.desc": "只有没有红石信号时才运作。",
   "ten4.misc.sigmode.high_level.desc": "只有有红石信号时才运作。",
 
+  "ten4.misc.facemode": "模式：",
   "ten4.misc.facemode.off": "禁用",
   "ten4.misc.facemode.passive_bipass": "被动，双侧",
   "ten4.misc.facemode.passive_input": "被动，输入",
@@ -65,11 +66,27 @@
   "ten4.misc.north": "北侧",
   "ten4.misc.south": "南侧",
 
+  "ten4.misc.connection_type": "连接模式：",
+  "ten4.misc.connection_type.none": "无",
+  "ten4.misc.connection_type.normal": "正常",
+  "ten4.misc.connection_type.push": "推",
+  "ten4.misc.connection_type.pull": "拉",
+
   "ten4.misc.enabled": "启用",
   "ten4.misc.disabled": "禁用",
 
-  "ten4.device.pulverizer": "磨粉机",
-  "ten4.device.pulverizer.desc": "把矿物和金属磨成粉末、浮冰打碎成雪，等等。",
-  "ten4.device.heat_generator": "热力发电机",
-  "ten4.device.heat_generator.desc": "通过燃烧燃料发电。"
+  "ten4.pulverizer": "磨粉机",
+  "ten4.pulverizer.desc": "把矿物和金属磨成粉末、浮冰打碎成雪，等等。",
+  "ten4.heat_generator": "热力发电机",
+  "ten4.heat_generator.desc": "通过燃烧燃料发电。",
+
+  "block.ten4.pulverizer": "磨粉机",
+  "block.ten4.heat_generator": "热力发电机",
+
+  "item.ten4.iron_dust": "铁粉",
+  "item.ten4.iron_plate": "铁板",
+  "item.ten4.copper_dust": "铜粉",
+  "item.ten4.copper_plate": "铜板",
+  "item.ten4.gold_dust": "金粉",
+  "item.ten4.gold_plate": "金板"
 }

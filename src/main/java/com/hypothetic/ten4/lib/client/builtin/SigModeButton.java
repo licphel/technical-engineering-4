@@ -1,5 +1,6 @@
 package com.hypothetic.ten4.lib.client.builtin;
 
+import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.lib.blockentity.SignalMode;
 import com.hypothetic.ten4.lib.client.components.Button;
 import com.hypothetic.ten4.lib.client.render.gui.EnhancedGuiGraphics;
@@ -10,6 +11,7 @@ import com.hypothetic.ten4.lib.network.SetSignalPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
@@ -44,7 +46,10 @@ class SigModeButton extends Button {
 
     int mode = reader.getInt(BuiltinSyncedFields.SIG_MODE);
     SignalMode sig = SignalMode.of(mode);
-    tooltips.add(sig.getComponent());
+
+    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.sigmode"));
+    mc.append(sig.getComponent());
+    tooltips.add(mc);
     tooltips.add(sig.getDesc().withStyle(ChatFormatting.GRAY));
   }
 }

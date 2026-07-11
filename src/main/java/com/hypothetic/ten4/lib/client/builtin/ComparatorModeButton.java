@@ -1,5 +1,6 @@
 package com.hypothetic.ten4.lib.client.builtin;
 
+import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.lib.blockentity.ComparatorMode;
 import com.hypothetic.ten4.lib.blockentity.SignalMode;
 import com.hypothetic.ten4.lib.client.components.Button;
@@ -11,6 +12,7 @@ import com.hypothetic.ten4.lib.network.DeviceConfigPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
@@ -46,7 +48,10 @@ public class ComparatorModeButton extends Button {
 
     int mode = reader.getInt(BuiltinSyncedFields.COMPARATOR_MODE);
     ComparatorMode cm = ComparatorMode.of(mode);
-    tooltips.add(cm.getComponent());
+
+    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.comparator_mode"));
+    mc.append(cm.getComponent());
+    tooltips.add(mc);
     tooltips.add(cm.getDesc().withStyle(ChatFormatting.GRAY));
   }
 }

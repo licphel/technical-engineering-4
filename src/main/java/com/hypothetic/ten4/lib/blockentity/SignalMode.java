@@ -3,8 +3,9 @@ package com.hypothetic.ten4.lib.blockentity;
 import com.hypothetic.ten4.Ten4;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.StringRepresentable;
 
-public enum SignalMode {
+public enum SignalMode implements StringRepresentable {
   IGNORE,
   LOW,
   HIGH;
@@ -32,5 +33,10 @@ public enum SignalMode {
       case 2 -> HIGH;
       default -> IGNORE;
     };
+  }
+
+  @Override
+  public String getSerializedName() {
+    return toString();
   }
 }

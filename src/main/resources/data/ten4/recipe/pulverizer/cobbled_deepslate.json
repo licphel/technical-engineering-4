@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item": "minecraft:deepslate"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:cobbled_deepslate"
+    }
+  ],
+  "time": 200
+}

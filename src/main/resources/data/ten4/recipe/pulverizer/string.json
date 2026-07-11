@@ -1,0 +1,23 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "minecraft:wool"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 2,
+      "item": "minecraft:string"
+    },
+    {
+      "item": "minecraft:string",
+      "chance": 0.5
+    },
+    {
+      "item": "minecraft:string",
+      "chance": 0.5
+    }
+  ],
+  "time": 200
+}

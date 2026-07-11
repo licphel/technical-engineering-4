@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.lib.client.builtin;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.lib.blockentity.IInfoProvider;
+import com.hypothetic.ten4.lib.blockentity.IDescriptionProvider;
 import com.hypothetic.ten4.lib.client.DeviceScreen;
 import com.hypothetic.ten4.lib.client.components.*;
 import com.hypothetic.ten4.lib.client.render.gui.EnhancedGuiGraphics;
@@ -21,8 +21,14 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import java.util.List;
 
 public final class BuiltinComponents {
-  static final ResourceLocation TEXTURE = Ten4.id("textures/gui/components.png");
-  static final ResourceLocation PANELS = Ten4.id("textures/gui/panels.png");
+  public static final ResourceLocation TEXTURE = Ten4.id("textures/gui/components.png");
+  public static final ResourceLocation PANELS = Ten4.id("textures/gui/panels.png");
+  public static final TextureRegion ENERGY_EMPTY = TextureRegion.of(TEXTURE, 204, 0, 8, 50);
+  public static final TextureRegion ENERGY_FULL = TextureRegion.of(TEXTURE, 204, 50, 8, 50);
+  public static final TextureRegion FUEL_EMPTY = TextureRegion.of(TEXTURE, 168, 0, 14, 14);
+  public static final TextureRegion FUEL_FULL = TextureRegion.of(TEXTURE, 168, 14, 14, 14);
+  public static final TextureRegion PROGRESS_EMPTY = TextureRegion.of(TEXTURE, 234, 0, 22, 16);
+  public static final TextureRegion PROGRESS_FULL = TextureRegion.of(TEXTURE, 234, 16, 22, 16);
 
   private BuiltinComponents() {
   }
@@ -37,9 +43,7 @@ public final class BuiltinComponents {
         super.onCollectingTooltips(tooltips);
         tooltips.add(DisplayHelper.getFE(partial.getAsInt(), full.getAsInt()));
       }
-    }.withTexture(
-        TextureRegion.of(TEXTURE, 204, 0, 8, 50),
-        TextureRegion.of(TEXTURE, 204, 50, 8, 50));
+    }.withTexture(ENERGY_EMPTY, ENERGY_FULL);
   }
 
   public static GaugeVertical fuelGauge(int x, int y, SyncedFieldReader reader) {
@@ -50,18 +54,14 @@ public final class BuiltinComponents {
       @Override
       public void onCollectingTooltips(List<Component> tooltips) {
       }
-    }.withTexture(
-        TextureRegion.of(TEXTURE, 168, 0, 14, 14),
-        TextureRegion.of(TEXTURE, 168, 14, 14, 14));
+    }.withTexture(FUEL_EMPTY, FUEL_FULL);
   }
 
   public static GaugeHorizontal progressGauge(int x, int y, SyncedFieldReader reader) {
     return new GaugeHorizontal(x, y, 22, 16,
         () -> reader.getInt(BuiltinSyncedFields.PROGRESS),
         () -> reader.getInt(BuiltinSyncedFields.MAX_PROGRESS)
-    ).withTexture(
-        TextureRegion.of(TEXTURE, 234, 0, 22, 16),
-        TextureRegion.of(TEXTURE, 234, 16, 22, 16));
+    ).withTexture(PROGRESS_EMPTY, PROGRESS_FULL);
   }
 
   // 2-px padding rightward
@@ -84,16 +84,16 @@ public final class BuiltinComponents {
   }
 
   public static PanelLayout leftPanels() {
-    return new PanelLayout(-15, 6).panelGap(2);
+    return new PanelLayout(-15, 8).panelGap(2);
   }
 
   public static PanelLayout rightPanels(int bgWidth) {
-    return new PanelLayout(bgWidth, 6).panelGap(2);
+    return new PanelLayout(bgWidth, 8).panelGap(2);
   }
 
   public static Panel infoPanel(DeviceScreen screen) {
     SyncedFieldReader reader = screen.getMenu().fieldsReader();
-    IInfoProvider ip = screen.getMenu().getBlockEntity();
+    IDescriptionProvider ip = screen.getMenu().getBlockEntity();
     Component rawText = Component.translatable(ip.getInfoLangKey());
 
     return new Panel(BuiltinComponents.panelBacking(15, 15, 241, 67, 15, 15), 91, 72, -15) {
@@ -131,7 +131,7 @@ public final class BuiltinComponents {
         addChild(new SigModeButton(18, 24, 12, 12, reader, pos));
         addChild(new StrictInputButton(33, 24, 12, 12, reader, pos));
         addChild(new ComparatorModeButton(48, 24, 12, 12, reader, pos));
-        addChild(new RequestRateButton(63, 24, 12, 12, reader, pos));
+        addChild(new ReqIntervalButton(63, 24, 12, 12, reader, pos));
       }
 
       @Override

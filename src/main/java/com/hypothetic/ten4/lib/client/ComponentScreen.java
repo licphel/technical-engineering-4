@@ -4,6 +4,7 @@ import com.hypothetic.ten4.lib.client.components.UiComponent;
 import com.hypothetic.ten4.lib.client.render.gui.EnhancedGuiGraphics;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -90,8 +91,8 @@ public abstract class ComponentScreen<T extends AbstractContainerMenu> extends A
       return true;
     }
 
-    for (UiComponent e : components) {
-      if (e.getTakeUp().contains((int) x, (int) y)) {
+    for (Rect2i r : getComponentAreas()) {
+      if (r.contains((int) x, (int) y)) {
         return false;
       }
     }
@@ -110,6 +111,16 @@ public abstract class ComponentScreen<T extends AbstractContainerMenu> extends A
 
   protected void add(UiComponent e) {
     components.add(e);
+  }
+
+  public List<Rect2i> getComponentAreas() {
+    List<Rect2i> areas = new ArrayList<>();
+    for (UiComponent c : components) {
+      if (c.isVisible()) {
+        areas.addAll(c.getTakeUp());
+      }
+    }
+    return areas;
   }
 
   public void onRescaled(int x, int y) {

@@ -168,23 +168,16 @@ public class UiComponent {
     this.height = height;
   }
 
-  public Rect2i getTakeUp() {
+  public List<Rect2i> getTakeUp() {
     if (children.isEmpty()) {
-      return new Rect2i(x, y, width, height);
+      return List.of(new Rect2i(x, y, width, height));
     }
-
-    int minX = getX();
-    int maxX = getX() + getWidth();
-    int minY = getY();
-    int maxY = getY() + getHeight();
+    List<Rect2i> takeUp = new ArrayList<>();
+    takeUp.add(new Rect2i(x, y, width, height));
 
     for (UiComponent child : children) {
-      Rect2i r = child.getTakeUp();
-      minX = Math.min(minX, r.getX());
-      minY = Math.min(minY, r.getY());
-      maxX = Math.max(maxX, r.getX() + r.getWidth());
-      maxY = Math.max(maxY, r.getY() + r.getHeight());
+      takeUp.addAll(child.getTakeUp());
     }
-    return new Rect2i(minX, minY, maxX - minX, maxY - minY);
+    return takeUp;
   }
 }

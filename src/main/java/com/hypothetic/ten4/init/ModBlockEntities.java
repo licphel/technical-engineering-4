@@ -1,8 +1,9 @@
 package com.hypothetic.ten4.init;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.device.HeatGeneratorBlockEntity;
-import com.hypothetic.ten4.device.PulverizerBlockEntity;
+import com.hypothetic.ten4.core.device.HeatGeneratorBlockEntity;
+import com.hypothetic.ten4.core.device.PulverizerBlockEntity;
+import com.hypothetic.ten4.lib.blockentity.internet.EnergyCableBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -23,4 +24,8 @@ public class ModBlockEntities {
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HeatGeneratorBlockEntity>> HEAT_GENERATOR =
       TILES.register("heat_generator", () ->
           BlockEntityType.Builder.of(HeatGeneratorBlockEntity::new, ModBlocks.HEAT_GENERATOR.get()).build(null));
+
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EnergyCableBlockEntity>> GLASS_ENERGY_CABLE =
+      TILES.register("glass_energy_cable", () ->
+          BlockEntityType.Builder.of((pos, state) -> new EnergyCableBlockEntity(pos, state, EnergyCableBlockEntity.CAPACITY), ModBlocks.GLASS_ENERGY_CABLE.get()).build(null));
 }

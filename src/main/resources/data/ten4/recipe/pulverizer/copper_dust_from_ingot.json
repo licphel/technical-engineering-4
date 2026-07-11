@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizer",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/copper"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:copper_dust"
+    }
+  ],
+  "time": 100
+}

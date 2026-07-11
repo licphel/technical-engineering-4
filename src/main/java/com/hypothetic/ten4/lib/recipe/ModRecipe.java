@@ -13,34 +13,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModRecipe implements Recipe<RecipeInput> {
-  final List<CombinedIngredient> inputs;
-  final List<CombinedIngredient> outputs;
-  final List<CombinedIngredient> itemInputs;
-  final List<CombinedIngredient> fluidInputs;
-  final List<ItemStack> itemOutputs;
-  final List<FluidStack> fluidOutputs;
+  final List<RecipeEntry> inputs;
+  final List<RecipeEntry> outputs;
+  final List<RecipeEntry> itemInputs;
+  final List<RecipeEntry> fluidInputs;
+  final List<RecipeEntry> itemOutputs;
+  final List<RecipeEntry> fluidOutputs;
   final ResourceLocation id;
   final int time;
 
   RecipeSerializer<?> serializer;
   RecipeType<?> recipeType;
 
-  public ModRecipe(ResourceLocation id, List<CombinedIngredient> inputs, List<CombinedIngredient> outputs, int time) {
+  public ModRecipe(ResourceLocation id, List<RecipeEntry> inputs, List<RecipeEntry> outputs, int time) {
     this.id = id;
     this.inputs = List.copyOf(inputs);
     this.outputs = List.copyOf(outputs);
-    this.itemInputs = inputs.stream().filter(CombinedIngredient::isItem).toList();
-    this.fluidInputs = inputs.stream().filter(CombinedIngredient::isFluid).toList();
-    this.itemOutputs = outputs.stream().filter(CombinedIngredient::isItem).map(CombinedIngredient::symbolItem).toList();
-    this.fluidOutputs = outputs.stream().filter(CombinedIngredient::isFluid).map(CombinedIngredient::symbolFluid).toList();
+    this.itemInputs = inputs.stream().filter(RecipeEntry::isItem).toList();
+    this.fluidInputs = inputs.stream().filter(RecipeEntry::isFluid).toList();
+    this.itemOutputs = outputs.stream().filter(RecipeEntry::isItem).toList();
+    this.fluidOutputs = outputs.stream().filter(RecipeEntry::isFluid).toList();
     this.time = time;
   }
 
-  public List<CombinedIngredient> inputs() {
+  public List<RecipeEntry> inputs() {
     return inputs;
   }
 
-  public List<CombinedIngredient> outputs() {
+  public List<RecipeEntry> outputs() {
     return outputs;
   }
 
@@ -48,24 +48,24 @@ public class ModRecipe implements Recipe<RecipeInput> {
     return time;
   }
 
-  public List<CombinedIngredient> itemInputs() {
+  public List<RecipeEntry> itemInputs() {
     return itemInputs;
   }
 
-  public List<CombinedIngredient> fluidInputs() {
+  public List<RecipeEntry> fluidInputs() {
     return fluidInputs;
   }
 
-  public List<ItemStack> itemOutputs() {
+  public List<RecipeEntry> itemOutputs() {
     return itemOutputs;
   }
 
-  public List<FluidStack> fluidOutputs() {
+  public List<RecipeEntry> fluidOutputs() {
     return fluidOutputs;
   }
 
   public int inputLimit(ItemStack stack) {
-    for (CombinedIngredient ing : inputs) {
+    for (RecipeEntry ing : inputs) {
       if (ing.containsItem(stack.getItem())) {
         return ing.count();
       }
@@ -74,7 +74,7 @@ public class ModRecipe implements Recipe<RecipeInput> {
   }
 
   public int inputLimit(FluidStack stack) {
-    for (CombinedIngredient ing : inputs) {
+    for (RecipeEntry ing : inputs) {
       if (ing.containsFluid(stack.getFluid())) {
         return ing.count();
       }
@@ -84,7 +84,7 @@ public class ModRecipe implements Recipe<RecipeInput> {
 
   public List<ItemStack> generateItems() {
     List<ItemStack> result = new ArrayList<>();
-    for (CombinedIngredient ing : outputs) {
+    for (RecipeEntry ing : outputs) {
       if (ing.isItem()) {
         result.add(ing.genItem());
       }
@@ -94,7 +94,7 @@ public class ModRecipe implements Recipe<RecipeInput> {
 
   public List<FluidStack> generateFluids() {
     List<FluidStack> result = new ArrayList<>();
-    for (CombinedIngredient ing : outputs) {
+    for (RecipeEntry ing : outputs) {
       if (ing.isFluid()) {
         result.add(ing.genFluid());
       }
@@ -121,7 +121,7 @@ public class ModRecipe implements Recipe<RecipeInput> {
 
   @Override
   public ItemStack getResultItem(HolderLookup.Provider registries) {
-    for (CombinedIngredient ing : outputs) {
+    for (RecipeEntry ing : outputs) {
       if (ing.isItem()) {
         return ing.symbolItem();
       }
@@ -132,7 +132,7 @@ public class ModRecipe implements Recipe<RecipeInput> {
   @Override
   public NonNullList<Ingredient> getIngredients() {
     NonNullList<Ingredient> list = NonNullList.create();
-    for (CombinedIngredient ing : inputs) {
+    for (RecipeEntry ing : inputs) {
       if (ing.isItem() && !ing.allowAll()) {
         list.add(ing.isTag() ? Ingredient.of(TagHelper.keyItem(ing.id().toString())) : Ingredient.of(ing.itemStacks().stream()));
       }
