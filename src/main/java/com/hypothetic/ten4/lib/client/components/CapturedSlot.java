@@ -6,8 +6,8 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public class CapturedSlot extends UiComponent {
-  private ManualSlot backingSlot;
   private final AbstractContainerScreen<? extends AbstractContainerMenu> screen;
+  private ManualSlot backingSlot;
   private int lastX;
   private int lastY;
 

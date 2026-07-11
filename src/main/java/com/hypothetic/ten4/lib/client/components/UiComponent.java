@@ -60,7 +60,7 @@ public class UiComponent {
 
   public void onCollectingTooltips(List<Component> tooltips) {
     for (UiComponent child : children) {
-      if (child.isVisible()) {
+      if (child.isVisible() && child.hovering) {
         child.onCollectingTooltips(tooltips);
       }
     }
@@ -68,10 +68,21 @@ public class UiComponent {
 
   public void onMouseClicked(int mouseX, int mouseY, int button) {
     for (UiComponent child : children) {
-      if (child.isVisible() && child.isMouseHovering(mouseX, mouseY)) {
+      if (child.isVisible() && child.hovering) {
         child.onMouseClicked(mouseX, mouseY, button);
       }
     }
+  }
+
+  public boolean onMouseScrolled(double mx, double my, double delta) {
+    for (UiComponent child : children) {
+      if (child.isVisible() && child.isMouseHovering((int) mx, (int) my)) {
+        if (child.onMouseScrolled(mx, my, delta)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public void onMouseMotion(int mouseX, int mouseY) {
@@ -109,22 +120,30 @@ public class UiComponent {
     return x;
   }
 
-  public int getY() {
-    return y;
-  }
-
   public void setX(int x) {
     this.x = x;
+  }
+
+  public int getY() {
+    return y;
   }
 
   public void setY(int y) {
     this.y = y;
   }
 
+  public int getSemanticX() {
+    return semanticX;
+  }
+
   public void setSemanticX(int semanticX) {
     int delta = semanticX - this.semanticX;
     this.semanticX = semanticX;
     this.x += delta;
+  }
+
+  public int getSemanticY() {
+    return semanticY;
   }
 
   public void setSemanticY(int semanticY) {
@@ -137,12 +156,12 @@ public class UiComponent {
     return width;
   }
 
-  public int getHeight() {
-    return height;
-  }
-
   public void setWidth(int width) {
     this.width = width;
+  }
+
+  public int getHeight() {
+    return height;
   }
 
   public void setHeight(int height) {

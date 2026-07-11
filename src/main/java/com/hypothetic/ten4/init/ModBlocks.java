@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.init;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.device.HeatGeneratorBlockEntity;
 import com.hypothetic.ten4.device.DeviceBlock;
+import com.hypothetic.ten4.device.HeatGeneratorBlockEntity;
 import com.hypothetic.ten4.device.PulverizerBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;

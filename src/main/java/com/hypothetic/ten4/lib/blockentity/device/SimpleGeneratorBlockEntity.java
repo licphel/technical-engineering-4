@@ -1,14 +1,11 @@
 package com.hypothetic.ten4.lib.blockentity.device;
 
-import com.hypothetic.ten4.lib.blockentity.FaceMode;
 import com.hypothetic.ten4.lib.blockentity.ITickable;
 import com.hypothetic.ten4.lib.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.lib.container.sync.Syncer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -18,11 +15,6 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
 
   public SimpleGeneratorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
-
-    /*
-     * Generator has its upside active.
-     */
-    setEnergyFaceMode(Direction.UP, FaceMode.ACTIVE_EXTRACT);
   }
 
   @Override
@@ -32,8 +24,6 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
     syncer.register(BuiltinSyncedFields.FUEL);
     syncer.register(BuiltinSyncedFields.MAX_FUEL);
     syncer.register(BuiltinSyncedFields.EFFICIENCY);
-    syncer.register(BuiltinSyncedFields.ACTIVE);
-    syncer.register(BuiltinSyncedFields.SIG_MODE);
   }
 
   @Override
@@ -47,10 +37,13 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
     if (fuel > 0) {
       setEnergy(getEnergy() + getEfficiency());
       fuel = Math.max(fuel - getEfficiency(), 0);
+      setChanged();
     }
 
     if (isSignalEnabled()) {
-      queuedPushPull();
+      if (getEnergy() > 0) {
+        queuedPushPull();
+      }
 
       if (hasOutputSpace() && fuel <= 0) {
         int v = tryFueling(true);
@@ -60,6 +53,8 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
           maxFuel = fuel;
         }
       }
+
+      setChanged();
     }
 
     syncer.set(BuiltinSyncedFields.ENERGY, getEnergy());
@@ -67,8 +62,7 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
     syncer.set(BuiltinSyncedFields.FUEL, fuel);
     syncer.set(BuiltinSyncedFields.MAX_FUEL, maxFuel);
     syncer.set(BuiltinSyncedFields.EFFICIENCY, getEfficiency());
-    syncer.set(BuiltinSyncedFields.ACTIVE, isActive());
-    syncer.set(BuiltinSyncedFields.SIG_MODE, sigMode.ordinal());
+    synchronizeBasicData();
   }
 
   public boolean hasOutputSpace() {

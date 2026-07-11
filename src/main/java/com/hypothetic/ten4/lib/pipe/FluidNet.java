@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.lib.pipe;
 
-import com.hypothetic.ten4.lib.capability.fluid.IDirectionalFluidProvider;
 import com.hypothetic.ten4.lib.capability.fluid.DirectionalFluidHandler;
+import com.hypothetic.ten4.lib.capability.fluid.IDirectionalFluidProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;

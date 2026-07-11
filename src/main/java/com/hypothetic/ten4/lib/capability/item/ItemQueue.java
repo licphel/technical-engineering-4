@@ -8,6 +8,8 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Queue;
 
 public final class ItemQueue {
@@ -15,6 +17,8 @@ public final class ItemQueue {
 
   private ItemQueue() {
   }
+
+  // ---- push: host → neighbors ----
 
   public static void push(Level level, BlockPos pos, IDirectionalItemProvider host) {
     if (host.getItemPushingCycle().isEmpty()) {
@@ -44,37 +48,55 @@ public final class ItemQueue {
 
     int maxRate = host.getMaxItemExtract(cycle.peek());
     for (int slot = 0; slot < inv.getSlots(); slot++) {
-      ItemStack stack = inv.extractItem(slot, maxRate, true);
-      if (stack.isEmpty()) {
+      // 1. Simulate extract
+      ItemStack simExtracted = inv.extractItem(slot, maxRate, true);
+      if (simExtracted.isEmpty()) {
         continue;
       }
-      int remaining = stack.getCount();
-      int per = Math.max(remaining / available, 1), rem = remaining - per * available;
+
+      // 2. Per-target sim-insertAll to find how much can actually fit
+      Map<Direction, Integer> planned = new LinkedHashMap<>();
+      int totalMovable = 0;
+      ItemStack remaining = simExtracted.copy();
       for (Direction d : cycle) {
         IItemHandler h = cache[d.ordinal()];
-        if (h == null) {
+        if (h == null || remaining.isEmpty()) {
           continue;
         }
-        int amt = per + (rem > 0 ? 1 : 0);
-        if (rem > 0) {
-          rem--;
+        ItemStack leftover = insertAll(h, remaining.copy(), true);
+        int moved = remaining.getCount() - leftover.getCount();
+        if (moved > 0) {
+          planned.put(d, moved);
+          totalMovable += moved;
+          remaining.shrink(moved);
         }
-        amt = Math.min(remaining, Math.min(host.getMaxItemExtract(d), amt));
+      }
+      if (totalMovable <= 0) {
+        continue;
+      }
+
+      // 3. Real extract only what all targets can accept
+      ItemStack realExtracted = inv.extractItem(slot, totalMovable, false);
+      if (realExtracted.isEmpty()) {
+        continue;
+      }
+
+      // 4. Distribute to targets matching planned amounts
+      for (var e : planned.entrySet()) {
+        IItemHandler h = cache[e.getKey().ordinal()];
+        int amt = Math.min(e.getValue(), realExtracted.getCount());
         if (amt <= 0) {
           continue;
         }
-        ItemStack toPush = inv.extractItem(slot, amt, false);
-        if (toPush.isEmpty()) {
-          continue;
-        }
-        ItemStack leftover = h.insertItem(findEmpty(h), toPush, false);
+        ItemStack portion = realExtracted.split(amt);
+        ItemStack leftover = insertAll(h, portion, false);
         if (!leftover.isEmpty()) {
-          inv.insertItem(slot, leftover, false);
+          realExtracted.grow(leftover.getCount());
         }
-        remaining -= (amt - leftover.getCount());
-        if (remaining <= 0) {
-          break;
-        }
+      }
+      // Return any undistributed remainder
+      if (!realExtracted.isEmpty()) {
+        inv.insertItem(slot, realExtracted, false);
       }
     }
     cycle.offer(cycle.remove());
@@ -112,40 +134,38 @@ public final class ItemQueue {
         continue;
       }
       int maxPull = host.getMaxItemReceive(d);
-      for (int srcSlot = 0; srcSlot < h.getSlots(); srcSlot++) {
-        if (maxPull <= 0) {
-          break;
-        }
-        ItemStack pulled = h.extractItem(srcSlot, maxPull, true);
-        if (pulled.isEmpty()) {
+      for (int srcSlot = 0; srcSlot < h.getSlots() && maxPull > 0; srcSlot++) {
+        // 1. Simulate extract from neighbor
+        ItemStack simPulled = h.extractItem(srcSlot, maxPull, true);
+        if (simPulled.isEmpty()) {
           continue;
         }
-        int dest = findEmpty(inv);
-        if (dest < 0) {
-          break;
-        }
-        ItemStack leftover = inv.insertItem(dest, pulled.copy(), true);
-        int movable = pulled.getCount() - leftover.getCount();
+
+        // 2. Simulate insertAll into host to find actual fit
+        ItemStack simLeftover = insertAll(inv, simPulled.copy(), true);
+        int movable = simPulled.getCount() - simLeftover.getCount();
         if (movable <= 0) {
           continue;
         }
-        pulled = h.extractItem(srcSlot, movable, false);
-        leftover = inv.insertItem(dest, pulled, false);
+
+        // 3. Real extract + insert
+        ItemStack pulled = h.extractItem(srcSlot, movable, false);
+        ItemStack leftover = insertAll(inv, pulled, false);
         if (!leftover.isEmpty()) {
           h.insertItem(srcSlot, leftover, false);
         }
+
         maxPull -= movable - leftover.getCount();
       }
     }
     cycle.offer(cycle.remove());
   }
 
-  private static int findEmpty(IItemHandler inv) {
-    for (int i = 0; i < inv.getSlots(); i++) {
-      if (inv.getStackInSlot(i).isEmpty()) {
-        return i;
-      }
+  private static ItemStack insertAll(IItemHandler inv, ItemStack stack, boolean sim) {
+    ItemStack remaining = stack;
+    for (int i = 0; i < inv.getSlots() && !remaining.isEmpty(); i++) {
+      remaining = inv.insertItem(i, remaining, sim);
     }
-    return 0;
+    return remaining;
   }
 }

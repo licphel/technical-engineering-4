@@ -1,7 +1,5 @@
 package com.hypothetic.ten4.lib.capability.item;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
 public interface IItemSlot {
@@ -18,6 +16,4 @@ public interface IItemSlot {
   int getSlotLimit();
 
   SlotOption getType();
-
-  CompoundTag writeToNBT(HolderLookup.Provider reg, CompoundTag tag);
 }

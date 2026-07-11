@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.device;
 
 import com.hypothetic.ten4.lib.client.DeviceScreen;
-import com.hypothetic.ten4.lib.client.BuiltinComponents;
+import com.hypothetic.ten4.lib.client.builtin.BuiltinComponents;
 import com.hypothetic.ten4.lib.container.ContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.lib.blockentity.device;
 
 import com.hypothetic.ten4.lib.blockentity.ITickable;
-import com.hypothetic.ten4.lib.container.sync.Syncer;
 import com.hypothetic.ten4.lib.container.sync.BuiltinSyncedFields;
+import com.hypothetic.ten4.lib.container.sync.Syncer;
 import com.hypothetic.ten4.lib.recipe.CombinedIngredient;
 import com.hypothetic.ten4.lib.recipe.ModRecipe;
 import net.minecraft.core.BlockPos;
@@ -27,6 +27,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   protected final List<Integer> outputTanks = new ArrayList<>();
   protected final RecipeType<ModRecipe> recipeType;
   protected @Nullable ModRecipe recipe;
+  protected @Nullable ModRecipe lastRecipe;
   protected int progress = 0;
   protected int maxProgress = 0;
 
@@ -42,8 +43,50 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     syncer.register(BuiltinSyncedFields.PROGRESS);
     syncer.register(BuiltinSyncedFields.MAX_PROGRESS);
     syncer.register(BuiltinSyncedFields.EFFICIENCY);
-    syncer.register(BuiltinSyncedFields.ACTIVE);
-    syncer.register(BuiltinSyncedFields.SIG_MODE);
+  }
+
+  @Override
+  public int getComparatorSignal() {
+    return switch (comparatorMode) {
+      case OUTPUT_ITEMS -> {
+        int count = 0, max = 0;
+        for (int i : outputSlots) {
+          count += inventory.getStackInSlot(i).getCount();
+          max += inventory.getSlotLimit(i);
+        }
+        yield max > 0 ? (int) (14L * count / max) + 1 : 0;
+      }
+      case OUTPUT_FLUID -> {
+        int amt = 0, max = 0;
+        for (int i : outputTanks) {
+          amt += fluidTanks.getTank(i).getFluidAmount();
+          max += fluidTanks.getTank(i).getCapacity();
+        }
+        yield max > 0 ? (int) (14L * amt / max) + 1 : 0;
+      }
+      default -> super.getComparatorSignal();
+    };
+  }
+
+  @Override
+  public boolean isValidInput(ItemStack stack) {
+    if (level == null || level.isClientSide()) {
+      return false;
+    }
+
+    if (!strictInput) {
+      return true;
+    }
+
+    return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
+        .anyMatch(h -> {
+          for (CombinedIngredient in : h.value().itemInputs()) {
+            if (in.test(stack)) {
+              return true;
+            }
+          }
+          return false;
+        });
   }
 
   @Override
@@ -60,7 +103,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
 
     process();
 
-    if (isSignalEnabled()) {
+    if (isSignalEnabled() && getEnergy() > 0) {
       queuedPushPull();
     }
 
@@ -69,14 +112,20 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     syncer.set(BuiltinSyncedFields.PROGRESS, getProgress());
     syncer.set(BuiltinSyncedFields.MAX_PROGRESS, getMaxProgress());
     syncer.set(BuiltinSyncedFields.EFFICIENCY, getEfficiency());
-    syncer.set(BuiltinSyncedFields.ACTIVE, isActive());
-    syncer.set(BuiltinSyncedFields.SIG_MODE, sigMode.ordinal());
+    synchronizeBasicData();
   }
 
   protected void process() {
-    recipe = findRecipe();
+    if (hasEnoughOutputSpace() && isSignalEnabled() && isEnergySufficient()) {
+      lastRecipe = recipe;
+      recipe = findRecipe();
 
-    if (recipe != null && hasEnoughOutputSpace() && isSignalEnabled() && isEnergySufficient()) {
+      if (recipe == null || lastRecipe != recipe) {
+        progress = 0;
+        setChanged();
+        return;
+      }
+
       setActive(true);
       maxProgress = recipe.time() * getBasicEfficiency();
       int consumed = getEfficiency();
@@ -98,7 +147,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     } else {
       setActive(false);
 
-      if (progress > 0) {
+      if (progress > 0 && !isEnergySufficient()) {
         progress = Math.max(0, progress - getBasicEfficiency());
         setChanged();
       }

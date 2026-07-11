@@ -2,7 +2,7 @@
   "type": "ten4:pulverizer",
   "inputs": [
     {
-      "item_tag": "c:cobblestone"
+      "item_tag": "c:cobblestones"
     }
   ],
   "outputs": [

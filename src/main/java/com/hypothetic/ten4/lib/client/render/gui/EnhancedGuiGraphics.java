@@ -9,7 +9,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.api.distmarker.Dist;
@@ -18,6 +20,8 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public final class EnhancedGuiGraphics {
@@ -29,6 +33,10 @@ public final class EnhancedGuiGraphics {
   public EnhancedGuiGraphics(GuiGraphics inner) {
     this.inner = inner;
     this.font = Minecraft.getInstance().font;
+  }
+
+  public Font font() {
+    return font;
   }
 
   public GuiGraphics inner() {
@@ -123,11 +131,27 @@ public final class EnhancedGuiGraphics {
     inner.drawString(font, text, x, y, color, shadow);
   }
 
+  public void drawBrokenString(FormattedText text, int x, int y, int color, int maxWidth, boolean shadow) {
+    List<FormattedCharSequence> comps = font.split(text, maxWidth);
+    for (int l = 0; l < comps.size(); l++) {
+      FormattedCharSequence fcs = comps.get(l);
+      inner.drawString(font, fcs, x, y + l * 9, color, shadow);
+    }
+  }
+
   public void drawCenteredString(Component text, int x, int y, int color, boolean shadow) {
     inner.drawString(font, text, x - font.width(text) / 2, y, color, shadow);
   }
 
-  public int stringWidth(Component text) {
+  public void drawString(FormattedCharSequence text, int x, int y, int color, boolean shadow) {
+    inner.drawString(font, text, x, y, color, shadow);
+  }
+
+  public void drawCenteredString(FormattedCharSequence text, int x, int y, int color, boolean shadow) {
+    inner.drawString(font, text, x - font.width(text) / 2, y, color, shadow);
+  }
+
+  public int stringWidth(FormattedText text) {
     return font.width(text);
   }
 

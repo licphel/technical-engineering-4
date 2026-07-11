@@ -60,6 +60,16 @@ public class Panel extends UiComponent {
   }
 
   @Override
+  public void onRescaled(int i, int j) {
+    x = semanticX + i;
+    y = semanticY + j;
+
+    for (UiComponent child : children) {
+      child.onRescaled(effectiveX(), y);
+    }
+  }
+
+  @Override
   public void onRender(EnhancedGuiGraphics g, float pt) {
     GuiGraphics gg = g.inner();
     button.onRender(g, pt);
@@ -80,7 +90,6 @@ public class Panel extends UiComponent {
 
     gg.enableScissor(bodyX, y, bodyX + visibleW, y + visibleH);
     renderBody(g, bodyX, y, bodyW, bodyH);
-    gg.disableScissor();
 
     if (expanding && progress < 1) {
       progress = Math.min(1, progress + ANIM_SPEED * pt);
@@ -90,6 +99,8 @@ public class Panel extends UiComponent {
 
     button.setVisible(false);
     super.onRender(g, pt);
+
+    gg.disableScissor();
   }
 
   @Override
@@ -100,7 +111,7 @@ public class Panel extends UiComponent {
 
   @Override
   public void onMouseClicked(int mx, int my, int button) {
-    if (this.button.isMouseHovering(mx, my)) { // Only to click at the corner can hide the panel
+    if (mx >= effectiveX() && mx < effectiveX() + width && my >= y && my <= y + this.button.getHeight()) {
       toggle();
     }
 

@@ -2,7 +2,6 @@ package com.hypothetic.ten4.lib.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import org.jetbrains.annotations.Nullable;
 
 public class JsonParser {

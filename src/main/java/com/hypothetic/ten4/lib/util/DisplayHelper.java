@@ -6,7 +6,8 @@ import net.minecraft.network.chat.Component;
 import java.util.StringJoiner;
 
 public final class DisplayHelper {
-  private DisplayHelper() {}
+  private DisplayHelper() {
+  }
 
   public static Component getFE(double e, double me) {
     if (e >= 0) {

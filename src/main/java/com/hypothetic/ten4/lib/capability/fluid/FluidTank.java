@@ -1,13 +1,12 @@
 package com.hypothetic.ten4.lib.capability.fluid;
 
-import com.hypothetic.ten4.lib.util.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Predicate;
 
 public class FluidTank implements IFluidTank, IFluidHandler {
@@ -60,11 +59,31 @@ public class FluidTank implements IFluidTank, IFluidHandler {
   }
 
   @Override
-  public int fill(FluidStack resource, FluidAction action) { return fill(resource, action, false); }
+  public int fill(FluidStack resource, FluidAction action) {
+    return fill(resource, action, false);
+  }
+
+  @Override
+  public FluidStack drain(int maxDrain, FluidAction action) {
+    return drain(maxDrain, action, false);
+  }
+
+  @Override
+  public FluidStack drain(FluidStack resource, FluidAction action) {
+    return drain(resource, action, false);
+  }
+
+  public void setFluid(FluidStack stack) {
+    this.fluid = stack;
+  }
 
   public int fill(FluidStack resource, FluidAction action, boolean force) {
-    if (resource.isEmpty()) return 0;
-    if (!force && !isFluidValid(resource)) return 0;
+    if (resource.isEmpty()) {
+      return 0;
+    }
+    if (!force && !isFluidValid(resource)) {
+      return 0;
+    }
     if (action.simulate()) {
       if (fluid.isEmpty()) {
         return Math.min(capacity, resource.getAmount());
@@ -93,11 +112,10 @@ public class FluidTank implements IFluidTank, IFluidHandler {
     return filled;
   }
 
-  @Override
-  public FluidStack drain(int maxDrain, FluidAction action) { return drain(maxDrain, action, false); }
-
   public FluidStack drain(int maxDrain, FluidAction action, boolean force) {
-    if (!force && !canDrain()) return FluidStack.EMPTY;
+    if (!force && !canDrain()) {
+      return FluidStack.EMPTY;
+    }
 
     int drained = maxDrain;
     if (fluid.getAmount() < drained) {
@@ -110,17 +128,14 @@ public class FluidTank implements IFluidTank, IFluidHandler {
     return stack;
   }
 
-  @Override
-  public FluidStack drain(FluidStack resource, FluidAction action) { return drain(resource, action, false); }
-
   public FluidStack drain(FluidStack resource, FluidAction action, boolean force) {
-    if (!force && !canDrain()) return FluidStack.EMPTY;
-    if (resource.isEmpty() || !FluidStack.isSameFluidSameComponents(resource, fluid)) return FluidStack.EMPTY;
+    if (!force && !canDrain()) {
+      return FluidStack.EMPTY;
+    }
+    if (resource.isEmpty() || !FluidStack.isSameFluidSameComponents(resource, fluid)) {
+      return FluidStack.EMPTY;
+    }
     return drain(resource.getAmount(), action, force);
-  }
-
-  public void setFluid(FluidStack stack) {
-    this.fluid = stack;
   }
 
   public FluidTank readFromNBT(HolderLookup.Provider lookupProvider, CompoundTag nbt) {

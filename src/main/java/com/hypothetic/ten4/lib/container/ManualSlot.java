@@ -54,17 +54,17 @@ public class ManualSlot extends Slot {
   }
 
   @Override
+  public ItemStack remove(int amount) {
+    return inventory.forceExtract(amount, List.of(slot), false);
+  }
+
+  @Override
   public boolean mayPickup(Player player) {
     /*
      * Always removable.
      * Do not let !canExtract check forbid player picking up action.
      */
     return true;
-  }
-
-  @Override
-  public ItemStack remove(int amount) {
-    return inventory.forceExtract(amount, List.of(slot), false);
   }
 
   @Override

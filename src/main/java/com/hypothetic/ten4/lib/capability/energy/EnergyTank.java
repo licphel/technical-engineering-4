@@ -6,28 +6,28 @@ public class EnergyTank implements IEnergyProvider {
   private int maxReceive;
   private int maxExtract;
 
-  public void setCapacity(int capacity) {
-    this.capacity = capacity;
-  }
-
   public int getCapacity() {
     return capacity;
   }
 
-  public void setMaxReceive(int maxReceive) {
-    this.maxReceive = maxReceive;
+  public void setCapacity(int capacity) {
+    this.capacity = capacity;
   }
 
   public int getMaxReceive() {
     return maxReceive;
   }
 
-  public void setMaxExtract(int maxExtract) {
-    this.maxExtract = maxExtract;
+  public void setMaxReceive(int maxReceive) {
+    this.maxReceive = maxReceive;
   }
 
   public int getMaxExtract() {
     return maxExtract;
+  }
+
+  public void setMaxExtract(int maxExtract) {
+    this.maxExtract = maxExtract;
   }
 
   @Override

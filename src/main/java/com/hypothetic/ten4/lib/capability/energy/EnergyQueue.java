@@ -62,8 +62,8 @@ public final class EnergyQueue {
       if (amt <= 0) {
         continue;
       }
-      host.setEnergy(host.getEnergy() - amt);
-      s.receiveEnergy(amt, false);
+      int accepted = s.receiveEnergy(amt, false);
+      host.setEnergy(host.getEnergy() - accepted);
     }
     cycle.offer(cycle.remove());
   }

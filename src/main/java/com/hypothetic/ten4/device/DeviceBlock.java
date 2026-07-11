@@ -1,6 +1,7 @@
 package com.hypothetic.ten4.device;
 
 import com.hypothetic.ten4.lib.block.BuiltinBlockStates;
+import com.hypothetic.ten4.lib.blockentity.ComparatorMode;
 import com.hypothetic.ten4.lib.blockentity.IDropContent;
 import com.hypothetic.ten4.lib.blockentity.SimpleTicker;
 import com.hypothetic.ten4.lib.blockentity.device.AbstractDeviceBlockEntity;
@@ -26,8 +27,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -60,6 +59,19 @@ public class DeviceBlock extends BaseEntityBlock {
   @Override
   public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level l, BlockState s, BlockEntityType<T> t) {
     return t == bet.get() ? new SimpleTicker<>() : null;
+  }
+
+  @Override
+  public boolean hasAnalogOutputSignal(BlockState state) { return true; }
+
+  @Override
+  public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    var be = level.getBlockEntity(pos);
+    if (be instanceof AbstractDeviceBlockEntity device) {
+      int s = device.getComparatorSignal();
+      return device.getComparatorMode() == ComparatorMode.OFF ? 0 : s;
+    }
+    return 0;
   }
 
   @Override

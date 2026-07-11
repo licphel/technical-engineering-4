@@ -14,10 +14,10 @@ import java.util.function.Supplier;
 public class GaugeFluid extends UiComponent {
   protected final Supplier<FluidStack> stackSupplier;
   protected final IntSupplier capacity;
-  protected @Nullable TextureRegion emptyTex;
-  protected @Nullable TextureRegion overlayTex;
   protected final int innerW;
   protected final int innerH;
+  protected @Nullable TextureRegion emptyTex;
+  protected @Nullable TextureRegion overlayTex;
 
   public GaugeFluid(int x, int y, int w, int h, int innerW, int innerH, Supplier<FluidStack> stackSupplier, IntSupplier capacity) {
     super(x, y, w, h);

@@ -27,7 +27,9 @@ public class CombinedIngredient {
     public <T> DataResult<Pair<CombinedIngredient, T>> decode(DynamicOps<T> ops, T input) {
       try {
         com.google.gson.JsonElement el = ops.convertTo(JsonOps.INSTANCE, input);
-        if (!el.isJsonObject()) return DataResult.error(() -> "Not a JSON object: " + el);
+        if (!el.isJsonObject()) {
+          return DataResult.error(() -> "Not a JSON object: " + el);
+        }
         return DataResult.success(Pair.of(fromJson(el.getAsJsonObject()), ops.empty()));
       } catch (Exception e) {
         return DataResult.error(() -> "Failed to decode CombinedIngredient: " + e.getMessage());
@@ -40,22 +42,32 @@ public class CombinedIngredient {
       switch (input.kind) {
         case ITEM -> {
           obj.addProperty("item", input.id.toString());
-          if (input.count != 1) obj.addProperty("count", input.count);
+          if (input.count != 1) {
+            obj.addProperty("count", input.count);
+          }
         }
         case ITEM_TAG -> {
           obj.addProperty("item_tag", input.id.toString());
-          if (input.count != 1) obj.addProperty("count", input.count);
+          if (input.count != 1) {
+            obj.addProperty("count", input.count);
+          }
         }
         case FLUID -> {
           obj.addProperty("fluid", input.id.toString());
-          if (input.count != 0) obj.addProperty("amount", input.count);
+          if (input.count != 0) {
+            obj.addProperty("amount", input.count);
+          }
         }
         case FLUID_TAG -> {
           obj.addProperty("fluid_tag", input.id.toString());
-          if (input.count != 0) obj.addProperty("amount", input.count);
+          if (input.count != 0) {
+            obj.addProperty("amount", input.count);
+          }
         }
       }
-      if (input.chance != 1.0) obj.addProperty("chance", input.chance);
+      if (input.chance != 1.0) {
+        obj.addProperty("chance", input.chance);
+      }
       return DataResult.success(JsonOps.INSTANCE.convertTo(ops, obj));
     }
   };
@@ -318,5 +330,4 @@ public class CombinedIngredient {
       return this == ITEM_TAG || this == FLUID_TAG;
     }
   }
-
 }

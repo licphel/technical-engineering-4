@@ -2,7 +2,7 @@
   "type": "ten4:pulverizer",
   "inputs": [
     {
-      "item_tag": "c:stone"
+      "item_tag": "c:stones"
     }
   ],
   "outputs": [

@@ -6,5 +6,5 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 @FunctionalInterface
 public interface BlockStateGenerator {
-    void generate(BlockStateProvider prov, DeferredHolder<Block, ? extends Block> entry, String modelName);
+  void generate(BlockStateProvider prov, DeferredHolder<Block, ? extends Block> entry, String modelName);
 }

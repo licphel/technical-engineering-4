@@ -1,5 +1,6 @@
 package com.hypothetic.ten4.lib.client;
 
+import com.hypothetic.ten4.lib.client.builtin.BuiltinComponents;
 import com.hypothetic.ten4.lib.client.components.PanelLayout;
 import com.hypothetic.ten4.lib.container.ContainerMenu;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,8 +23,8 @@ public class DeviceScreen extends ComponentScreen<ContainerMenu> {
     this.rightPanels = BuiltinComponents.rightPanels(imageWidth);
     leftPanels.addPanel(BuiltinComponents.infoPanel(this));
     leftPanels.addPanel(BuiltinComponents.sigModePanel(this));
-    rightPanels.addPanel(BuiltinComponents.augmentPanel(this));
     rightPanels.addPanel(BuiltinComponents.ioPanel(this));
+    rightPanels.addPanel(BuiltinComponents.augmentPanel(this));
   }
 
   @Override

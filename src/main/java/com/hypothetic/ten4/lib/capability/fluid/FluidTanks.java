@@ -10,12 +10,12 @@ import java.util.List;
 
 public class FluidTanks implements IFluidHandler {
   private final List<FluidTank> tanks = new ArrayList<>();
-  
+
   public FluidTanks add(FluidTank tank) {
     tanks.add(tank);
     return this;
   }
-  
+
   @Override
   public int getTanks() {
     return tanks.size();

@@ -55,7 +55,10 @@ public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
 
   @Override
   public int getSlotLimit() {
-    return Integer.MAX_VALUE;
+    if (stack.isEmpty()) {
+      return Integer.MAX_VALUE;
+    }
+    return stack.getMaxStackSize();
   }
 
   @Override
@@ -68,12 +71,10 @@ public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
     return this;
   }
 
-  @Override
-  public CompoundTag writeToNBT(HolderLookup.Provider reg, CompoundTag tag) {
+  public void writeToNBT(HolderLookup.Provider reg, CompoundTag tag) {
     if (!stack.isEmpty()) {
       tag.put("Item", stack.save(reg));
     }
-    return tag;
   }
 
   public ItemSlot readFromNBT(HolderLookup.Provider reg, CompoundTag tag) {

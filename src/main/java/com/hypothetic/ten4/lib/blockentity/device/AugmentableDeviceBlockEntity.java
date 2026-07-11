@@ -17,20 +17,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEntity {
-  protected ItemInventory augments = new ItemInventory();
+  protected ItemInventory augments;
 
   public AugmentableDeviceBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
-  }
 
-  @Override
-  protected void initializeCapabilities() {
-    super.initializeCapabilities();
-
+    augments = new ItemInventory();
     augments.setChangeListener(this::setChanged);
     augments.setStillValidCheck(p -> level != null && level.getBlockEntity(worldPosition) == this);
     for (int i = 0; i < AUGMENT_CAPACITY; i++) {
-      augments.add(new ItemSlot(SlotOption.BOTH).setValidator(s -> s.is(Items.OBSIDIAN)));
+      augments.add(new ItemSlot(SlotOption.BOTH).setValidator(s -> s.getItem() instanceof IAugment<?>));
     }
   }
 
@@ -61,11 +57,6 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
   }
 
   @Override
-  public int getEfficiency() {
-    return applyAugments(IAugment.ModifiableEntry.EFFICIENCY, super.getEfficiency());
-  }
-
-  @Override
   public int getMaxEnergy() {
     return applyAugments(IAugment.ModifiableEntry.ENERGY_CAPACITY, super.getMaxEnergy());
   }
@@ -81,16 +72,6 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
   }
 
   @Override
-  public int getMaxItemExtract(@Nullable Direction d) {
-    return applyAugments(IAugment.ModifiableEntry.MAX_ITEM_EXTRACT, super.getMaxItemExtract(d));
-  }
-
-  @Override
-  public int getMaxItemReceive(@Nullable Direction d) {
-    return applyAugments(IAugment.ModifiableEntry.MAX_ITEM_RECEIVE, super.getMaxItemReceive(d));
-  }
-
-  @Override
   public int getMaxFluidExtract(@Nullable Direction d) {
     return applyAugments(IAugment.ModifiableEntry.MAX_FLUID_EXTRACT, super.getMaxFluidExtract(d));
   }
@@ -101,10 +82,18 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
   }
 
   @Override
-  protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
-    super.saveAdditional(tag, reg);
+  public int getMaxItemExtract(@Nullable Direction d) {
+    return applyAugments(IAugment.ModifiableEntry.MAX_ITEM_EXTRACT, super.getMaxItemExtract(d));
+  }
 
-    tag.put("augments", augments.createTag(reg));
+  @Override
+  public int getMaxItemReceive(@Nullable Direction d) {
+    return applyAugments(IAugment.ModifiableEntry.MAX_ITEM_RECEIVE, super.getMaxItemReceive(d));
+  }
+
+  @Override
+  public int getEfficiency() {
+    return applyAugments(IAugment.ModifiableEntry.EFFICIENCY, super.getEfficiency());
   }
 
   @Override
@@ -115,11 +104,18 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
   }
 
   @Override
+  protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
+    super.saveAdditional(tag, reg);
+
+    tag.put("augments", augments.createTag(reg));
+  }
+
+  @Override
   public void getLoot(List<ItemStack> loot) {
     super.getLoot(loot);
 
     for (int i = 0; i < augments.getSlots(); i++) {
-      if(augments.getStackInSlot(i).isEmpty()) {
+      if (augments.getStackInSlot(i).isEmpty()) {
         continue;
       }
       loot.add(augments.getStackInSlot(i));

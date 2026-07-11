@@ -2,11 +2,11 @@
   "credit": "Made with Blockbench",
   "parent": "engines",
   "textures": {
-    "0": "ten4:block/machine/engine/engine_extraction",
-    "1": "ten4:block/machine/engine/engine_extraction_bottom",
-    "2": "ten4:block/machine/engine/engine_extraction_head",
+    "0": "ten4:block/machine/engine/engine_outpution",
+    "1": "ten4:block/machine/engine/engine_outpution_bottom",
+    "2": "ten4:block/machine/engine/engine_outpution_head",
     "3": "ten4:block/machine/cell_core",
-    "particle": "ten4:block/machine/engine/engine_extraction"
+    "particle": "ten4:block/machine/engine/engine_outpution"
   },
   "elements": [
     {

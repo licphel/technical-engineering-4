@@ -1,8 +1,75 @@
 {
-  "itemGroup.ten4.block": "Technical Engineering IV - Blocks",
-  "itemGroup.ten4.device": "Technical Engineering IV - Devices",
-  "itemGroup.ten4.material": "Technical Engineering IV - Materials",
-  "itemGroup.ten4.tool": "Technical Engineering IV - Tools",
+  "ten4.creative_mode_tab.block": "Technical Engineering IV - Blocks",
+  "ten4.creative_mode_tab.device": "Technical Engineering IV - Devices",
+  "ten4.creative_mode_tab.material": "Technical Engineering IV - Materials",
+  "ten4.creative_mode_tab.tool": "Technical Engineering IV - Tools",
 
-  "ten4.gui.device.augment_label": "Augments"
+  "ten4.misc.info_label": "Information",
+  "ten4.misc.sigmode_label": "Configurations",
+  "ten4.misc.io_label": "Input/Output",
+  "ten4.misc.augment_label": "Augments",
+
+  "ten4.misc.sigmode": "Signal Mode: ",
+  "ten4.misc.sigmode.ignore": "Ignore",
+  "ten4.misc.sigmode.low_level": "Low Level",
+  "ten4.misc.sigmode.high_level": "High Level",
+  "ten4.misc.sigmode.ignore.desc": "Redstone has no impact.",
+  "ten4.misc.sigmode.low_level.desc": "Works iff redstone's off.",
+  "ten4.misc.sigmode.high_level.desc": "Works iff redstone's on.",
+
+  "ten4.misc.strict_input": "Strict Input: ",
+  "ten4.misc.strict_input.desc": "Indicates whether to accept only recipe-related items.",
+
+  "ten4.misc.comparator_mode": "Comparator Mode: ",
+  "ten4.misc.comparator_mode.off": "Off",
+  "ten4.misc.comparator_mode.energy": "Energy",
+  "ten4.misc.comparator_mode.output_items": "Output Items",
+  "ten4.misc.comparator_mode.output_fluid": "Output Fluid",
+  "ten4.misc.comparator_mode.active": "Active Only",
+  "ten4.misc.comparator_mode.off.desc": "No comparator output.",
+  "ten4.misc.comparator_mode.energy.desc": "Based on stored energy percentage.",
+  "ten4.misc.comparator_mode.output_items.desc": "Based on how full the output item slots are.",
+  "ten4.misc.comparator_mode.output_fluid.desc": "Based on how full the output fluid tanks are.",
+  "ten4.misc.comparator_mode.active.desc": "Output when active, otherwise not.",
+
+  "ten4.misc.request_rate": "Request Rate: ",
+  "ten4.misc.request_rate.desc": "The tick count between each two push and pull.",
+
+  "ten4.misc.facemode.off": "Off",
+  "ten4.misc.facemode.passive_bipass": "Passive, Bi-pass",
+  "ten4.misc.facemode.passive_input": "Passive, Input",
+  "ten4.misc.facemode.passive_output": "Passive, Output",
+  "ten4.misc.facemode.active_input": "Active, Input",
+  "ten4.misc.facemode.active_output": "Active, Output",
+  "ten4.misc.facemode.off.desc": "Input and output are banned.",
+  "ten4.misc.facemode.passive_bipass.desc": "Passively reacts to input and output requests.",
+  "ten4.misc.facemode.passive_input.desc": "Passively reacts to input requests. Output is banned.",
+  "ten4.misc.facemode.passive_output.desc": "Passively reacts to output requests. Input is banned.",
+  "ten4.misc.facemode.active_input.desc": "Actively pulls and reacts to input requests. Output is banned.",
+  "ten4.misc.facemode.active_output.desc": "Actively pushes and reacts to output requests. Input is banned.",
+
+  "ten4.misc.current_configuring": "Configure: ",
+
+  "ten4.misc.energy": "Energy",
+  "ten4.misc.item": "Item",
+  "ten4.misc.fluid": "Fluid",
+
+  "ten4.misc.front": "Front Side",
+  "ten4.misc.left": "Left Side",
+  "ten4.misc.right": "Right Side",
+  "ten4.misc.back": "Back Side",
+  "ten4.misc.up": "Up Side",
+  "ten4.misc.down": "Down Side",
+  "ten4.misc.west": "West Side",
+  "ten4.misc.east": "East Side",
+  "ten4.misc.north": "North Side",
+  "ten4.misc.south": "South Side",
+
+  "ten4.misc.enabled": "Enabled",
+  "ten4.misc.disabled": "Disabled",
+
+  "ten4.device.pulverizer": "Pulverizer",
+  "ten4.device.pulverizer.desc": "Pulverizes ores and metals into dusts, packed ice into snow, etc.",
+  "ten4.device.heat_generator": "Heat Generator",
+  "ten4.device.heat_generator.desc": "Generates energy by burning fuels."
 }

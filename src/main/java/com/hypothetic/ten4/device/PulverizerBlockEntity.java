@@ -1,14 +1,13 @@
 package com.hypothetic.ten4.device;
 
 import com.hypothetic.ten4.Ten4;
+import com.hypothetic.ten4.init.ModBlockEntities;
 import com.hypothetic.ten4.init.ModMenus;
 import com.hypothetic.ten4.init.ModRecipes;
-import com.hypothetic.ten4.init.ModBlockEntities;
 import com.hypothetic.ten4.lib.blockentity.device.RecipeDeviceBlockEntity;
 import com.hypothetic.ten4.lib.capability.item.ItemSlot;
 import com.hypothetic.ten4.lib.capability.item.SlotOption;
 import com.hypothetic.ten4.lib.container.AugmentableContainerMenu;
-import com.hypothetic.ten4.lib.container.ContainerMenu;
 import com.hypothetic.ten4.lib.container.ContainerMenuLayout;
 import com.hypothetic.ten4.lib.recipe.ModRecipe;
 import net.minecraft.core.BlockPos;
@@ -27,7 +26,7 @@ public class PulverizerBlockEntity extends RecipeDeviceBlockEntity {
 
   @Override
   protected void setupStorage() {
-    inventory.add(new ItemSlot(SlotOption.INPUT));
+    inventory.add(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput));
     inventory.add(new ItemSlot(SlotOption.OUTPUT));
     inventory.add(new ItemSlot(SlotOption.OUTPUT));
     inventory.add(new ItemSlot(SlotOption.OUTPUT));
@@ -40,6 +39,11 @@ public class PulverizerBlockEntity extends RecipeDeviceBlockEntity {
   }
 
   @Override
+  public Component getDisplayName() {
+    return Component.translatable(Ten4.getLangKey("device.pulverizer"));
+  }
+
+  @Override
   public @Nullable AbstractContainerMenu createMenu(int cid, Inventory inv, Player p) {
     ContainerMenuLayout layout = new ContainerMenuLayout()
         .add(0, 44, 35)
@@ -48,6 +52,11 @@ public class PulverizerBlockEntity extends RecipeDeviceBlockEntity {
         .add(3, 98, 44)
         .add(4, 116, 44);
     return new AugmentableContainerMenu(ModMenus.PULVERIZER.get(), cid, inv, this, layout);
+  }
+
+  @Override
+  public String getInfoLangKey() {
+    return Ten4.getLangKey("device.pulverizer.desc");
   }
 
   @Override

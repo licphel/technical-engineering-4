@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.lib.capability.energy;
 
 import net.minecraft.core.Direction;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Queue;
 
 public interface IDirectionalEnergyProvider {
@@ -21,7 +21,7 @@ public interface IDirectionalEnergyProvider {
   }
 
   default boolean canReceiveEnergy(@Nullable Direction d) {
-    return  getMaxEnergyReceive(d) > 0;
+    return getMaxEnergyReceive(d) > 0;
   }
 
   Queue<Direction> getEnergyPushingCycle();

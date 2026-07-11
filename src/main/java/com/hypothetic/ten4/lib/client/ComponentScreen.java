@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.lib.client;
 
-import com.hypothetic.ten4.lib.client.render.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.lib.client.components.UiComponent;
+import com.hypothetic.ten4.lib.client.render.gui.EnhancedGuiGraphics;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -73,13 +73,29 @@ public abstract class ComponentScreen<T extends AbstractContainerMenu> extends A
     super.mouseClicked(mx, my, button); // Do not stop event spread chain
 
     for (UiComponent e : components) {
-      if (e.isVisible() && e.isMouseHovering((int) mx, (int) my)) {
+      if (e.isVisible() && e.hovering) {
         e.onMouseClicked((int) mx, (int) my, button);
         return true;
       }
     }
 
     return false;
+  }
+
+  @Override
+  protected boolean hasClickedOutside(double x, double y, int left, int top, int p_97761_) {
+    boolean flag = super.hasClickedOutside(x, y, left, top, p_97761_);
+
+    if (!flag) {
+      return true;
+    }
+
+    for (UiComponent e : components) {
+      if (e.getTakeUp().contains((int) x, (int) y)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
@@ -111,18 +127,14 @@ public abstract class ComponentScreen<T extends AbstractContainerMenu> extends A
   }
 
   @Override
-  protected boolean hasClickedOutside(double x, double y, int left, int top, int p_97761_) {
-    boolean flag = super.hasClickedOutside(x, y, left, top, p_97761_);
-
-    if (!flag) {
-      return true;
-    }
-
+  public boolean mouseScrolled(double mx, double my, double scrollX, double scrollY) {
     for (UiComponent e : components) {
-      if (e.getTakeUp().contains((int) x, (int) y)) {
-        return false;
+      if (e.isVisible() && e.hovering) {
+        if (e.onMouseScrolled(mx, my, scrollY)) {
+          return true;
+        }
       }
     }
-    return true;
+    return super.mouseScrolled(mx, my, scrollX, scrollY);
   }
 }

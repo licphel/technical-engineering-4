@@ -219,7 +219,8 @@ public class ItemInventory implements IItemHandlerModifiable, Container {
       if (!slots.get(i).isEmpty()) {
         CompoundTag e = new CompoundTag();
         e.putInt("Slot", i);
-        list.add(slots.get(i).getStack().save(reg, e));
+        slots.get(i).writeToNBT(reg, e);
+        list.add(e);
       }
     }
     tag.put("Items", list);
@@ -228,9 +229,7 @@ public class ItemInventory implements IItemHandlerModifiable, Container {
 
   public void fromTag(CompoundTag tag, HolderLookup.Provider reg) {
     ListTag list = tag.getList("Items", CompoundTag.TAG_COMPOUND);
-    for (ItemSlot s : slots) {
-      s.readFromNBT(reg, new CompoundTag());
-    }
+
     for (int i = 0; i < list.size(); i++) {
       CompoundTag e = list.getCompound(i);
       int idx = e.getInt("Slot");

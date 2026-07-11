@@ -4,8 +4,6 @@ import com.hypothetic.ten4.lib.blockentity.device.AugmentableDeviceBlockEntity;
 import com.hypothetic.ten4.lib.capability.item.ItemInventory;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;

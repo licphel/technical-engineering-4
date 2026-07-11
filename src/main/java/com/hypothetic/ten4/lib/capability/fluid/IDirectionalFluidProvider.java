@@ -3,8 +3,8 @@ package com.hypothetic.ten4.lib.capability.fluid;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Queue;
 
 public interface IDirectionalFluidProvider {
@@ -23,7 +23,7 @@ public interface IDirectionalFluidProvider {
   }
 
   default boolean canReceiveFluid(@Nullable Direction d) {
-    return  getMaxFluidReceive(d) > 0;
+    return getMaxFluidReceive(d) > 0;
   }
 
   Queue<Direction> getFluidPushingCycle();

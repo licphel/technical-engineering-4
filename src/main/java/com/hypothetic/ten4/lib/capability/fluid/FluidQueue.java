@@ -8,6 +8,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Queue;
 
 public final class FluidQueue {
@@ -24,7 +26,6 @@ public final class FluidQueue {
     IFluidHandler tanks = host.getTanks();
     IFluidHandler[] cache = CACHE.get();
     Arrays.fill(cache, null);
-
     Queue<Direction> cycle = host.getFluidPushingCycle();
     int available = 0;
 
@@ -50,29 +51,50 @@ public final class FluidQueue {
         continue;
       }
 
-      int amount = stack.getAmount();
-      int toDrain = Math.min(amount, maxRate);
-      int per = Math.max(toDrain / available, 1);
-      int rem = toDrain - per * available;
-
+      // 1. Per-target sim-fill to find actual capacity
+      Map<Direction, Integer> planned = new LinkedHashMap<>();
+      int totalMovable = 0;
+      int remaining = Math.min(stack.getAmount(), maxRate);
       for (Direction d : cycle) {
         IFluidHandler h = cache[d.ordinal()];
-        if (h == null) {
+        if (h == null || remaining <= 0) {
           continue;
         }
-        int amt = per + (rem > 0 ? 1 : 0);
-        if (rem > 0) {
-          rem--;
+        int filled = h.fill(new FluidStack(stack.getFluid(), remaining), IFluidHandler.FluidAction.SIMULATE);
+        if (filled > 0) {
+          planned.put(d, filled);
+          totalMovable += filled;
+          remaining -= filled;
         }
-        amt = Math.min(host.getMaxFluidExtract(d), amt);
+      }
+      if (totalMovable <= 0) {
+        continue;
+      }
+
+      // 2. Real drain only what all targets can accept
+      FluidStack drained = tanks.drain(new FluidStack(stack.getFluid(), totalMovable), IFluidHandler.FluidAction.EXECUTE);
+      if (drained.isEmpty()) {
+        continue;
+      }
+
+      // 3. Distribute matching planned amounts
+      FluidStack toDistribute = drained.copy();
+      for (var e : planned.entrySet()) {
+        IFluidHandler h = cache[e.getKey().ordinal()];
+        int amt = Math.min(e.getValue(), toDistribute.getAmount());
         if (amt <= 0) {
           continue;
         }
-
-        FluidStack drained = tanks.drain(new FluidStack(stack.getFluid(), amt), IFluidHandler.FluidAction.EXECUTE);
-        if (!drained.isEmpty()) {
-          h.fill(drained, IFluidHandler.FluidAction.EXECUTE);
+        FluidStack portion = new FluidStack(toDistribute.getFluid(), amt);
+        int leftoverAmt = amt - h.fill(portion, IFluidHandler.FluidAction.EXECUTE);
+        if (leftoverAmt > 0) {
+          toDistribute.grow(leftoverAmt - amt); // put back
         }
+        toDistribute.shrink(amt);
+      }
+      // Return any undistributed remainder
+      if (!toDistribute.isEmpty()) {
+        tanks.fill(toDistribute, IFluidHandler.FluidAction.EXECUTE);
       }
     }
     cycle.offer(cycle.remove());
@@ -86,10 +108,8 @@ public final class FluidQueue {
     IFluidHandler tanks = host.getTanks();
     IFluidHandler[] cache = CACHE.get();
     Arrays.fill(cache, null);
-
     Queue<Direction> cycle = host.getFluidPullingCycle();
     int available = 0;
-    int maxRate = host.getMaxFluidReceive(cycle.peek());
 
     for (Direction d : cycle) {
       if (!host.canReceiveFluid(d)) {
@@ -106,24 +126,26 @@ public final class FluidQueue {
       return;
     }
 
-    int per = Math.max(maxRate / available, 1);
-    int rem = maxRate - per * available;
-
     for (Direction d : cycle) {
       IFluidHandler h = cache[d.ordinal()];
       if (h == null) {
         continue;
       }
-      int amt = per + (rem > 0 ? 1 : 0);
-      if (rem > 0) {
-        rem--;
-      }
-      amt = Math.min(host.getMaxFluidReceive(d), amt);
-      if (amt <= 0) {
+      int maxPull = host.getMaxFluidReceive(d);
+      // 1. Sim-drain from neighbor
+      FluidStack simDrained = h.drain(maxPull, IFluidHandler.FluidAction.SIMULATE);
+      if (simDrained.isEmpty()) {
         continue;
       }
 
-      FluidStack drained = h.drain(amt, IFluidHandler.FluidAction.EXECUTE);
+      // 2. Sim-fill into host to find actual capacity
+      int filled = tanks.fill(simDrained, IFluidHandler.FluidAction.SIMULATE);
+      if (filled <= 0) {
+        continue;
+      }
+
+      // 3. Real drain + fill only what fits
+      FluidStack drained = h.drain(filled, IFluidHandler.FluidAction.EXECUTE);
       if (!drained.isEmpty()) {
         tanks.fill(drained, IFluidHandler.FluidAction.EXECUTE);
       }

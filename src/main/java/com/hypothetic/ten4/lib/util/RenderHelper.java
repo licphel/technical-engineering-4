@@ -3,19 +3,25 @@ package com.hypothetic.ten4.lib.util;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.hypothetic.ten4.lib.client.render.gui.TextureRegion;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -62,7 +68,18 @@ public final class RenderHelper {
     return Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(rl);
   }
 
-  private record Dimension(int width, int height) {
+  public static @Nullable TextureRegion getFaceSprite(BlockState state, Direction face) {
+    BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
+    net.minecraft.util.RandomSource rand = net.minecraft.util.RandomSource.create();
+    List<net.minecraft.client.renderer.block.model.BakedQuad> quads = model.getQuads(state, face, rand, ModelData.EMPTY, null);
+    if (!quads.isEmpty()) {
+      return TextureRegion.ofSprite(quads.getFirst().getSprite());
+    }
+    quads = model.getQuads(state, null, rand, ModelData.EMPTY, null);
+    if (!quads.isEmpty()) {
+      return TextureRegion.ofSprite(quads.getFirst().getSprite());
+    }
+    return TextureRegion.ofSprite(model.getParticleIcon(ModelData.EMPTY));
   }
 
   public static int guiOriginX(int width, int xSize) {
@@ -71,5 +88,8 @@ public final class RenderHelper {
 
   public static int guiOriginY(int height, int ySize) {
     return (height - ySize) / 2;
+  }
+
+  private record Dimension(int width, int height) {
   }
 }

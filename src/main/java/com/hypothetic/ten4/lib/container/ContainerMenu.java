@@ -78,7 +78,7 @@ public class ContainerMenu extends AbstractContainerMenu {
       ItemStack slotStack = slot.getItem();
       itemstack = slotStack.copy();
 
-      if (itemstack.is(Items.OBSIDIAN)) {
+      if (itemstack.getItem() instanceof IAugment<?>) {
         // Handle augment slots
         if (isInBackpack(slotId)) {
           if (this instanceof AugmentableContainerMenu acm) {

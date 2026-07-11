@@ -21,28 +21,28 @@ public final class ModCreativeTabs {
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BLOCK_TAB = TABS.register("block",
       () -> CreativeModeTab.builder()
           .icon(() -> new ItemStack(Items.IRON_BLOCK))
-          .title(Component.translatable("itemGroup.ten4.block"))
+          .title(Component.translatable(Ten4.getLangKey("creative_mode_tab.block")))
           .displayItems((params, output) -> blockTab.forEach(s -> output.accept(s.get())))
           .build());
   static final List<Supplier<Item>> deviceTab = new ArrayList<>();
-  public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MACHINE_TAB = TABS.register("machine",
+  public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MACHINE_TAB = TABS.register("device",
       () -> CreativeModeTab.builder()
           .icon(() -> new ItemStack(Items.FURNACE))
-          .title(Component.translatable("itemGroup.ten4.device"))
+          .title(Component.translatable(Ten4.getLangKey("creative_mode_tab.device")))
           .displayItems((params, output) -> deviceTab.forEach(s -> output.accept(s.get())))
           .build());
   static final List<Supplier<Item>> materialTab = new ArrayList<>();
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ITEM_TAB = TABS.register("item",
       () -> CreativeModeTab.builder()
           .icon(() -> new ItemStack(Items.IRON_INGOT))
-          .title(Component.translatable("itemGroup.ten4.material"))
+          .title(Component.translatable(Ten4.getLangKey("creative_mode_tab.material")))
           .displayItems((params, output) -> materialTab.forEach(s -> output.accept(s.get())))
           .build());
   static final List<Supplier<Item>> toolTab = new ArrayList<>();
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TOOL_TAB = TABS.register("tool",
       () -> CreativeModeTab.builder()
           .icon(() -> new ItemStack(Items.STICK))
-          .title(Component.translatable("itemGroup.ten4.tool"))
+          .title(Component.translatable(Ten4.getLangKey("creative_mode_tab.tool")))
           .displayItems((params, output) -> toolTab.forEach(s -> output.accept(s.get())))
           .build());
 

@@ -1,8 +1,75 @@
 {
-  "itemGroup.ten4.block": "科能工程 4 - 方块",
-  "itemGroup.ten4.device": "科能工程 4 - 机器",
-  "itemGroup.ten4.material": "科能工程 4 - 材料",
-  "itemGroup.ten4.tool": "科能工程 4 - 工具",
+  "ten4.creative_mode_tab.block": "科能工程 IV - 方块",
+  "ten4.creative_mode_tab.device": "科能工程 IV - 机器",
+  "ten4.creative_mode_tab.material": "科能工程 IV - 材料",
+  "ten4.creative_mode_tab.tool": "科能工程 IV - 工具",
 
-  "ten4.gui.device.augment_label": "升级"
+  "ten4.misc.info_label": "关于",
+  "ten4.misc.sigmode_label": "配置",
+  "ten4.misc.io_label": "输入/输出",
+  "ten4.misc.augment_label": "升级",
+
+  "ten4.misc.strict_input": "严格输入：",
+  "ten4.misc.strict_input.desc": "代表是否只允许输入有配方的物品。",
+
+  "ten4.misc.comparator_mode": "比较器模式：",
+  "ten4.misc.comparator_mode.off": "禁用",
+  "ten4.misc.comparator_mode.energy": "能量",
+  "ten4.misc.comparator_mode.output_items": "输出物品",
+  "ten4.misc.comparator_mode.output_fluid": "输出流体",
+  "ten4.misc.comparator_mode.active": "仅活动",
+  "ten4.misc.comparator_mode.off.desc": "无比较器输出。",
+  "ten4.misc.comparator_mode.energy.desc": "由储存的能量比例决定。",
+  "ten4.misc.comparator_mode.output_items.desc": "由输出物品槽位的充盈程度决定。",
+  "ten4.misc.comparator_mode.output_fluid.desc": "由输出流体槽位的充盈程度决定。",
+  "ten4.misc.comparator_mode.active.desc": "仅当活动时有输出，否则无输出。",
+
+  "ten4.misc.request_rate": "申请速度：",
+  "ten4.misc.request_rate.desc": "每两次申请输入/输出之间的 Tick 间隔。",
+
+  "ten4.misc.sigmode": "信号模式：",
+  "ten4.misc.sigmode.ignore": "忽略",
+  "ten4.misc.sigmode.low_level": "低电平",
+  "ten4.misc.sigmode.high_level": "高电平",
+  "ten4.misc.sigmode.ignore.desc": "红石信号不影响运作。",
+  "ten4.misc.sigmode.low_level.desc": "只有没有红石信号时才运作。",
+  "ten4.misc.sigmode.high_level.desc": "只有有红石信号时才运作。",
+
+  "ten4.misc.facemode.off": "禁用",
+  "ten4.misc.facemode.passive_bipass": "被动，双侧",
+  "ten4.misc.facemode.passive_input": "被动，输入",
+  "ten4.misc.facemode.passive_output": "被动，输出",
+  "ten4.misc.facemode.active_input": "主动，输入",
+  "ten4.misc.facemode.active_output": "主动，输出",
+  "ten4.misc.facemode.off.desc": "输入、输出皆被禁用。",
+  "ten4.misc.facemode.passive_bipass.desc": "被动地响应输入、输出请求。",
+  "ten4.misc.facemode.passive_input.desc": "被动地响应输入请求。输出被禁用。",
+  "ten4.misc.facemode.passive_output.desc": "被动地响应输出请求。输入被禁用。",
+  "ten4.misc.facemode.active_input.desc": "主动拉取，并响应输入请求。输出被禁用。",
+  "ten4.misc.facemode.active_output.desc": "主动推送，并响应输出请求。输入被禁用。",
+
+  "ten4.misc.current_configuring": "配置：",
+
+  "ten4.misc.energy": "能量",
+  "ten4.misc.item": "物品",
+  "ten4.misc.fluid": "流体",
+
+  "ten4.misc.front": "前侧",
+  "ten4.misc.left": "左侧",
+  "ten4.misc.right": "右侧",
+  "ten4.misc.back": "后侧",
+  "ten4.misc.up": "上侧",
+  "ten4.misc.down": "下侧",
+  "ten4.misc.west": "西侧",
+  "ten4.misc.east": "东侧",
+  "ten4.misc.north": "北侧",
+  "ten4.misc.south": "南侧",
+
+  "ten4.misc.enabled": "启用",
+  "ten4.misc.disabled": "禁用",
+
+  "ten4.device.pulverizer": "磨粉机",
+  "ten4.device.pulverizer.desc": "把矿物和金属磨成粉末、浮冰打碎成雪，等等。",
+  "ten4.device.heat_generator": "热力发电机",
+  "ten4.device.heat_generator.desc": "通过燃烧燃料发电。"
 }

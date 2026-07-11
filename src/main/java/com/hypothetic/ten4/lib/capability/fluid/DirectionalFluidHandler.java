@@ -3,7 +3,6 @@ package com.hypothetic.ten4.lib.capability.fluid;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-
 import org.jetbrains.annotations.Nullable;
 
 public class DirectionalFluidHandler implements IFluidHandler {

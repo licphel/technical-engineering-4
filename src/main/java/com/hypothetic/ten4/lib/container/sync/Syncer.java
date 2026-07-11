@@ -25,10 +25,10 @@ public class Syncer {
     }
     sealed = true;
 
-    var sorted = keys.stream().sorted(Comparator.comparing(SyncedField::name)).toList();
+    List<SyncedField<?>> sorted = keys.stream().sorted(Comparator.comparing(SyncedField::name)).toList();
     nameToIndex = new HashMap<>();
     int idx = 0;
-    for (var key : sorted) {
+    for (SyncedField<?> key : sorted) {
       nameToIndex.put(key.name(), idx);
       idx += key.slots();
     }

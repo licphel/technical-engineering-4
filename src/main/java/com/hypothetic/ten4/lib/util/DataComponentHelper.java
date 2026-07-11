@@ -13,7 +13,8 @@ import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import java.util.function.Consumer;
 
 public final class DataComponentHelper {
-  private DataComponentHelper() {}
+  private DataComponentHelper() {
+  }
 
   public static ItemStack[] merge(ItemStack i1, ItemStack i2) {
     SimpleContainer inv = new SimpleContainer(2);

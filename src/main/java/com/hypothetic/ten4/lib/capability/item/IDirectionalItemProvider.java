@@ -4,8 +4,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Queue;
 
 public interface IDirectionalItemProvider {
@@ -26,7 +26,7 @@ public interface IDirectionalItemProvider {
   }
 
   default boolean canReceiveItem(@Nullable Direction d) {
-    return  getMaxItemReceive(d) > 0;
+    return getMaxItemReceive(d) > 0;
   }
 
   Queue<Direction> getItemPushingCycle();

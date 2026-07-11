@@ -7,7 +7,6 @@ import com.hypothetic.ten4.lib.blockentity.device.SimpleGeneratorBlockEntity;
 import com.hypothetic.ten4.lib.capability.item.ItemSlot;
 import com.hypothetic.ten4.lib.capability.item.SlotOption;
 import com.hypothetic.ten4.lib.container.AugmentableContainerMenu;
-import com.hypothetic.ten4.lib.container.ContainerMenu;
 import com.hypothetic.ten4.lib.container.ContainerMenuLayout;
 import com.hypothetic.ten4.lib.util.Util;
 import net.minecraft.core.BlockPos;
@@ -27,7 +26,12 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
 
   @Override
   protected void setupStorage() {
-    inventory.add(new ItemSlot(SlotOption.INPUT));
+    inventory.add(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput));
+  }
+
+  @Override
+  public boolean isValidInput(ItemStack stack) {
+    return !strictInput || stack.getBurnTime(RecipeType.SMELTING) > 0;
   }
 
   @Override
@@ -37,7 +41,7 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
 
   @Override
   public Component getDisplayName() {
-    return Component.translatable(Ten4.getLangKey("machine.engine_extraction"));
+    return Component.translatable(Ten4.getLangKey("device.heat_generator"));
   }
 
   @Override
@@ -45,6 +49,11 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
     ContainerMenuLayout layout = new ContainerMenuLayout()
         .add(0, 44, 35);
     return new AugmentableContainerMenu(ModMenus.HEAT_GENERATOR.get(), cid, inv, this, layout);
+  }
+
+  @Override
+  public String getInfoLangKey() {
+    return Ten4.getLangKey("device.heat_generator.desc");
   }
 
   @Override

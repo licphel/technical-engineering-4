@@ -14,7 +14,8 @@ import java.util.Collection;
 import java.util.List;
 
 public final class TagHelper {
-  private TagHelper() {}
+  private TagHelper() {
+  }
 
   public static Collection<Item> getItems(TagKey<Item> tag) {
     List<Item> list = new ArrayList<>();

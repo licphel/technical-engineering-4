@@ -10,7 +10,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 
 public final class WorkingHelper {
-  private WorkingHelper() {}
+  private WorkingHelper() {
+  }
 
   public static void runIn(int radius, BlockPos center, RunWithPos r) {
     int x = center.getX();

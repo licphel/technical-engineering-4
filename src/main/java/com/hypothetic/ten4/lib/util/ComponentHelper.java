@@ -9,7 +9,8 @@ public final class ComponentHelper {
   public static ChatFormatting GREEN = ChatFormatting.GREEN;
   public static ChatFormatting RED = ChatFormatting.RED;
 
-  private ComponentHelper() {}
+  private ComponentHelper() {
+  }
 
   public static MutableComponent translated(String... ss) {
     if (ss.length == 0) {
