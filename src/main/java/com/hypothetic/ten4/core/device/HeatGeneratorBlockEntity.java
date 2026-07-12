@@ -1,14 +1,14 @@
 package com.hypothetic.ten4.core.device;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.init.ModBlockEntities;
-import com.hypothetic.ten4.init.ModMenus;
-import com.hypothetic.ten4.lib.blockentity.device.SimpleGeneratorBlockEntity;
-import com.hypothetic.ten4.lib.capability.item.ItemSlot;
-import com.hypothetic.ten4.lib.capability.item.SlotOption;
-import com.hypothetic.ten4.lib.container.AugmentableContainerMenu;
-import com.hypothetic.ten4.lib.container.ContainerMenuLayout;
-import com.hypothetic.ten4.lib.util.Util;
+import com.hypothetic.ten4.registry.ModBlockEntities;
+import com.hypothetic.ten4.registry.ModMenus;
+import com.hypothetic.ten4.api.blockentity.device.SimpleGeneratorBlockEntity;
+import com.hypothetic.ten4.api.capability.item.ItemSlot;
+import com.hypothetic.ten4.api.capability.item.SlotOption;
+import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
+import com.hypothetic.ten4.api.container.ContainerMenuLayout;
+import com.hypothetic.ten4.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;

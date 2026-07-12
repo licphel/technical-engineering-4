@@ -1,11 +1,11 @@
 package com.hypothetic.ten4.compat.jei;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.lib.client.builtin.BuiltinComponents;
-import com.hypothetic.ten4.lib.client.render.gui.EnhancedGuiGraphics;
-import com.hypothetic.ten4.lib.client.render.gui.TextureRegion;
-import com.hypothetic.ten4.lib.recipe.RecipeEntry;
-import com.hypothetic.ten4.lib.recipe.ModRecipe;
+import com.hypothetic.ten4.api.client.builtin.BuiltinComponents;
+import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
+import com.hypothetic.ten4.api.client.gui.TextureRegion;
+import com.hypothetic.ten4.api.recipe.RecipeEntry;
+import com.hypothetic.ten4.api.recipe.ModRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

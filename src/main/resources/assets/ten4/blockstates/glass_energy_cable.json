@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "ten4:block/glass_energy_cable_dummy" }
+    "": {
+      "model": "ten4:block/glass_energy_cable"
+    }
   }
 }

@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.compat.jei.core;
 
 import com.hypothetic.ten4.compat.jei.ModRecipeCategory;
-import com.hypothetic.ten4.init.ModBlocks;
-import com.hypothetic.ten4.lib.recipe.RecipeEntry;
+import com.hypothetic.ten4.registry.ModBlocks;
+import com.hypothetic.ten4.api.recipe.RecipeEntry;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
