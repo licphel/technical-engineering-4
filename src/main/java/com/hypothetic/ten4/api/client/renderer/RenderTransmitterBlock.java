@@ -69,14 +69,25 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
   @Override
   public void render(BE be, float pt, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
-    TextureAtlasSprite cs = core(), ss = side();
-    int dc = bodyColor(be);
-    float r = ((dc >> 16) & 0xFF) / 255f;
-    float g = ((dc >> 8) & 0xFF) / 255f;
-    float b = (dc & 0xFF) / 255f;
-    renderBody(be, pose, buffers, cs, ss, r, g, b, light, overlay);
+    TextureAtlasSprite cs = core();
+    TextureAtlasSprite ss = side();
+    renderBody(be, pose, buffers, cs, ss, 1.0F, 1.0F, 1.0F, 1.0F, light, overlay);
     renderContents(be, pt, pose, buffers, cs, ss, light, overlay);
+
     // Colored overlay when dyed
+    DyeColor dye = getDyeColor(be);
+    if (dye != null) {
+      int color = dye.getFireworkColor();
+      float cr = ((color >> 16) & 0xFF) / 255F;
+      float cg = ((color >> 8) & 0xFF) / 255F;
+      float cb = (color & 0xFF) / 255F;
+      float s = 1.001F, off = (1 - s) / 2;
+      pose.pushPose();
+      pose.translate(off, off, off);
+      pose.scale(s, s, s);
+      renderBody(be, pose, buffers, OVERLAY, OVERLAY, cr, cg, cb, 0.45F, light, overlay);
+      pose.popPose();
+    }
   }
 
   protected int bodyColor(BE be) {
@@ -94,8 +105,8 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
   protected void renderBody(BE be, PoseStack pose, MultiBufferSource buffers,
                             TextureAtlasSprite cs, TextureAtlasSprite ss,
-                            float r, float g, float b, int light, int overlay) {
-    VertexConsumer vc = buffers.getBuffer(RenderType.cutout());
+                            float r, float g, float b, float a, int light, int overlay) {
+    VertexConsumer vc = buffers.getBuffer(a == 1 ? RenderType.cutout() : RenderType.translucent());
     var entry = pose.last();
     List<String> names = new ArrayList<>(6);
 
@@ -103,7 +114,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
     for (BakedQuad q : baker.getPart("core", cs)) {
       if (!hasConnection(be, q.getDirection())) {
         int faceLight = applyDirectionalLight(light, q.getDirection());
-        vc.putBulkData(entry, q, r, g, b, 1, faceLight, overlay, false);
+        vc.putBulkData(entry, q, r, g, b, a, faceLight, overlay, false);
       }
     }
 
@@ -114,7 +125,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
       }
       names.clear();
       names.add(d.getSerializedName() + "_" + partName(be, d));
-      drawParts(entry, vc, ss, names, r, g, b, 1, light, overlay);
+      drawParts(entry, vc, ss, names, r, g, b, a, light, overlay);
     }
   }
 

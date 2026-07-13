@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:block/cube",
   "textures": {
-    "particle": "ten4:block/water_pump_side",
-    "north": "ten4:block/water_pump_side",
-    "south": "ten4:block/water_pump_side",
-    "east": "ten4:block/water_pump_side",
-    "west": "ten4:block/water_pump_side",
+    "particle": "ten4:block/water_pump_side_active",
+    "north": "ten4:block/water_pump_side_active",
+    "south": "ten4:block/water_pump_side_active",
+    "east": "ten4:block/water_pump_side_active",
+    "west": "ten4:block/water_pump_side_active",
     "up": "ten4:block/water_pump_top",
     "down": "ten4:block/water_pump_bottom"
   }

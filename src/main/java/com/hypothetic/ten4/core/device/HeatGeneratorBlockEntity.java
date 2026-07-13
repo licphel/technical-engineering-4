@@ -2,13 +2,13 @@ package com.hypothetic.ten4.core.device;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
-import com.hypothetic.ten4.registry.ModBlockEntities;
-import com.hypothetic.ten4.registry.ModMenus;
 import com.hypothetic.ten4.api.blockentity.device.SimpleGeneratorBlockEntity;
 import com.hypothetic.ten4.api.capability.item.ItemSlot;
 import com.hypothetic.ten4.api.capability.item.SlotOption;
 import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
 import com.hypothetic.ten4.api.container.ContainerMenuLayout;
+import com.hypothetic.ten4.registry.ModBlockEntities;
+import com.hypothetic.ten4.registry.ModMenus;
 import com.hypothetic.ten4.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -26,11 +26,6 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
   }
 
   @Override
-  public boolean isValidInput(ItemStack stack) {
-    return !strictInput || stack.getBurnTime(RecipeType.SMELTING) > 0;
-  }
-
-  @Override
   protected DeviceInfo makeDeviceInfo() {
     return new DeviceInfo()
         .enableEnergy()
@@ -40,6 +35,11 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
         .setEnergyCapacity(10_000)
         .setEnergyThroughput(100)
         .setItemThroughput(1);
+  }
+
+  @Override
+  public boolean isValidInput(ItemStack stack) {
+    return !strictInput || stack.getBurnTime(RecipeType.SMELTING) > 0;
   }
 
   @Override

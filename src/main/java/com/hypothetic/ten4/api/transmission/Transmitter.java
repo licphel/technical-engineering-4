@@ -333,10 +333,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
 
   void markDirtyTransmitters() {
     tile.notifyTileChange();
-    if (hasNetwork()) {
-      TransmitterNetworkRegistry.onTransmitterRemoved(self());
-      TransmitterNetworkRegistry.joinNetwork(self());
-    }
+    requestsUpdate();
   }
 
   void markDirtyAcceptor(Direction side) {
