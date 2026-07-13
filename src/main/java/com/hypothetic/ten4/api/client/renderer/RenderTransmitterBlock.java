@@ -1,5 +1,6 @@
 package com.hypothetic.ten4.api.client.renderer;
 
+import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
 import com.hypothetic.ten4.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -11,12 +12,17 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements BlockEntityRenderer<BE> {
+  private static final TextureAtlasSprite OVERLAY = RenderHelper.getBlockSprite(
+      ResourceLocation.withDefaultNamespace("block/white_concrete"));
+
   protected final DuctModelBaker baker;
   private TextureAtlasSprite spriteCore, spriteSide;
 
@@ -70,10 +76,20 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
     float b = (dc & 0xFF) / 255f;
     renderBody(be, pose, buffers, cs, ss, r, g, b, light, overlay);
     renderContents(be, pt, pose, buffers, cs, ss, light, overlay);
+    // Colored overlay when dyed
   }
 
   protected int bodyColor(BE be) {
-    return 0xFFFFFF;
+    DyeColor c = getDyeColor(be);
+    return c == null ? 0xFFFFFF : c.getFireworkColor();
+  }
+
+  @Nullable
+  protected net.minecraft.world.item.DyeColor getDyeColor(BE be) {
+    if (be instanceof ITransmitterProvider provider && provider.getTransmitter() != null) {
+      return provider.getTransmitter().getColor();
+    }
+    return null;
   }
 
   protected void renderBody(BE be, PoseStack pose, MultiBufferSource buffers,

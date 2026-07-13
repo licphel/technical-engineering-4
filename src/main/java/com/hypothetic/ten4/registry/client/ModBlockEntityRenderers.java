@@ -3,6 +3,8 @@ package com.hypothetic.ten4.registry.client;
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.registry.ModBlockEntities;
 import com.hypothetic.ten4.api.client.renderer.RenderEnergyDuct;
+import com.hypothetic.ten4.api.client.renderer.RenderFluidDuct;
+import com.hypothetic.ten4.api.client.renderer.RenderItemDuct;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -14,5 +16,9 @@ public class ModBlockEntityRenderers {
   public static void listen(EntityRenderersEvent.RegisterRenderers e) {
     e.registerBlockEntityRenderer(ModBlockEntities.COPPER_ENERGY_DUCT.get(),
         ctx -> new RenderEnergyDuct(ctx, Ten4.id("block/duct/copper_energy_duct")));
+    e.registerBlockEntityRenderer(ModBlockEntities.COPPER_ITEM_DUCT.get(),
+        ctx -> new RenderItemDuct(ctx, Ten4.id("block/duct/copper_item_duct")));
+    e.registerBlockEntityRenderer(ModBlockEntities.COPPER_FLUID_DUCT.get(),
+        ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_fluid_duct")));
   }
 }

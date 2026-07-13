@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.api.client.builtin;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.IDescriptionProvider;
+import com.hypothetic.ten4.api.IDescriptionProvider;
 import com.hypothetic.ten4.api.client.DeviceScreen;
 import com.hypothetic.ten4.api.client.components.*;
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
@@ -11,6 +11,7 @@ import com.hypothetic.ten4.api.container.ContainerMenu;
 import com.hypothetic.ten4.api.container.ManualSlot;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.SyncedFieldReader;
+import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;
 import com.hypothetic.ten4.util.DisplayHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,6 +30,7 @@ public final class BuiltinComponents {
   public static final TextureRegion FUEL_FULL = TextureRegion.of(TEXTURE, 168, 14, 14, 14);
   public static final TextureRegion PROGRESS_EMPTY = TextureRegion.of(TEXTURE, 234, 0, 22, 16);
   public static final TextureRegion PROGRESS_FULL = TextureRegion.of(TEXTURE, 234, 16, 22, 16);
+  public static final TextureRegion FLUID_TANK = TextureRegion.of(TEXTURE, 214, 0, 18, 50);
 
   private BuiltinComponents() {
   }
@@ -62,6 +64,13 @@ public final class BuiltinComponents {
         () -> reader.getInt(BuiltinSyncedFields.PROGRESS),
         () -> reader.getInt(BuiltinSyncedFields.MAX_PROGRESS)
     ).withTexture(PROGRESS_EMPTY, PROGRESS_FULL);
+  }
+
+  public static GaugeFluid fluidGauge(int x, int y, SyncedFieldReader reader, SyncedFluidStack sfs) {
+    return new GaugeFluid(x, y, 18, 50, 16, 48,
+        () -> sfs.decode(reader),
+        () -> reader.getInt(sfs.getCapacityField())
+    ).withTexture(FLUID_TANK, null);
   }
 
   // 2-px padding rightward

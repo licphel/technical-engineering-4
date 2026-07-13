@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
-import com.hypothetic.ten4.api.blockentity.ITickable;
+import com.hypothetic.ten4.api.ITickable;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.Syncer;
 import com.hypothetic.ten4.api.recipe.RecipeEntry;
@@ -38,53 +38,21 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   }
 
   @Override
-  protected void initAttributes(Syncer syncer) {
+  protected void registerAdditionalSyncFields(Syncer syncer) {
     syncer.register(BuiltinSyncedFields.ENERGY);
     syncer.register(BuiltinSyncedFields.MAX_ENERGY);
     syncer.register(BuiltinSyncedFields.PROGRESS);
     syncer.register(BuiltinSyncedFields.MAX_PROGRESS);
-    syncer.register(BuiltinSyncedFields.EFFICIENCY);
   }
 
   @Override
-  public int getComparatorSignal() {
-    return switch (comparatorMode) {
-      case OUTPUT_ITEMS -> {
-        if (outputSlots.isEmpty()) {
-          yield  0;
-        }
+  protected List<Integer> getComparatorSignalSlots() {
+    return outputSlots;
+  }
 
-        float f = 0.0F;
-
-        for (int i : outputSlots) {
-          ItemStack itemstack = inventory.getItem(i);
-          if (!itemstack.isEmpty()) {
-            f += (float) itemstack.getCount() / (float) inventory.getSlotLimit(i);
-          }
-        }
-
-        f /= (float) outputSlots.size();
-        yield Mth.lerpDiscrete(f, 0, 15);
-      }
-      case OUTPUT_FLUID -> {
-        if (outputTanks.isEmpty()) {
-          yield  0;
-        }
-
-        float f = 0.0F;
-
-        for (int i : outputTanks) {
-          FluidStack s = fluidTanks.getFluidInTank(i);
-          if (!s.isEmpty()) {
-            f += (float) s.getAmount() / (float) fluidTanks.getTankCapacity(i);
-          }
-        }
-
-        f /= (float) outputTanks.size();
-        yield Mth.lerpDiscrete(f, 0, 15);
-      }
-      default -> super.getComparatorSignal();
-    };
+  @Override
+  protected List<Integer> getComparatorSignalTanks() {
+    return outputTanks;
   }
 
   @Override
@@ -122,15 +90,15 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
 
     process();
 
-    if (isSignalEnabled() && getEnergy() > 0) {
+    if (isSignalEnabled()) {
       queuedPushPull();
     }
 
     syncer.set(BuiltinSyncedFields.ENERGY, getEnergy());
-    syncer.set(BuiltinSyncedFields.MAX_ENERGY, getMaxEnergy());
+    syncer.set(BuiltinSyncedFields.MAX_ENERGY, this.getEnergyCapacity());
     syncer.set(BuiltinSyncedFields.PROGRESS, getProgress());
     syncer.set(BuiltinSyncedFields.MAX_PROGRESS, getMaxProgress());
-    syncer.set(BuiltinSyncedFields.EFFICIENCY, getEfficiency());
+    syncer.set(BuiltinSyncedFields.POWER, getActualPower());
     synchronizeBasicData();
   }
 
@@ -147,8 +115,8 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
       }
 
       setActive(true);
-      maxProgress = recipe.time() * getBasicEfficiency();
-      int consumed = getEfficiency();
+      maxProgress = recipe.time() * info.power;
+      int consumed = getActualPower();
       if (consumed <= 0) {
         setActive(false);
         return;
@@ -168,7 +136,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
       setActive(false);
 
       if (progress > 0 && !isEnergySufficient()) {
-        progress = Math.max(0, progress - getBasicEfficiency());
+        progress = Math.max(0, progress - info.power);
         setChanged();
       }
     }
@@ -225,11 +193,11 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   }
 
   protected boolean canFitFluidOutput(FluidStack f) {
-    return fluidTanks.forceFill(f.copy(), outputTanks, IFluidHandler.FluidAction.SIMULATE) >= f.getAmount();
+    return fluidInventory.forceFill(f.copy(), outputTanks, IFluidHandler.FluidAction.SIMULATE) >= f.getAmount();
   }
 
   protected void giveFluidOutput(FluidStack f) {
-    fluidTanks.forceFill(f.copy(), outputTanks, IFluidHandler.FluidAction.EXECUTE);
+    fluidInventory.forceFill(f.copy(), outputTanks, IFluidHandler.FluidAction.EXECUTE);
   }
 
   protected void shrinkInputs() {
@@ -249,10 +217,10 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     for (RecipeEntry in : recipe.fluidInputs()) {
       int n = in.count();
       for (Integer i : inputTanks) {
-        FluidStack f = fluidTanks.getFluidInTank(i);
+        FluidStack f = fluidInventory.getFluidInTank(i);
         if (in.containsFluid(f.getFluid())) {
           int t = Math.min(n, f.getAmount());
-          fluidTanks.getTank(i).drain(t, IFluidHandler.FluidAction.EXECUTE);
+          fluidInventory.getTank(i).drain(t, IFluidHandler.FluidAction.EXECUTE);
           n -= t;
         }
       }
@@ -275,7 +243,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     for (RecipeEntry in : r.fluidInputs()) {
       boolean f = false;
       for (Integer i : inputTanks) {
-        if (in.test(fluidTanks.getFluidInTank(i))) {
+        if (in.test(fluidInventory.getFluidInTank(i))) {
           f = true;
           break;
         }

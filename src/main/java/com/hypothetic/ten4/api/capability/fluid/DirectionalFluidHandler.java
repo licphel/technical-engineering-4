@@ -39,7 +39,7 @@ public class DirectionalFluidHandler implements IFluidHandler {
     if (resource.isEmpty() || !host.canReceiveFluid(side)) {
       return 0;
     }
-    int cap = host.getMaxFluidReceive(side);
+    int cap = host.getFluidThroughput();
     if (cap <= 0) {
       return 0;
     }
@@ -51,7 +51,7 @@ public class DirectionalFluidHandler implements IFluidHandler {
     if (resource.isEmpty() || !host.canExtractFluid(side)) {
       return FluidStack.EMPTY;
     }
-    int cap = host.getMaxFluidExtract(side);
+    int cap = host.getFluidThroughput();
     if (cap <= 0) {
       return FluidStack.EMPTY;
     }
@@ -63,7 +63,7 @@ public class DirectionalFluidHandler implements IFluidHandler {
     if (maxDrain <= 0 || !host.canExtractFluid(side)) {
       return FluidStack.EMPTY;
     }
-    int cap = host.getMaxFluidExtract(side);
+    int cap = host.getFluidThroughput();
     if (cap <= 0) {
       return FluidStack.EMPTY;
     }

@@ -10,21 +10,15 @@ import java.util.Queue;
 public interface IDirectionalFluidProvider {
   IFluidHandler getTanks();
 
-  int getMaxFluidExtract(@Nullable Direction d);
-
-  int getMaxFluidReceive(@Nullable Direction d);
+  int getFluidThroughput();
 
   default boolean isFluidValid(int tank, FluidStack stack) {
     return getTanks().isFluidValid(tank, stack);
   }
 
-  default boolean canExtractFluid(@Nullable Direction d) {
-    return getMaxFluidExtract(d) > 0;
-  }
+  boolean canExtractFluid(@Nullable Direction d);
 
-  default boolean canReceiveFluid(@Nullable Direction d) {
-    return getMaxFluidReceive(d) > 0;
-  }
+  boolean canReceiveFluid(@Nullable Direction d);
 
   Queue<Direction> getFluidPushingCycle();
 

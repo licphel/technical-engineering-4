@@ -1,13 +1,13 @@
 package com.hypothetic.ten4.compat.jei;
 
 import com.hypothetic.ten4.Ten4;
+import com.hypothetic.ten4.api.client.TenScreen;
 import com.hypothetic.ten4.compat.jei.core.HeatGeneratorCategory;
 import com.hypothetic.ten4.compat.jei.core.PulverizerCategory;
 import com.hypothetic.ten4.core.device.HeatGeneratorScreen;
 import com.hypothetic.ten4.core.device.PulverizerScreen;
 import com.hypothetic.ten4.registry.ModBlocks;
 import com.hypothetic.ten4.registry.ModRecipes;
-import com.hypothetic.ten4.api.client.ComponentScreen;
 import com.hypothetic.ten4.api.recipe.ModRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -96,10 +96,10 @@ public class ModJeiPlugin implements IModPlugin {
     registry.addRecipeClickArea(HeatGeneratorScreen.class, 80, 36, 14, 14, HEAT_GENERATOR);
 
     // Excluded areas
-    registry.addGenericGuiContainerHandler(ComponentScreen.class, new IGuiContainerHandler<>() {
+    registry.addGenericGuiContainerHandler(TenScreen.class, new IGuiContainerHandler<>() {
       @Override
       public List<Rect2i> getGuiExtraAreas(AbstractContainerScreen<?> containerScreen) {
-        if (containerScreen instanceof ComponentScreen<?> cs) {
+        if (containerScreen instanceof TenScreen<?> cs) {
           return cs.getComponentAreas();
         }
         return Collections.emptyList();

@@ -75,13 +75,21 @@
   "ten4.misc.enabled": "启用",
   "ten4.misc.disabled": "禁用",
 
+  "ten4.misc.throughput.energy": "能量吞吐：",
+  "ten4.misc.throughput.item": "物品吞吐：",
+  "ten4.misc.throughput.fluid": "流体吞吐：",
+  "ten4.misc.power": "功率：",
+
   "ten4.pulverizer": "磨粉机",
   "ten4.pulverizer.desc": "把矿物和金属磨成粉末、浮冰打碎成雪，等等。",
   "ten4.heat_generator": "热力发电机",
   "ten4.heat_generator.desc": "通过燃烧燃料发电。",
+  "ten4.water_pump": "水泵",
+  "ten4.water_pump.desc": "从世界中的液体泵取到其水槽中。",
 
   "block.ten4.pulverizer": "磨粉机",
   "block.ten4.heat_generator": "热力发电机",
+  "block.ten4.water_pump": "水泵",
 
   "item.ten4.iron_dust": "铁粉",
   "item.ten4.iron_plate": "铁板",

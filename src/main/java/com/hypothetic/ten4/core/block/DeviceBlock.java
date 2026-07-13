@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.core.block;
 
 import com.hypothetic.ten4.api.blockentity.device.ComparatorMode;
-import com.hypothetic.ten4.api.blockentity.ILootProvider;
+import com.hypothetic.ten4.api.ILootProvider;
 import com.hypothetic.ten4.api.blockentity.SimpleTicker;
 import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
 import com.mojang.serialization.MapCodec;
@@ -10,6 +10,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -109,8 +110,8 @@ public class DeviceBlock extends BaseEntityBlock {
       return ItemInteractionResult.SUCCESS;
     }
     BlockEntity be = level.getBlockEntity(pos);
-    if (be instanceof AbstractDeviceBlockEntity mbe) {
-      player.openMenu(mbe, pos);
+    if (be instanceof MenuProvider menuProvider) {
+      player.openMenu(menuProvider, pos);
     }
     return ItemInteractionResult.CONSUME;
   }

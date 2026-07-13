@@ -44,7 +44,7 @@ public final class FluidQueue {
       return;
     }
 
-    int maxRate = host.getMaxFluidExtract(cycle.peek());
+    int maxRate = host.getFluidThroughput();
     for (int tank = 0; tank < tanks.getTanks(); tank++) {
       FluidStack stack = tanks.getFluidInTank(tank);
       if (stack.isEmpty()) {
@@ -131,7 +131,7 @@ public final class FluidQueue {
       if (h == null) {
         continue;
       }
-      int maxPull = host.getMaxFluidReceive(d);
+      int maxPull = host.getFluidThroughput();
       // 1. Sim-drain from neighbor
       FluidStack simDrained = h.drain(maxPull, IFluidHandler.FluidAction.SIMULATE);
       if (simDrained.isEmpty()) {

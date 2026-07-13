@@ -1,6 +1,7 @@
 package com.hypothetic.ten4.core.device;
 
 import com.hypothetic.ten4.Ten4;
+import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
 import com.hypothetic.ten4.registry.ModBlockEntities;
 import com.hypothetic.ten4.registry.ModMenus;
 import com.hypothetic.ten4.api.blockentity.device.SimpleGeneratorBlockEntity;
@@ -25,18 +26,20 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
   }
 
   @Override
-  protected void setupStorage() {
-    inventory.add(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput));
-  }
-
-  @Override
   public boolean isValidInput(ItemStack stack) {
     return !strictInput || stack.getBurnTime(RecipeType.SMELTING) > 0;
   }
 
   @Override
-  public int getBasicEfficiency() {
-    return 30;
+  protected DeviceInfo makeDeviceInfo() {
+    return new DeviceInfo()
+        .enableEnergy()
+        .enableItem()
+        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput))
+        .setPower(20)
+        .setEnergyCapacity(10_000)
+        .setEnergyThroughput(100)
+        .setItemThroughput(1);
   }
 
   @Override

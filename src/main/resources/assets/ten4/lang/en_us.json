@@ -75,13 +75,21 @@
   "ten4.misc.enabled": "Enabled",
   "ten4.misc.disabled": "Disabled",
 
+  "ten4.misc.throughput.energy": "Energy Throughput: ",
+  "ten4.misc.throughput.item": "Item Throughput: ",
+  "ten4.misc.throughput.fluid": "Fluid Throughput: ",
+  "ten4.misc.power": "Power: ",
+
   "ten4.pulverizer": "Pulverizer",
   "ten4.pulverizer.desc": "Pulverizes ores and metals into dusts, packed ice into snow, etc.",
   "ten4.heat_generator": "Heat Generator",
   "ten4.heat_generator.desc": "Generates energy by burning fuels.",
+  "ten4.water_pump": "Water Pump",
+  "ten4.water_pump.desc": "Pumps liquid from the world to its tanks.",
 
   "block.ten4.pulverizer": "Pulverizer",
   "block.ten4.heat_generator": "Heat Generator",
+  "block.ten4.water_pump": "Water Pump",
 
   "item.ten4.iron_dust": "Iron Dust",
   "item.ten4.iron_plate": "Iron Plate",

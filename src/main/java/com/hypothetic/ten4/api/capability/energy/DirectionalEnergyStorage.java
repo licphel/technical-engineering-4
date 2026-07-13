@@ -18,7 +18,7 @@ public class DirectionalEnergyStorage implements IEnergyStorage {
     if (!canReceive()) {
       return 0;
     }
-    int v = Math.min(host.getMaxEnergy() - host.getEnergy(), Math.min(maxReceive, host.getMaxEnergyReceive(side)));
+    int v = Math.min(host.getEnergyCapacity() - host.getEnergy(), Math.min(maxReceive, host.getEnergyThroughput()));
     if (v <= 0) {
       return 0;
     }
@@ -33,7 +33,7 @@ public class DirectionalEnergyStorage implements IEnergyStorage {
     if (!canExtract()) {
       return 0;
     }
-    int v = Math.min(host.getEnergy(), Math.min(maxExtract, host.getMaxEnergyExtract(side)));
+    int v = Math.min(host.getEnergy(), Math.min(maxExtract, host.getEnergyThroughput()));
     if (v <= 0) {
       return 0;
     }
@@ -50,7 +50,7 @@ public class DirectionalEnergyStorage implements IEnergyStorage {
 
   @Override
   public int getMaxEnergyStored() {
-    return host.getMaxEnergy();
+    return host.getEnergyCapacity();
   }
 
   @Override

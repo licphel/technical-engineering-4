@@ -2,7 +2,7 @@ package com.hypothetic.ten4.api.client.renderer;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.blockentity.internet.EnergyDuctBlockEntity;
-import com.hypothetic.ten4.api.capability.internet.ConnectionType;
+import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -23,18 +23,19 @@ import net.minecraft.world.item.DyeColor;
  * Pattern: Mekanism's RenderUniversalCable.
  */
 public class RenderEnergyDuct extends RenderTransmitterBlock<EnergyDuctBlockEntity> {
+  private static final ResourceLocation MODEL_CORE = Ten4.id("block/connectable/connectable_core");
   private static final ResourceLocation MODEL_PART = Ten4.id("block/connectable/connectable_part");
   private static final ResourceLocation MODEL_PULL = Ten4.id("block/connectable/connectable_pull");
   private static final ResourceLocation MODEL_PUSH = Ten4.id("block/connectable/connectable_push");
-  private static final TextureAtlasSprite WATER = RenderHelper.getBlockSprite(
-      ResourceLocation.withDefaultNamespace("block/water_still"));
   private static final ResourceLocation INNER_CORE = Ten4.id("block/connectable/inner_core");
   private static final ResourceLocation INNER_PART = Ten4.id("block/connectable/inner_part");
+  private static final TextureAtlasSprite WATER = RenderHelper.getBlockSprite(
+      ResourceLocation.withDefaultNamespace("block/water_still"));
   private final ResourceLocation texture;
   private final DuctModelBaker innerBaker = new DuctModelBaker(INNER_CORE, INNER_PART, INNER_PART, INNER_PART);
 
   public RenderEnergyDuct(BlockEntityRendererProvider.Context ctx, ResourceLocation textureName) {
-    super(ctx, Ten4.id("block/connectable/connectable_core"), MODEL_PART, MODEL_PULL, MODEL_PUSH);
+    super(ctx, MODEL_CORE, MODEL_PART, MODEL_PULL, MODEL_PUSH);
     texture = textureName;
   }
 
@@ -63,28 +64,20 @@ public class RenderEnergyDuct extends RenderTransmitterBlock<EnergyDuctBlockEnti
   }
 
   @Override
-  protected int bodyColor(EnergyDuctBlockEntity be) {
-    DyeColor c = be.transmitter.getColor();
-    return c == null ? 0xFFFFFF : c.getFireworkColor();
-  }
-
-  @Override
   protected void renderContents(EnergyDuctBlockEntity be, float pt, PoseStack pose,
                                 MultiBufferSource buffers, TextureAtlasSprite cs, TextureAtlasSprite ss,
                                 int light, int overlay) {
-    float fill = be.transmitter.getClientFillRatio();
-    if (fill <= 0) {
-      return;
-    }
+    float scale = be.transmitter.getClientScale();
+    if (scale <= 0) return;
     Player player = Minecraft.getInstance().player;
     if (player == null || !player.blockPosition().closerThan(be.getBlockPos(), 32)) {
       return;
     }
 
     VertexConsumer vc = buffers.getBuffer(RenderType.translucent());
-    float alpha = Math.min(fill, 1f);
+    float alpha = Math.min(scale, 1f);
     float s = 0.971f, off = (1 - s) / 2;
-    final float r = 0.2f, g = 0.8f, b = 0.5f;
+    final float r = 0.32f, g = 0.7f, b = 0.5f;
 
     pose.pushPose();
     pose.translate(off, off, off);

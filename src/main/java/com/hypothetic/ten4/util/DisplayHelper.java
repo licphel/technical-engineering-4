@@ -12,9 +12,9 @@ public final class DisplayHelper {
   public static Component getFE(double e, double me) {
     if (e >= 0) {
       if (e < 1000) {
-        return ComponentHelper.make(ComponentHelper.RED, e + " FE / " + String.format("%.1f", me / 1000) + " kFE");
+        return ComponentHelper.make(ComponentHelper.RED, (int) e + " FE / " + String.format("%.0f", me / 1000) + " kFE");
       } else {
-        return ComponentHelper.make(ComponentHelper.RED, String.format("%.1f", e / 1000) + " kFE / " + String.format("%.1f", me / 1000) + " kFE");
+        return ComponentHelper.make(ComponentHelper.RED, String.format("%.2f", e / 1000) + " kFE / " + String.format("%.0f", me / 1000) + " kFE");
       }
     }
     return ComponentHelper.make("ERROR");
@@ -22,7 +22,7 @@ public final class DisplayHelper {
 
   public static Component getMB(double e, double me) {
     if (e >= 0) {
-      return ComponentHelper.make(e + " mB / " + me + " mB");
+      return ComponentHelper.make((int) e + " mB / " + (int) me + " mB");
     }
     return ComponentHelper.make("ERROR");
   }

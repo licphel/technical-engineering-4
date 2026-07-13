@@ -117,7 +117,7 @@ public class Panel extends UiComponent {
 
   @Override
   public void onMouseClicked(int mx, int my, int button) {
-    if (mx >= effectiveX() && mx < effectiveX() + width && my >= y && my <= y + this.button.getHeight()) {
+    if (mx >= effectiveX() && mx < effectiveX() + currentWidth() && my >= y && my <= y + this.button.getHeight()) {
       toggle();
     }
 

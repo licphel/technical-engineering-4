@@ -1,8 +1,9 @@
 package com.hypothetic.ten4.api.network.duct;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.internet.EnergyDuctBlockEntity;
-import com.hypothetic.ten4.api.capability.internet.ConnectionType;
+import com.hypothetic.ten4.api.transmission.ConnectionType;
+import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
+import com.hypothetic.ten4.api.transmission.Transmitter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -51,8 +52,9 @@ public record DuctConnectionPayload(BlockPos pos, byte conn, byte acc,
 
   public static void handle(DuctConnectionPayload pkt, IPayloadContext ctx) {
     Level level = ctx.player().level();
-    if (level.getBlockEntity(pkt.pos) instanceof EnergyDuctBlockEntity cable) {
-      cable.transmitter.applyConnectionSync(pkt.conn, pkt.acc, pkt.types, pkt.color);
+    if (level.getBlockEntity(pkt.pos) instanceof ITransmitterProvider duct) {
+      Transmitter<?, ?, ?> t = duct.getTransmitter();
+      if (t != null) t.applyConnectionSync(pkt.conn, pkt.acc, pkt.types, pkt.color);
     }
   }
 }

@@ -13,21 +13,15 @@ public interface IDirectionalItemProvider {
 
   Container getContainer();
 
-  int getMaxItemExtract(@Nullable Direction d);
-
-  int getMaxItemReceive(@Nullable Direction d);
+  int getItemThroughput();
 
   default boolean isItemValid(int slot, ItemStack stack) {
     return getInventory().isItemValid(slot, stack);
   }
 
-  default boolean canExtractItem(@Nullable Direction d) {
-    return getMaxItemExtract(d) > 0;
-  }
+  boolean canExtractItem(@Nullable Direction d);
 
-  default boolean canReceiveItem(@Nullable Direction d) {
-    return getMaxItemReceive(d) > 0;
-  }
+  boolean canReceiveItem(@Nullable Direction d);
 
   Queue<Direction> getItemPushingCycle();
 

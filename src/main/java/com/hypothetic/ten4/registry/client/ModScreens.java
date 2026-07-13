@@ -3,6 +3,7 @@ package com.hypothetic.ten4.registry.client;
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.core.device.HeatGeneratorScreen;
 import com.hypothetic.ten4.core.device.PulverizerScreen;
+import com.hypothetic.ten4.core.device.WaterPumpScreen;
 import com.hypothetic.ten4.registry.ModMenus;
 import com.hypothetic.ten4.api.container.ContainerMenu;
 import net.minecraft.network.chat.Component;
@@ -22,5 +23,8 @@ public class ModScreens {
     event.register(ModMenus.HEAT_GENERATOR.get(),
         (ContainerMenu menu, Inventory inv, Component title) -> new HeatGeneratorScreen(menu, inv, title,
             Ten4.id("textures/gui/heat_generator.png")));
+    event.register(ModMenus.WATER_PUMP.get(),
+        (ContainerMenu menu, Inventory inv, Component title) -> new WaterPumpScreen(menu, inv, title,
+            Ten4.id("textures/gui/water_pump.png")));
   }
 }

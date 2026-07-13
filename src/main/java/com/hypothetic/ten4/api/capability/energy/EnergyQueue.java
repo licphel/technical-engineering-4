@@ -45,7 +45,7 @@ public final class EnergyQueue {
       return;
     }
 
-    int maxRate = host.getMaxEnergyExtract(cycle.peek());
+    int maxRate = host.getEnergyThroughput();
     int per = Math.max(Math.min(energy / available, maxRate), 1);
     int rem = energy - per * available;
 
@@ -58,7 +58,7 @@ public final class EnergyQueue {
       if (rem > 0) {
         rem--;
       }
-      amt = Math.min(host.getEnergy(), Math.min(host.getMaxEnergyExtract(d), amt));
+      amt = Math.min(host.getEnergy(), Math.min(host.getEnergyThroughput(), amt));
       if (amt <= 0) {
         continue;
       }
@@ -72,7 +72,7 @@ public final class EnergyQueue {
     if (host.getEnergyPullingCycle().isEmpty()) {
       return;
     }
-    if (host.getEnergy() >= host.getMaxEnergy()) {
+    if (host.getEnergy() >= host.getEnergyCapacity()) {
       return;
     }
 
@@ -81,7 +81,7 @@ public final class EnergyQueue {
 
     Queue<Direction> cycle = host.getEnergyPullingCycle();
     int available = 0;
-    int space = host.getMaxEnergy() - host.getEnergy();
+    int space = host.getEnergyCapacity() - host.getEnergy();
 
     for (Direction d : cycle) {
       if (!host.canReceiveEnergy(d)) {
@@ -98,7 +98,7 @@ public final class EnergyQueue {
       return;
     }
 
-    int maxRate = host.getMaxEnergyReceive(cycle.peek());
+    int maxRate = host.getEnergyThroughput();
     int per = Math.max(Math.min(space / available, maxRate), 1);
     int rem = space - per * available;
 
@@ -111,7 +111,7 @@ public final class EnergyQueue {
       if (rem > 0) {
         rem--;
       }
-      amt = Math.min(host.getMaxEnergy() - host.getEnergy(), Math.min(host.getMaxEnergyReceive(d), amt));
+      amt = Math.min(host.getEnergyCapacity() - host.getEnergy(), Math.min(host.getEnergyThroughput(), amt));
       if (amt <= 0) {
         continue;
       }

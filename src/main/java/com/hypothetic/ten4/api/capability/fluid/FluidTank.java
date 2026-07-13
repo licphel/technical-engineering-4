@@ -15,7 +15,8 @@ public class FluidTank implements IFluidTank, IFluidHandler {
   protected FluidStack fluid = FluidStack.EMPTY;
   protected int capacity;
 
-  public FluidTank(int capacity) {
+  public FluidTank(TankOption option, int capacity) {
+    this.option = option;
     this.capacity = capacity;
   }
 
@@ -23,11 +24,6 @@ public class FluidTank implements IFluidTank, IFluidHandler {
     if (validator != null) {
       this.validator = validator;
     }
-    return this;
-  }
-
-  public FluidTank setOption(TankOption option) {
-    this.option = option;
     return this;
   }
 

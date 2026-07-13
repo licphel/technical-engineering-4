@@ -6,14 +6,12 @@ import net.minecraft.world.item.ItemStack;
 public class ItemEnergyProvider implements IEnergyProvider {
   private final ItemStack stack;
   private final int capacity;
-  private final int maxExtract;
-  private final int maxReceive;
+  private final int throughput;
 
-  public ItemEnergyProvider(ItemStack stack, int capacity, int maxReceive, int maxExtract) {
+  public ItemEnergyProvider(ItemStack stack, int capacity, int throughput) {
     this.stack = stack;
     this.capacity = capacity;
-    this.maxReceive = maxReceive;
-    this.maxExtract = maxExtract;
+    this.throughput = throughput;
   }
 
   @Override
@@ -27,17 +25,12 @@ public class ItemEnergyProvider implements IEnergyProvider {
   }
 
   @Override
-  public int getMaxEnergy() {
+  public int getEnergyCapacity() {
     return capacity;
   }
 
   @Override
-  public int getMaxEnergyExtract() {
-    return maxExtract;
-  }
-
-  @Override
-  public int getMaxEnergyReceive() {
-    return maxReceive;
+  public int getEnergyThroughput() {
+    return throughput;
   }
 }

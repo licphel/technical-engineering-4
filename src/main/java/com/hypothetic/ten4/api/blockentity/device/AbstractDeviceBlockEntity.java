@@ -1,25 +1,24 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
 import com.hypothetic.ten4.core.block.BuiltinBlockStates;
-import com.hypothetic.ten4.api.blockentity.*;
 import com.hypothetic.ten4.api.capability.energy.DirectionalEnergyStorage;
 import com.hypothetic.ten4.api.capability.energy.EnergyQueue;
 import com.hypothetic.ten4.api.capability.energy.IDirectionalEnergyProvider;
 import com.hypothetic.ten4.api.capability.fluid.DirectionalFluidHandler;
 import com.hypothetic.ten4.api.capability.fluid.FluidQueue;
-import com.hypothetic.ten4.api.capability.fluid.FluidTanks;
+import com.hypothetic.ten4.api.capability.fluid.FluidInventory;
 import com.hypothetic.ten4.api.capability.fluid.IDirectionalFluidProvider;
-import com.hypothetic.ten4.api.capability.item.DirectionalItemHandler;
-import com.hypothetic.ten4.api.capability.item.IDirectionalItemProvider;
-import com.hypothetic.ten4.api.capability.item.ItemInventory;
-import com.hypothetic.ten4.api.capability.item.ItemQueue;
+import com.hypothetic.ten4.api.capability.item.*;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.Syncer;
+import com.hypothetic.ten4.api.IDescriptionProvider;
+import com.hypothetic.ten4.api.ILootProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,6 +31,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
@@ -40,13 +40,6 @@ import java.util.*;
 
 public abstract class AbstractDeviceBlockEntity extends BlockEntity
     implements ILootProvider, IDescriptionProvider, IDirectionalEnergyProvider, IDirectionalFluidProvider, IDirectionalItemProvider, MenuProvider {
-  public static final int BASE_ENERGY_CAPACITY = 10_000;
-  public static final int BASE_FLUID_CAPACITY = 10_000;
-  public static final int BASE_ITEM_TRANSPORTATION = 1;
-  public static final int BASE_ENERGY_TRANSPORTATION = 1_000;
-  public static final int BASE_FLUID_TRANSPORTATION = 1_000;
-  public static final int AUGMENT_CAPACITY = 4;
-
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IEnergyStorage> ENERGY =
       AbstractDeviceBlockEntity::getEnergyStorage;
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IItemHandler> ITEM =
@@ -63,21 +56,14 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
   protected final Map<Direction, FaceMode> itemFaceConfig = new HashMap<>();
   protected final Queue<Direction> itemPushingQueue = new LinkedList<>();
   protected final Queue<Direction> itemPullingQueue = new LinkedList<>();
-  protected final FluidTanks fluidTanks;
+  protected final FluidInventory fluidInventory;
   protected final Map<Direction, DirectionalFluidHandler> fluidHandlers = new HashMap<>();
   protected final Map<Direction, FaceMode> fluidFaceConfig = new HashMap<>();
   protected final Queue<Direction> fluidPushingQueue = new LinkedList<>();
   protected final Queue<Direction> fluidPullingQueue = new LinkedList<>();
   protected final Syncer syncer = new Syncer();
-  protected int efficiency = getBasicEfficiency();
-  protected int energyStored = 0;
-  protected int energyCapacity = getEnergyCapacity();
-  protected int maxExtractEnergy = BASE_ENERGY_TRANSPORTATION;
-  protected int maxReceiveEnergy = BASE_ENERGY_TRANSPORTATION;
-  protected int itemMaxExtract = BASE_ITEM_TRANSPORTATION;
-  protected int itemMaxReceive = BASE_ITEM_TRANSPORTATION;
-  protected int fluidMaxExtract = BASE_FLUID_TRANSPORTATION;
-  protected int fluidMaxReceive = BASE_FLUID_TRANSPORTATION;
+  protected int energy = 0;
+  protected DeviceInfo info;
   protected boolean active;
   protected SignalMode sigMode = SignalMode.IGNORE;
   protected boolean strictInput = false;
@@ -88,7 +74,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
   public AbstractDeviceBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
 
-    initAttributes(syncer);
+    registerAdditionalSyncFields(syncer);
 
     syncer.register(BuiltinSyncedFields.ENERGY_FACES);
     syncer.register(BuiltinSyncedFields.ITEM_FACES);
@@ -98,6 +84,10 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     syncer.register(BuiltinSyncedFields.STRICT_INPUT);
     syncer.register(BuiltinSyncedFields.COMPARATOR_MODE);
     syncer.register(BuiltinSyncedFields.REQUEST_INTERVAL);
+    syncer.register(BuiltinSyncedFields.POWER);
+    syncer.register(BuiltinSyncedFields.ENERGY_THROUGHPUT);
+    syncer.register(BuiltinSyncedFields.ITEM_THROUGHPUT);
+    syncer.register(BuiltinSyncedFields.FLUID_THROUGHPUT);
 
     syncer.seal();
     active = getBlockState().hasProperty(BuiltinBlockStates.ACTIVE)
@@ -107,29 +97,33 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     inventory.setChangeListener(this::setChanged);
     inventory.setStillValidCheck(p -> level != null && level.getBlockEntity(worldPosition) == this);
 
-    fluidTanks = new FluidTanks();
+    fluidInventory = new FluidInventory();
 
-    setupStorage();
+    info = makeDeviceInfo();
+    info.slots.forEach(inventory::add);
+    info.tanks.forEach(fluidInventory::add);
+
     initializeCapabilities();
   }
 
-  private static int packFaces(Map<Direction, FaceMode> config) {
-    int packed = 0;
-    for (Direction d : Direction.values()) {
-      packed = FaceModePacker.set(packed, d, config.getOrDefault(d, FaceMode.PASSIVE_BIPASS));
-    }
-    return packed;
-  }
-
   public @Nullable IEnergyStorage getEnergyStorage(@Nullable Direction side) {
+    if (!info.hasEnergy) {
+      return null;
+    }
     return energyHandlers.get(side);
   }
 
   public @Nullable IItemHandler getItemHandler(@Nullable Direction side) {
+    if (!info.hasItem) {
+      return null;
+    }
     return itemHandlers.get(side);
   }
 
   public @Nullable IFluidHandler getFluidHandler(@Nullable Direction side) {
+    if (!info.hasFluid) {
+      return null;
+    }
     return fluidHandlers.get(side);
   }
 
@@ -150,9 +144,9 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     fluidFaceConfig.put(null, FaceMode.PASSIVE_BIPASS);
   }
 
-  protected abstract void initAttributes(Syncer syncer);
+  protected abstract DeviceInfo makeDeviceInfo();
 
-  protected abstract void setupStorage();
+  protected abstract void registerAdditionalSyncFields(Syncer syncer);
 
   public boolean isSignalEnabled() {
     if (level == null) {
@@ -184,6 +178,9 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
 
   public void setComparatorMode(ComparatorMode comparatorMode) {
     this.comparatorMode = comparatorMode;
+    if (level != null) {
+      level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+    }
   }
 
   public int getRequestInterval() {
@@ -196,30 +193,35 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
 
   @Override
   public int getEnergy() {
-    if (energyStored >= energyCapacity) {
-      return energyStored = energyCapacity;
+    if (energy >= getEnergyCapacity()) {
+      return energy = getEnergyCapacity();
     }
-    return energyStored;
+    return energy;
   }
 
   @Override
   public void setEnergy(int e) {
-    energyStored = Math.min(e, energyCapacity);
+    energy = Math.clamp(e, 0, getEnergyCapacity());
   }
 
   @Override
-  public int getMaxEnergy() {
-    return energyCapacity;
+  public int getEnergyCapacity() {
+    return info.energyCapacity;
   }
 
   @Override
-  public int getMaxEnergyExtract(@Nullable Direction d) {
-    return energyFaceConfig.get(d).canExtract() ? maxExtractEnergy : 0;
+  public int getEnergyThroughput() {
+    return info.energyThroughput;
   }
 
   @Override
-  public int getMaxEnergyReceive(@Nullable Direction d) {
-    return energyFaceConfig.get(d).canReceive() ? maxReceiveEnergy : 0;
+  public boolean canExtractEnergy(@Nullable Direction d) {
+    return energyFaceConfig.get(d).canExtract();
+  }
+
+  @Override
+  public boolean canReceiveEnergy(@Nullable Direction d) {
+    return energyFaceConfig.get(d).canReceive();
   }
 
   @Override
@@ -234,17 +236,22 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
 
   @Override
   public IFluidHandler getTanks() {
-    return fluidTanks;
+    return fluidInventory;
   }
 
   @Override
-  public int getMaxFluidExtract(@Nullable Direction d) {
-    return fluidFaceConfig.get(d).canExtract() ? fluidMaxExtract : 0;
+  public int getFluidThroughput() {
+    return info.fluidThroughput;
   }
 
   @Override
-  public int getMaxFluidReceive(@Nullable Direction d) {
-    return fluidFaceConfig.get(d).canReceive() ? fluidMaxReceive : 0;
+  public boolean canExtractFluid(@Nullable Direction d) {
+    return fluidFaceConfig.get(d).canExtract();
+  }
+
+  @Override
+  public boolean canReceiveFluid(@Nullable Direction d) {
+    return fluidFaceConfig.get(d).canReceive();
   }
 
   @Override
@@ -268,13 +275,18 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
   }
 
   @Override
-  public int getMaxItemExtract(@Nullable Direction d) {
-    return itemFaceConfig.get(d).canExtract() ? itemMaxExtract : 0;
+  public int getItemThroughput() {
+    return info.itemThroughput;
   }
 
   @Override
-  public int getMaxItemReceive(@Nullable Direction d) {
-    return itemFaceConfig.get(d).canReceive() ? itemMaxReceive : 0;
+  public boolean canExtractItem(@Nullable Direction d) {
+    return itemFaceConfig.get(d).canExtract();
+  }
+
+  @Override
+  public boolean canReceiveItem(@Nullable Direction d) {
+    return itemFaceConfig.get(d).canReceive();
   }
 
   @Override
@@ -322,7 +334,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
       return;
     }
 
-    if (getMaxEnergy() > 0) {
+    if (this.getEnergyCapacity() > 0) {
       EnergyQueue.push(level, worldPosition, this);
       EnergyQueue.pull(level, worldPosition, this);
     }
@@ -330,7 +342,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
       ItemQueue.push(level, worldPosition, this);
       ItemQueue.pull(level, worldPosition, this);
     }
-    if (fluidTanks.getTanks() > 0) {
+    if (fluidInventory.getTanks() > 0) {
       FluidQueue.push(level, worldPosition, this);
       FluidQueue.pull(level, worldPosition, this);
     }
@@ -387,11 +399,55 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     fluidFaceConfig.put(side, mode);
   }
 
+  protected List<Integer> getComparatorSignalSlots() {
+    return Collections.emptyList();
+  }
+
+  protected List<Integer> getComparatorSignalTanks() {
+    return Collections.emptyList();
+  }
+
   public int getComparatorSignal() {
     return switch (comparatorMode) {
-      case ENERGY -> getMaxEnergy() > 0 ? (int) (14L * getEnergy() / getMaxEnergy()) + 1 : 0;
-      case OUTPUT_ITEMS, OFF, OUTPUT_FLUID -> 0;
+      case OUTPUT_ITEMS -> {
+        List<Integer> sigSlots = getComparatorSignalTanks();
+        if (sigSlots.isEmpty()) {
+          yield  0;
+        }
+
+        float f = 0.0F;
+
+        for (int i : sigSlots) {
+          ItemStack itemstack = inventory.getItem(i);
+          if (!itemstack.isEmpty()) {
+            f += (float) itemstack.getCount() / (float) inventory.getSlotLimit(i);
+          }
+        }
+
+        f /= (float) sigSlots.size();
+        yield Mth.lerpDiscrete(f, 0, 15);
+      }
+      case OUTPUT_FLUID -> {
+        List<Integer> sigTanks = getComparatorSignalTanks();
+        if (sigTanks.isEmpty()) {
+          yield  0;
+        }
+
+        float f = 0.0F;
+
+        for (int i : sigTanks) {
+          FluidStack s = fluidInventory.getFluidInTank(i);
+          if (!s.isEmpty()) {
+            f += (float) s.getAmount() / (float) fluidInventory.getTankCapacity(i);
+          }
+        }
+
+        f /= (float) sigTanks.size();
+        yield Mth.lerpDiscrete(f, 0, 15);
+      }
+      case ENERGY -> getEnergy() > 0 ? (int) (14L * getEnergy() / getEnergyCapacity()) + 1 : 0;
       case ACTIVE -> isActive() ? 15 : 0;
+      case OFF -> 0;
     };
   }
 
@@ -400,14 +456,18 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
   }
 
   protected void synchronizeBasicData() {
-    syncer.set(BuiltinSyncedFields.ENERGY_FACES, packFaces(energyFaceConfig));
-    syncer.set(BuiltinSyncedFields.ITEM_FACES, packFaces(itemFaceConfig));
-    syncer.set(BuiltinSyncedFields.FLUID_FACES, packFaces(fluidFaceConfig));
+    syncer.set(BuiltinSyncedFields.ENERGY_FACES, FaceModePacker.packFaces(energyFaceConfig));
+    syncer.set(BuiltinSyncedFields.ITEM_FACES, FaceModePacker.packFaces(itemFaceConfig));
+    syncer.set(BuiltinSyncedFields.FLUID_FACES, FaceModePacker.packFaces(fluidFaceConfig));
     syncer.set(BuiltinSyncedFields.SIG_MODE, sigMode.ordinal());
     syncer.set(BuiltinSyncedFields.ACTIVE, active);
     syncer.set(BuiltinSyncedFields.REQUEST_INTERVAL, requestInterval);
     syncer.set(BuiltinSyncedFields.COMPARATOR_MODE, comparatorMode.ordinal());
     syncer.set(BuiltinSyncedFields.STRICT_INPUT, strictInput);
+    syncer.set(BuiltinSyncedFields.POWER, getActualPower());
+    syncer.set(BuiltinSyncedFields.ENERGY_THROUGHPUT, getEnergyThroughput());
+    syncer.set(BuiltinSyncedFields.ITEM_THROUGHPUT, getItemThroughput());
+    syncer.set(BuiltinSyncedFields.FLUID_THROUGHPUT, getFluidThroughput());
   }
 
   public Syncer getAttributes() {
@@ -419,11 +479,11 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
   }
 
   protected boolean isEnergySufficient() {
-    return getEnergy() >= getEfficiency();
+    return getEnergy() >= getActualPower();
   }
 
-  public int getEfficiency() {
-    return efficiency;
+  public int getActualPower() {
+    return info.power;
   }
 
   @Override
@@ -432,7 +492,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
 
     setEnergy(tag.getInt("Energy"));
     inventory.fromTag(tag.getCompound("Inventory"), reg);
-    fluidTanks.fromTag(tag.getCompound("FluidTank"), reg);
+    fluidInventory.fromTag(tag.getCompound("FluidTank"), reg);
 
     CompoundTag cfg = tag.getCompound("Configuration");
     for (Direction d : Direction.values()) {
@@ -455,7 +515,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
 
     tag.putInt("Energy", getEnergy());
     tag.put("Inventory", inventory.createTag(reg));
-    tag.put("FluidTank", fluidTanks.createTag(reg));
+    tag.put("FluidTank", fluidInventory.createTag(reg));
 
     CompoundTag cfg = new CompoundTag();
     for (Direction d : Direction.values()) {
@@ -473,15 +533,9 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     tag.putInt("DelayPushBuffer", delayPushBuffer);
   }
 
-  public abstract int getBasicEfficiency();
-
   @Override
   public Component getDisplayName() {
     return getBlockState().getBlock().getName();
-  }
-
-  public int getEnergyCapacity() {
-    return BASE_ENERGY_CAPACITY;
   }
 
   @Override

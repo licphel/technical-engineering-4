@@ -32,7 +32,7 @@ public class DirectionalItemHandler implements IItemHandler {
     if (!host.isItemValid(slot, stack)) {
       return stack;
     }
-    int cap = host.getMaxItemReceive(side);
+    int cap = host.getItemThroughput();
     if (cap <= 0) {
       return stack;
     }
@@ -44,7 +44,7 @@ public class DirectionalItemHandler implements IItemHandler {
     if (amount <= 0 || !host.canExtractItem(side)) {
       return ItemStack.EMPTY;
     }
-    int cap = host.getMaxItemExtract(side);
+    int cap = host.getItemThroughput();
     if (cap <= 0) {
       return ItemStack.EMPTY;
     }

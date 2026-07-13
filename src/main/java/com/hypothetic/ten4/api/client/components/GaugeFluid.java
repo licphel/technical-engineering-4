@@ -49,7 +49,7 @@ public class GaugeFluid extends UiComponent {
     if (fill > 0) {
       int ox = Math.round((width - innerW) / 2.0F);
       int oy = Math.round((height - innerH) / 2.0F);
-      g.drawFluid(stack.getFluid(), x + ox, y + oy + innerH, innerW, fill, false);
+      g.drawFluid(stack.getFluid(), x + ox, y - fill + oy + innerH, innerW, fill, false);
     }
 
     g.draw(overlayTex, x, y, width, height);

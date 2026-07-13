@@ -1,6 +1,7 @@
 package com.hypothetic.ten4.core.device;
 
 import com.hypothetic.ten4.Ten4;
+import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
 import com.hypothetic.ten4.registry.ModBlockEntities;
 import com.hypothetic.ten4.registry.ModMenus;
 import com.hypothetic.ten4.registry.ModRecipes;
@@ -25,17 +26,19 @@ public class PulverizerBlockEntity extends RecipeDeviceBlockEntity {
   }
 
   @Override
-  protected void setupStorage() {
-    inventory.add(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput));
-    inventory.add(new ItemSlot(SlotOption.OUTPUT));
-    inventory.add(new ItemSlot(SlotOption.OUTPUT));
-    inventory.add(new ItemSlot(SlotOption.OUTPUT));
-    inventory.add(new ItemSlot(SlotOption.OUTPUT));
-  }
-
-  @Override
-  public int getBasicEfficiency() {
-    return 10;
+  protected DeviceInfo makeDeviceInfo() {
+    return new DeviceInfo()
+        .enableEnergy()
+        .enableItem()
+        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT))
+        .setPower(15)
+        .setEnergyCapacity(10_000)
+        .setEnergyThroughput(100)
+        .setItemThroughput(1);
   }
 
   @Override

@@ -16,12 +16,12 @@ public interface IAugment<T extends AugmentableDeviceBlockEntity> {
 
   enum ModifiableEntry {
     EFFICIENCY,
-    MAX_ENERGY_EXTRACT,
+    ENERGY_THROUGHPUT,
     MAX_ENERGY_RECEIVE,
     ENERGY_CAPACITY,
-    MAX_ITEM_EXTRACT,
+    ITEM_THROUGHPUT,
     MAX_ITEM_RECEIVE,
-    MAX_FLUID_EXTRACT,
+    FLUID_THROUGHPUT,
     MAX_FLUID_RECEIVE
   }
 }

@@ -5,9 +5,7 @@ public interface IEnergyProvider {
 
   void setEnergy(int e);
 
-  int getMaxEnergy();
+  int getEnergyCapacity();
 
-  int getMaxEnergyExtract();
-
-  int getMaxEnergyReceive();
+  int getEnergyThroughput();
 }

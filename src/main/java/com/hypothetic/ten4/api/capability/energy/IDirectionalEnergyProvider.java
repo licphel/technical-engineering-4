@@ -10,19 +10,13 @@ public interface IDirectionalEnergyProvider {
 
   void setEnergy(int e);
 
-  int getMaxEnergy();
+  int getEnergyCapacity();
 
-  int getMaxEnergyExtract(@Nullable Direction d);
+  int getEnergyThroughput();
 
-  int getMaxEnergyReceive(@Nullable Direction d);
+  boolean canExtractEnergy(@Nullable Direction d);
 
-  default boolean canExtractEnergy(@Nullable Direction d) {
-    return getMaxEnergyExtract(d) > 0;
-  }
-
-  default boolean canReceiveEnergy(@Nullable Direction d) {
-    return getMaxEnergyReceive(d) > 0;
-  }
+  boolean canReceiveEnergy(@Nullable Direction d);
 
   Queue<Direction> getEnergyPushingCycle();
 

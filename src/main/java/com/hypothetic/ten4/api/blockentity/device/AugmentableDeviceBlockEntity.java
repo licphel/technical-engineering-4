@@ -5,17 +5,18 @@ import com.hypothetic.ten4.api.capability.item.ItemSlot;
 import com.hypothetic.ten4.api.capability.item.SlotOption;
 import com.hypothetic.ten4.api.item.IAugment;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEntity {
+  public static final int AUGMENT_CAPACITY = 4;
+  public static final int AUGMENT_SLOT_LIMIT = 4;
+
   protected ItemInventory augments;
 
   public AugmentableDeviceBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -25,7 +26,10 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
     augments.setChangeListener(this::setChanged);
     augments.setStillValidCheck(p -> level != null && level.getBlockEntity(worldPosition) == this);
     for (int i = 0; i < AUGMENT_CAPACITY; i++) {
-      augments.add(new ItemSlot(SlotOption.BOTH).setValidator(s -> s.getItem() instanceof IAugment<?>));
+      augments.add(new ItemSlot(SlotOption.BOTH)
+          .setValidator(s -> s.getItem() instanceof IAugment<?>)
+          .setSlotLimit(AUGMENT_SLOT_LIMIT)
+      );
     }
   }
 
@@ -56,43 +60,28 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
   }
 
   @Override
-  public int getMaxEnergy() {
-    return applyAugments(IAugment.ModifiableEntry.ENERGY_CAPACITY, super.getMaxEnergy());
+  public int getEnergyCapacity() {
+    return applyAugments(IAugment.ModifiableEntry.ENERGY_CAPACITY, super.getEnergyCapacity());
   }
 
   @Override
-  public int getMaxEnergyExtract(@Nullable Direction d) {
-    return applyAugments(IAugment.ModifiableEntry.MAX_ENERGY_EXTRACT, super.getMaxEnergyExtract(d));
+  public int getEnergyThroughput() {
+    return applyAugments(IAugment.ModifiableEntry.ENERGY_THROUGHPUT, super.getEnergyThroughput());
   }
 
   @Override
-  public int getMaxEnergyReceive(@Nullable Direction d) {
-    return applyAugments(IAugment.ModifiableEntry.MAX_ENERGY_RECEIVE, super.getMaxEnergyReceive(d));
+  public int getFluidThroughput() {
+    return applyAugments(IAugment.ModifiableEntry.FLUID_THROUGHPUT, super.getFluidThroughput());
   }
 
   @Override
-  public int getMaxFluidExtract(@Nullable Direction d) {
-    return applyAugments(IAugment.ModifiableEntry.MAX_FLUID_EXTRACT, super.getMaxFluidExtract(d));
+  public int getItemThroughput() {
+    return applyAugments(IAugment.ModifiableEntry.ITEM_THROUGHPUT, super.getItemThroughput());
   }
 
   @Override
-  public int getMaxFluidReceive(@Nullable Direction d) {
-    return applyAugments(IAugment.ModifiableEntry.MAX_FLUID_RECEIVE, super.getMaxFluidReceive(d));
-  }
-
-  @Override
-  public int getMaxItemExtract(@Nullable Direction d) {
-    return applyAugments(IAugment.ModifiableEntry.MAX_ITEM_EXTRACT, super.getMaxItemExtract(d));
-  }
-
-  @Override
-  public int getMaxItemReceive(@Nullable Direction d) {
-    return applyAugments(IAugment.ModifiableEntry.MAX_ITEM_RECEIVE, super.getMaxItemReceive(d));
-  }
-
-  @Override
-  public int getEfficiency() {
-    return applyAugments(IAugment.ModifiableEntry.EFFICIENCY, super.getEfficiency());
+  public int getActualPower() {
+    return applyAugments(IAugment.ModifiableEntry.EFFICIENCY, super.getActualPower());
   }
 
   @Override

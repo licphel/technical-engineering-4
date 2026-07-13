@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
-import com.hypothetic.ten4.api.blockentity.ITickable;
+import com.hypothetic.ten4.api.ITickable;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.Syncer;
 import net.minecraft.core.BlockPos;
@@ -18,12 +18,11 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
   }
 
   @Override
-  protected void initAttributes(Syncer syncer) {
+  protected void registerAdditionalSyncFields(Syncer syncer) {
     syncer.register(BuiltinSyncedFields.ENERGY);
     syncer.register(BuiltinSyncedFields.MAX_ENERGY);
     syncer.register(BuiltinSyncedFields.FUEL);
     syncer.register(BuiltinSyncedFields.MAX_FUEL);
-    syncer.register(BuiltinSyncedFields.EFFICIENCY);
   }
 
   @Override
@@ -35,21 +34,19 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
     setActive(fuel > 0);
 
     if (fuel > 0) {
-      setEnergy(getEnergy() + getEfficiency());
-      fuel = Math.max(fuel - getEfficiency(), 0);
+      setEnergy(getEnergy() + getActualPower());
+      fuel = Math.max(fuel - getActualPower(), 0);
       setChanged();
     }
 
     if (isSignalEnabled()) {
-      if (getEnergy() > 0) {
-        queuedPushPull();
-      }
+      queuedPushPull();
 
       if (hasOutputSpace() && fuel <= 0) {
         int v = tryFueling(true);
         if (v > 0) {
           tryFueling(false);
-          fuel = v * getBasicEfficiency();
+          fuel = v * info.power;
           maxFuel = fuel;
         }
       }
@@ -58,15 +55,15 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
     }
 
     syncer.set(BuiltinSyncedFields.ENERGY, getEnergy());
-    syncer.set(BuiltinSyncedFields.MAX_ENERGY, getMaxEnergy());
+    syncer.set(BuiltinSyncedFields.MAX_ENERGY, this.getEnergyCapacity());
     syncer.set(BuiltinSyncedFields.FUEL, fuel);
     syncer.set(BuiltinSyncedFields.MAX_FUEL, maxFuel);
-    syncer.set(BuiltinSyncedFields.EFFICIENCY, getEfficiency());
+    syncer.set(BuiltinSyncedFields.POWER, getActualPower());
     synchronizeBasicData();
   }
 
   public boolean hasOutputSpace() {
-    return getEnergy() + efficiency <= getMaxEnergy();
+    return getEnergy() + getActualPower() <= this.getEnergyCapacity();
   }
 
   public abstract int tryFueling(boolean simulate);

@@ -1,11 +1,12 @@
 package com.hypothetic.ten4.api.blockentity.internet;
 
-import com.hypothetic.ten4.api.capability.internet.ConnectionType;
-import com.hypothetic.ten4.api.capability.internet.ITransmitterProvider;
-import com.hypothetic.ten4.api.capability.internet.Transmitter;
-import com.hypothetic.ten4.api.capability.internet.TransmitterNetworkRegistry;
-import com.hypothetic.ten4.api.capability.internet.energy.EnergyNetwork;
-import com.hypothetic.ten4.api.capability.internet.energy.EnergyTransmitter;
+import com.hypothetic.ten4.api.ITickable;
+import com.hypothetic.ten4.api.transmission.ConnectionType;
+import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
+import com.hypothetic.ten4.api.transmission.Transmitter;
+import com.hypothetic.ten4.api.transmission.TransmitterNetworkRegistry;
+import com.hypothetic.ten4.api.transmission.energy.EnergyNetwork;
+import com.hypothetic.ten4.api.transmission.energy.EnergyTransmitter;
 import com.hypothetic.ten4.api.network.duct.DuctConnectionPayload;
 import com.hypothetic.ten4.api.network.duct.DuctEnergyPayload;
 import com.hypothetic.ten4.registry.ModBlockEntities;
@@ -20,8 +21,9 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-public class EnergyDuctBlockEntity extends BlockEntity implements ITransmitterProvider {
-  public static final int CAPACITY = 100;
+public class EnergyDuctBlockEntity extends BlockEntity implements ITransmitterProvider, ITickable {
+  public static final int CAP_COPPER = 20;
+
   public final EnergyTransmitter transmitter;
   private int tickCount;
 
@@ -30,13 +32,14 @@ public class EnergyDuctBlockEntity extends BlockEntity implements ITransmitterPr
     this.transmitter = new EnergyTransmitter(this, bufferCapacity);
   }
 
-  public static <T extends BlockEntity> void tick(EnergyDuctBlockEntity be) {
-    if (be.level instanceof ServerLevel) {
-      TransmitterNetworkRegistry.onServerTick(be.level);
+  @Override
+  public void tick() {
+    if (level == null || level.isClientSide()) {
+      return;
+    }
 
-      if (be.tickCount++ % 10 == 0) {
-        be.sendEnergyUpdate();
-      }
+    if (tickCount++ % 10 == 0) {
+      sendEnergyUpdate();
     }
   }
 
@@ -81,20 +84,47 @@ public class EnergyDuctBlockEntity extends BlockEntity implements ITransmitterPr
 
   private void sendEnergyUpdate() {
     if (level instanceof ServerLevel sl) {
-      var t = transmitter;
-      long buf = t.getNetwork() != null ? t.getNetwork().asStorage().getEnergyStored() : t.getBuffer();
-      long cap = t.getNetwork() != null ? t.getNetwork().asStorage().getMaxEnergyStored() : t.getCapacity();
+      EnergyNetwork net = transmitter.getNetwork();
+      float scale = net != null ? net.currentScale : (transmitter.getCapacity() > 0 ? (float) transmitter.getBuffer() / transmitter.getCapacity() : 0);
       PacketDistributor.sendToPlayersTrackingChunk(sl, sl.getChunkAt(worldPosition).getPos(),
-          new DuctEnergyPayload(worldPosition, buf, cap));
+          new DuctEnergyPayload(worldPosition, scale));
     }
   }
 
   public @Nullable IEnergyStorage getEnergyStorage(@Nullable Direction side) {
-    if (level == null) {
-      return null;
+    if (level == null) return null;
+    return new NetworkEnergyStorage();
+  }
+
+  private class NetworkEnergyStorage implements IEnergyStorage {
+    private EnergyNetwork net() { return transmitter.getNetwork(); }
+    private long buf()  { EnergyNetwork n = net(); return n != null ? n.getBuffer() : transmitter.getBuffer(); }
+    private long cap()  { EnergyNetwork n = net(); return n != null ? n.getCapacity() : transmitter.getCapacity(); }
+
+    @Override public int receiveEnergy(int max, boolean sim) {
+      long space = cap() - buf();
+      int toAdd = (int) Math.min(Math.min(space, max), Integer.MAX_VALUE);
+      if (toAdd > 0 && !sim) {
+        EnergyNetwork n = net();
+        if (n != null) n.setBuffer(n.getBuffer() + toAdd);
+        else transmitter.setBuffer(transmitter.getBuffer() + toAdd);
+      }
+      return toAdd;
     }
-    EnergyNetwork net = transmitter.getNetwork();
-    return net != null ? net.asStorage() : null;
+    @Override public int extractEnergy(int max, boolean sim) {
+      long cur = buf();
+      int toExtract = (int) Math.min(Math.min(cur, max), Integer.MAX_VALUE);
+      if (toExtract > 0 && !sim) {
+        EnergyNetwork n = net();
+        if (n != null) n.setBuffer(n.getBuffer() - toExtract);
+        else transmitter.setBuffer(transmitter.getBuffer() - toExtract);
+      }
+      return toExtract;
+    }
+    @Override public int getEnergyStored() { return (int) Math.min(buf(), Integer.MAX_VALUE); }
+    @Override public int getMaxEnergyStored() { return (int) Math.min(cap(), Integer.MAX_VALUE); }
+    @Override public boolean canExtract() { return buf() > 0; }
+    @Override public boolean canReceive() { return buf() < cap(); }
   }
 
   @Override
@@ -124,7 +154,7 @@ public class EnergyDuctBlockEntity extends BlockEntity implements ITransmitterPr
     super.setRemoved();
     if (level != null && !level.isClientSide()) {
       transmitter.remove();
-      TransmitterNetworkRegistry.invalidateTransmitter(transmitter);
+      TransmitterNetworkRegistry.onTransmitterRemoved(transmitter);
     }
   }
 
@@ -139,7 +169,7 @@ public class EnergyDuctBlockEntity extends BlockEntity implements ITransmitterPr
     super.onChunkUnloaded();
     if (level != null && !level.isClientSide()) {
       transmitter.validateAndTakeShare();
-      TransmitterNetworkRegistry.invalidateTransmitter(transmitter);
+      TransmitterNetworkRegistry.onTransmitterRemoved(transmitter);
     }
   }
 
@@ -148,7 +178,7 @@ public class EnergyDuctBlockEntity extends BlockEntity implements ITransmitterPr
     super.onLoad();
     if (level != null && !level.isClientSide()) {
       transmitter.refreshConnections();
-      TransmitterNetworkRegistry.registerOrphan(transmitter);
+      TransmitterNetworkRegistry.joinNetwork(transmitter);
       sendEnergyUpdate();
     }
   }

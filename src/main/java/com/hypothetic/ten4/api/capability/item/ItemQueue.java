@@ -46,7 +46,7 @@ public final class ItemQueue {
       return;
     }
 
-    int maxRate = host.getMaxItemExtract(cycle.peek());
+    int maxRate = host.getItemThroughput();
     for (int slot = 0; slot < inv.getSlots(); slot++) {
       // 1. Simulate extract
       ItemStack simExtracted = inv.extractItem(slot, maxRate, true);
@@ -133,7 +133,7 @@ public final class ItemQueue {
       if (h == null) {
         continue;
       }
-      int maxPull = host.getMaxItemReceive(d);
+      int maxPull = host.getItemThroughput();
       for (int srcSlot = 0; srcSlot < h.getSlots() && maxPull > 0; srcSlot++) {
         // 1. Simulate extract from neighbor
         ItemStack simPulled = h.extractItem(srcSlot, maxPull, true);

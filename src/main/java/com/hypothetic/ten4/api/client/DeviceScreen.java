@@ -1,14 +1,20 @@
 package com.hypothetic.ten4.api.client;
 
+import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.client.builtin.BuiltinComponents;
 import com.hypothetic.ten4.api.client.components.PanelLayout;
+import com.hypothetic.ten4.api.client.components.UiComponent;
 import com.hypothetic.ten4.api.container.ContainerMenu;
+import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class DeviceScreen extends ComponentScreen<ContainerMenu> {
+import java.util.List;
+
+public class DeviceScreen extends TenScreen<ContainerMenu> {
   private final ResourceLocation bg;
   private final PanelLayout leftPanels;
   private final PanelLayout rightPanels;

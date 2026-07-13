@@ -2,6 +2,8 @@ package com.hypothetic.ten4.api.blockentity.device;
 
 import net.minecraft.core.Direction;
 
+import java.util.Map;
+
 public final class FaceModePacker {
   private static final Direction[] ORDER = {Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
   private FaceModePacker() {
@@ -33,5 +35,11 @@ public final class FaceModePacker {
     return set(packed, d, next);
   }
 
-
+  static int packFaces(Map<Direction, FaceMode> config) {
+    int packed = 0;
+    for (Direction d : Direction.values()) {
+      packed = set(packed, d, config.getOrDefault(d, FaceMode.PASSIVE_BIPASS));
+    }
+    return packed;
+  }
 }

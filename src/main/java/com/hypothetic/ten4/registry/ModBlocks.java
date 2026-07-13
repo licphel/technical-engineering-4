@@ -1,10 +1,16 @@
 package com.hypothetic.ten4.registry;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.core.block.EnergyCableBlock;
+import com.hypothetic.ten4.api.blockentity.internet.EnergyDuctBlockEntity;
+import com.hypothetic.ten4.core.block.EnergyDuctBlock;
+import com.hypothetic.ten4.api.blockentity.internet.FluidDuctBlockEntity;
+import com.hypothetic.ten4.core.block.FluidDuctBlock;
+import com.hypothetic.ten4.core.block.ItemDuctBlock;
 import com.hypothetic.ten4.core.block.DeviceBlock;
+import com.hypothetic.ten4.api.blockentity.internet.ItemDuctBlockEntity;
 import com.hypothetic.ten4.core.device.HeatGeneratorBlockEntity;
 import com.hypothetic.ten4.core.device.PulverizerBlockEntity;
+import com.hypothetic.ten4.core.device.WaterPumpBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -32,15 +38,36 @@ public final class ModBlocks {
       (DeferredHolder<Block, DeviceBlock>) device("heat_generator",
           ModBlockEntities.HEAT_GENERATOR::get, HeatGeneratorBlockEntity::new);
 
-  public static final DeferredHolder<Block, EnergyCableBlock> COPPER_ENERGY_DUCT =
-      BLOCKS.register("copper_energy_duct", () -> new EnergyCableBlock(
+  @SuppressWarnings("unchecked")
+  public static final DeferredHolder<Block, DeviceBlock> WATER_PUMP =
+      (DeferredHolder<Block, DeviceBlock>) device("water_pump",
+          ModBlockEntities.WATER_PUMP::get, WaterPumpBlockEntity::new);
+
+  public static final DeferredHolder<Block, EnergyDuctBlock> COPPER_ENERGY_DUCT =
+      BLOCKS.register("copper_energy_duct", () -> new EnergyDuctBlock(
+          Block.Properties.of().mapColor(MapColor.NONE).strength(1.5F)
+              .sound(SoundType.GLASS).noOcclusion(), EnergyDuctBlockEntity.CAP_COPPER));
+
+  public static final DeferredHolder<Block, ItemDuctBlock> COPPER_ITEM_DUCT =
+      BLOCKS.register("copper_item_duct", () -> new ItemDuctBlock(
           Block.Properties.of().mapColor(MapColor.NONE).strength(1.5F)
               .sound(SoundType.GLASS).noOcclusion(),
-          ModBlockEntities.COPPER_ENERGY_DUCT));
+          ModBlockEntities.COPPER_ITEM_DUCT,
+          ItemDuctBlockEntity.TPB_COPPER, ItemDuctBlockEntity.SLOTS_COPPER, ItemDuctBlockEntity.CAP_COPPER));
+
+  public static final DeferredHolder<Block, FluidDuctBlock> COPPER_FLUID_DUCT =
+      BLOCKS.register("copper_fluid_duct", () -> new FluidDuctBlock(
+          Block.Properties.of().mapColor(MapColor.NONE).strength(1.5F)
+              .sound(SoundType.GLASS).noOcclusion(),
+          FluidDuctBlockEntity.CAP_COPPER, FluidDuctBlockEntity.TPB_COPPER));
 
   static {
     BLOCK_ITEMS.register("copper_energy_duct", () -> new BlockItem(COPPER_ENERGY_DUCT.get(), new Item.Properties()));
+    BLOCK_ITEMS.register("copper_item_duct", () -> new BlockItem(COPPER_ITEM_DUCT.get(), new Item.Properties()));
+    BLOCK_ITEMS.register("copper_fluid_duct", () -> new BlockItem(COPPER_FLUID_DUCT.get(), new Item.Properties()));
     ModCreativeTabs.deviceTab.add(() -> COPPER_ENERGY_DUCT.get().asItem());
+    ModCreativeTabs.deviceTab.add(() -> COPPER_ITEM_DUCT.get().asItem());
+    ModCreativeTabs.deviceTab.add(() -> COPPER_FLUID_DUCT.get().asItem());
   }
 
   private ModBlocks() {

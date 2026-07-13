@@ -12,6 +12,7 @@ public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
   protected @Nullable Predicate<ItemStack> validator;
   protected SlotOption type = SlotOption.BOTH;
   protected ItemStack stack = ItemStack.EMPTY;
+  protected int slotLimit = Integer.MAX_VALUE;
 
   public ItemSlot() {
   }
@@ -22,6 +23,11 @@ public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
 
   public ItemSlot setValidator(@Nullable Predicate<ItemStack> v) {
     validator = v;
+    return this;
+  }
+
+  public ItemSlot setSlotLimit(int slotLimit) {
+    this.slotLimit = slotLimit;
     return this;
   }
 
@@ -56,9 +62,9 @@ public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
   @Override
   public int getSlotLimit() {
     if (stack.isEmpty()) {
-      return Integer.MAX_VALUE;
+      return slotLimit;
     }
-    return stack.getMaxStackSize();
+    return Math.min(stack.getMaxStackSize(), slotLimit);
   }
 
   @Override
