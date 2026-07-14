@@ -32,7 +32,7 @@ public record DuctFluidPayload(BlockPos pos, float scale, FluidStack fluid) impl
   public static void handle(DuctFluidPayload pkt, IPayloadContext ctx) {
     Level level = ctx.player().level();
     if (level.getBlockEntity(pkt.pos) instanceof FluidDuctBlockEntity duct) {
-      duct.transmitter.applyFluidSync(pkt.scale, pkt.fluid);
+      duct.transmitter.syncClientFluid(pkt.scale, pkt.fluid);
     }
   }
 

@@ -30,7 +30,7 @@ public record DuctEnergyPayload(BlockPos pos, float scale) implements CustomPack
   public static void handle(DuctEnergyPayload pkt, IPayloadContext ctx) {
     Level level = ctx.player().level();
     if (level.getBlockEntity(pkt.pos) instanceof EnergyDuctBlockEntity cable) {
-      cable.transmitter.applyEnergySync(pkt.scale);
+      cable.transmitter.syncClientScale(pkt.scale);
     }
   }
 

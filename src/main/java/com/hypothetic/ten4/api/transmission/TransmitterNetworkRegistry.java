@@ -83,7 +83,7 @@ public final class TransmitterNetworkRegistry {
           continue;
         }
         Transmitter t = tb.getTransmitter();
-        if (t == null || !t.isValid() || !start.supportsTransmission(t)) {
+        if (!t.isValid() || !start.supportsTransmission(t)) {
           continue;
         }
 
@@ -106,7 +106,7 @@ public final class TransmitterNetworkRegistry {
             BlockEntity neighborBe = world.getBlockEntity(next);
             if (neighborBe instanceof ITransmitterProvider ntb) {
               Transmitter<?, ?, ?> neighbor = ntb.getTransmitter();
-              if (neighbor != null && t.isValidTransmitterBasic(ntb, d)) {
+              if (t.isValidTransmitterBasic(ntb, d)) {
                 queue.addLast(next);
               }
             }
@@ -171,7 +171,7 @@ public final class TransmitterNetworkRegistry {
         BlockEntity be = world.getBlockEntity(neighborPos);
         if (be instanceof ITransmitterProvider tb && removed.isValidTransmitterBasic(tb, d)) {
           Transmitter t = tb.getTransmitter();
-          if (t != null && t.isValid()) {
+          if (t.isValid()) {
             pendingJoins.add(t);
           }
         }

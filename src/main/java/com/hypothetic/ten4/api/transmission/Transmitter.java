@@ -93,7 +93,7 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
     this.color = color;
   }
 
-  public void applyEnergySync(float scale) {
+  public void syncClientScale(float scale) {
     this.clientScale = scale;
   }
 
@@ -249,7 +249,7 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
       BlockEntity be = level.getBlockEntity(p.relative(d));
       if (be instanceof ITransmitterProvider tb) {
         Transmitter<?, ?, ?> o = tb.getTransmitter();
-        if (o != null && supportsTransmission(o) && isColorCompatible(o)) {
+        if (supportsTransmission(o) && isColorCompatible(o)) {
           b |= (byte) (1 << d.ordinal());
         }
       }
@@ -286,7 +286,7 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
     BlockEntity be = level.getBlockEntity(getBlockPos().relative(side));
     if (be instanceof ITransmitterProvider tb) {
       Transmitter<?, ?, ?> o = tb.getTransmitter();
-      return o != null && supportsTransmission(o) && isColorCompatible(o);
+      return supportsTransmission(o) && isColorCompatible(o);
     }
     return false;
   }
@@ -316,9 +316,7 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
         BlockEntity be = level.getBlockEntity(p.relative(d));
         if (be instanceof ITransmitterProvider tb) {
           Transmitter<?, ?, ?> o = tb.getTransmitter();
-          if (o != null) {
-            o.refreshConnections(d.getOpposite());
-          }
+          o.refreshConnections(d.getOpposite());
         }
       }
     }
@@ -336,9 +334,7 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
         BlockEntity be = level.getBlockEntity(p.relative(d));
         if (be instanceof ITransmitterProvider tb) {
           Transmitter<?, ?, ?> o = tb.getTransmitter();
-          if (o != null) {
-            o.refreshConnections(d.getOpposite());
-          }
+          o.refreshConnections(d.getOpposite());
         }
       }
     }
@@ -384,7 +380,7 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
 
   public boolean isValidTransmitterBasic(ITransmitterProvider neighborTile, Direction side) {
     Transmitter<?, ?, ?> other = neighborTile.getTransmitter();
-    if (other == null || !supportsTransmission(other)) {
+    if (!supportsTransmission(other)) {
       return false;
     }
     // Color check: different non-null colors cannot connect

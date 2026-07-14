@@ -105,9 +105,11 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
       lastRecipe = recipe;
       recipe = findRecipe();
 
-      if (recipe == null || lastRecipe != recipe) {
+      if (recipe == null) {
         progress = 0;
-        setActive(false);
+        if (lastRecipe == null) {
+          setActive(false); // Fix: on completion, device toggles its ACTIVE. IDK why
+        }
         setChanged();
         return;
       }
@@ -283,7 +285,14 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     if (level == null || level.isClientSide()) {
       return null;
     }
-    return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
-        .map(RecipeHolder::value).filter(this::doesRecipeMatch).findFirst().orElse(null);
+
+    for (RecipeHolder<?> rh : level.getRecipeManager().getAllRecipesFor(recipeType)) {
+      IComplexRecipe r = (IComplexRecipe) rh.value();
+      if (doesRecipeMatch(r)) {
+        return r;
+      }
+    }
+
+    return null;
   }
 }

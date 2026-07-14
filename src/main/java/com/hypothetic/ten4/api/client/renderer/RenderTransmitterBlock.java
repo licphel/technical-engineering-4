@@ -112,7 +112,8 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
   @Nullable
   protected DyeColor getDyeColor(BE be) {
-    if (be instanceof ITransmitterProvider provider && provider.getTransmitter() != null) {
+    if (be instanceof ITransmitterProvider provider) {
+      provider.getTransmitter();
       return provider.getTransmitter().getColor();
     }
     return null;

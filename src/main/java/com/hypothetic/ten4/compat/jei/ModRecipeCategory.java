@@ -18,6 +18,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluids;
 
 public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
   private static final IDrawable fluidTank = new IDrawable() {
@@ -103,6 +104,8 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
       final ModTickTimer timer = new ModTickTimer(1000, 100, !increasing);
       final int width = 8;
       final int height = 50;
+      final int innerW = 1;
+      final int innerH = 1;
 
       @Override
       public int getWidth() {
@@ -120,13 +123,14 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
 
         int e = timer.getValue(), me = timer.getMaxValue();
         float frac = me > 0 ? (float) e / me : 0;
-        int fill = Math.round(height * frac);
+        int fill = Math.round(innerH * frac);
 
         g.draw(BuiltinComponents.ENERGY_EMPTY, x, y, width, height);
 
         if (fill > 0) {
-          int fillUV = Math.round(height * frac);
-          g.draw(BuiltinComponents.ENERGY_FULL, x, y + height - fill, width, fill, 0, height - fillUV, width, fillUV);
+          int ox = Math.round((width - innerW) / 2.0F);
+          int oy = Math.round((height - innerH) / 2.0F);
+          g.drawFluid(Fluids.WATER, x + ox, y - fill + oy + innerH, innerW, fill, false, () -> 0xFF52B380);
         }
       }
     });

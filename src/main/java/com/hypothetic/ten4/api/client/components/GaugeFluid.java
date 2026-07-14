@@ -4,6 +4,7 @@ import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.api.client.gui.TextureRegion;
 import com.hypothetic.ten4.util.DisplayUtil;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +19,7 @@ public class GaugeFluid extends UiComponent {
   protected final int innerH;
   protected @Nullable TextureRegion emptyTex;
   protected @Nullable TextureRegion overlayTex;
+  protected IntSupplier tinter;
 
   public GaugeFluid(int x, int y, int w, int h, int innerW, int innerH, Supplier<FluidStack> stackSupplier, IntSupplier capacity) {
     super(x, y, w, h);
@@ -25,11 +27,20 @@ public class GaugeFluid extends UiComponent {
     this.capacity = capacity;
     this.innerW = innerW;
     this.innerH = innerH;
+    this.tinter = () -> {
+      FluidStack stack = stackSupplier.get();
+      return IClientFluidTypeExtensions.of(stack.getFluid()).getTintColor(stack);
+    };
   }
 
   public GaugeFluid withTexture(@Nullable TextureRegion emptyTex, @Nullable TextureRegion overlayTex) {
     this.emptyTex = emptyTex;
     this.overlayTex = overlayTex;
+    return this;
+  }
+
+  public GaugeFluid withTinter(@Nullable IntSupplier tinter) {
+    this.tinter = tinter;
     return this;
   }
 
@@ -49,7 +60,7 @@ public class GaugeFluid extends UiComponent {
     if (fill > 0) {
       int ox = Math.round((width - innerW) / 2.0F);
       int oy = Math.round((height - innerH) / 2.0F);
-      g.drawFluid(stack.getFluid(), x + ox, y - fill + oy + innerH, innerW, fill, false);
+      g.drawFluid(stack.getFluid(), x + ox, y - fill + oy + innerH, innerW, fill, false, tinter);
     }
 
     g.draw(overlayTex, x, y, width, height);

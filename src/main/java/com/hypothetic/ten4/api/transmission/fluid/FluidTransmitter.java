@@ -18,7 +18,6 @@ public class FluidTransmitter extends BufferedTransmitter<IFluidHandler, FluidNe
   private FluidStack buffer = FluidStack.EMPTY; // local buffer when orphaned
   private FluidStack syncedBuffer = FluidStack.EMPTY;
   private long syncedCapacity;
-  private float clientScale;
 
   public FluidTransmitter(ITransmitterProvider tile, long capacity, long throughput) {
     super(tile, capacity, throughput);
@@ -47,10 +46,6 @@ public class FluidTransmitter extends BufferedTransmitter<IFluidHandler, FluidNe
 
   public long getBufferAmount() {
     return buffer.getAmount();
-  }
-
-  public float getClientScale() {
-    return clientScale;
   }
 
   @Override
@@ -96,8 +91,8 @@ public class FluidTransmitter extends BufferedTransmitter<IFluidHandler, FluidNe
     return syncedBuffer;
   }
 
-  public void applyFluidSync(float scale, FluidStack fluid) {
-    clientScale = scale;
+  public void syncClientFluid(float scale, FluidStack fluid) {
+    syncClientScale(scale);
     syncedBuffer = fluid;
   }
 }

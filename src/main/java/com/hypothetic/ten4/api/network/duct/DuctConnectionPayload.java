@@ -49,9 +49,7 @@ public record DuctConnectionPayload(BlockPos pos, byte conn, byte acc,
     Level level = ctx.player().level();
     if (level.getBlockEntity(pkt.pos) instanceof ITransmitterProvider duct) {
       Transmitter<?, ?, ?> t = duct.getTransmitter();
-      if (t != null) {
-        t.applyConnectionSync(pkt.conn, pkt.acc, pkt.types, pkt.color);
-      }
+      t.applyConnectionSync(pkt.conn, pkt.acc, pkt.types, pkt.color);
     }
   }
 

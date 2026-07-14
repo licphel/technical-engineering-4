@@ -87,17 +87,15 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
     }
     e.progress -= DUCT_LENGTH;
 
-    if (e.route == null || e.index >= e.route.length) {
+    if (e.index >= e.route.length) {
       ItemNetwork net = getNetwork();
       if (net != null) {
         byte[] newRoute = RouteFinder.findRoute(net, getBlockPos(), e.stack);
-        if (newRoute != null) {
-          e.route = newRoute;
-          e.index = 0;
-          e.exitSide = newRoute[0];
-        }
+        e.route = newRoute;
+        e.index = 0;
+        e.exitSide = newRoute.length > 0 ? newRoute[0] : 0;
       }
-      if (e.route == null || e.index >= e.route.length) {
+      if (e.index >= e.route.length) {
         e.progress = 0;
         return;
       }
@@ -115,7 +113,7 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
       nextDuct.transmitter.clientEntry = e;
       clientEntry = null;
     } else {
-      e.route = null;
+      e.route = new byte[0];
       e.progress = 0;
     }
   }
@@ -140,13 +138,10 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
             continue;
           }
           byte[] route = RouteFinder.findRoute(network, myPos, sim);
-          if (route == null) {
-            continue;
-          }
           TransitEntry entry = new TransitEntry();
           entry.stack = inv.extractItem(slot, Math.min(slotCapacity, sim.getCount()), false);
           entry.entrySide = (byte) side.ordinal();
-          entry.exitSide = route[0];
+          entry.exitSide = route.length > 0 ? route[0] : 0;
           entry.route = route;
           entry.index = 0;
           entry.id = nextId++;
@@ -163,19 +158,13 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
     // Route initialization for externally inserted items (PUSH via insertItem)
     if (snapshot != null && (snapshot.route == null || snapshot.index >= snapshot.route.length)) {
       byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
-      if (newRoute != null) {
-        snapshot.route = newRoute;
-        snapshot.index = 0;
-        snapshot.exitSide = newRoute[0];
-      }
+      snapshot.route = newRoute;
+      snapshot.index = 0;
+      snapshot.exitSide = newRoute.length > 0 ? newRoute[0] : 0;
     }
 
     // Advance (only if in snapshot — prevents same-tick multi-hop)
     if (snapshot == null) {
-      return;
-    }
-    if (snapshot.route == null) {
-      snapshot.progress = 0; // no route available yet, wait until next tick
       return;
     }
     snapshot.progress += speed;
@@ -203,13 +192,9 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
           }
         }
         byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
-        if (newRoute == null) {
-          snapshot.progress = DUCT_LENGTH - speed;
-          return;
-        }
         snapshot.route = newRoute;
         snapshot.index = 0;
-        snapshot.exitSide = newRoute[0];
+        snapshot.exitSide = newRoute.length > 0 ? newRoute[0] : 0;
         return;
       }
 
@@ -237,13 +222,9 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
       }
 
       byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
-      if (newRoute == null) {
-        snapshot.progress = DUCT_LENGTH - speed;
-        return;
-      }
       snapshot.route = newRoute;
       snapshot.index = 0;
-      snapshot.exitSide = newRoute[0];
+      snapshot.exitSide = newRoute.length > 0 ? newRoute[0] : 0;
     }
   }
 

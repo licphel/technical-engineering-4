@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitter> implements ILootProvider, ITickable {
   private final EnumMap<Direction, TransmitterItemHandler> itemHandlers = new EnumMap<>(Direction.class);
@@ -59,20 +57,17 @@ public abstract class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitte
   protected void loadAdditional(CompoundTag tag, HolderLookup.Provider reg) {
     super.loadAdditional(tag, reg);
 
-    if (tag.contains("Transit", Tag.TAG_LIST)) {
-      for (Tag t : tag.getList("Transit", Tag.TAG_COMPOUND)) {
-        CompoundTag c = (CompoundTag) t;
-        TransitEntry e = new TransitEntry();
-        e.id = c.getInt("Id");
-        e.stack = ItemStack.parseOptional(reg, c.getCompound("I"));
-        e.progress = c.getInt("P");
-        e.exitSide = c.getByte("D");
-        if (c.contains("R")) {
-          e.route = c.getByteArray("R");
-        }
-        e.index = c.getInt("Ri");
-        transmitter.getTransitMap().put(c.getInt("Id"), e);
-      }
+    if (tag.contains("Transit", Tag.TAG_COMPOUND)) {
+      CompoundTag c = tag.getCompound("Transit");
+
+      TransitEntry e = new TransitEntry();
+      e.id = c.getInt("Id");
+      e.stack = ItemStack.parseOptional(reg, c.getCompound("I"));
+      e.progress = c.getInt("P");
+      e.exitSide = c.getByte("D");
+      e.route = c.getByteArray("R");
+      e.index = c.getInt("Ri");
+      transmitter.getTransitMap().put(c.getInt("Id"), e);
     }
   }
 
@@ -80,21 +75,15 @@ public abstract class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitte
   protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
     super.saveAdditional(tag, reg);
 
-    if (!transmitter.getTransitMap().isEmpty()) {
-      ListTag list = new ListTag();
-      for (Map.Entry<Integer, TransitEntry> e : transmitter.getTransitMap().entrySet()) {
-        CompoundTag c = new CompoundTag();
-        c.putInt("Id", e.getKey());
-        c.put("I", e.getValue().stack.save(reg, new CompoundTag()));
-        c.putInt("P", e.getValue().progress);
-        c.putByte("D", e.getValue().exitSide);
-        if (e.getValue().route != null) {
-          c.putByteArray("R", e.getValue().route);
-        }
-        c.putInt("Ri", e.getValue().index);
-        list.add(c);
-      }
-      tag.put("Transit", list);
+    TransitEntry e = transmitter.transitEntry;
+    if (e != null) {
+      CompoundTag c = new CompoundTag();
+      c.put("I", e.stack.save(reg, new CompoundTag()));
+      c.putInt("P", e.progress);
+      c.putByte("D", e.exitSide);
+      c.putByteArray("R", e.route);
+      c.putInt("Ri", e.index);
+      tag.put("Transit", c);
     }
   }
 

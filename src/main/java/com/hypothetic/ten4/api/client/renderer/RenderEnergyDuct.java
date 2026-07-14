@@ -46,7 +46,7 @@ public class RenderEnergyDuct extends RenderTransmitterBlock<EnergyDuctBlockEnti
     VertexConsumer vc = buffers.getBuffer(RenderType.translucent());
     float alpha = Math.min(scale, 1f);
     float s = 0.971f, off = (1 - s) / 2;
-    final float r = 0.32f, g = 0.7f, b = 0.5f;
+    final float r = 0.32F, g = 0.7F, b = 0.5F;
 
     pose.pushPose();
     pose.translate(off, off, off);

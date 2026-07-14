@@ -74,9 +74,7 @@ public final class DuctInteractions {
     BlockEntity be = level.getBlockEntity(pos);
     if (be instanceof ITransmitterProvider duct) {
       Transmitter<?, ?, ?> t = duct.getTransmitter();
-      if (t != null) {
-        t.refreshConnections();
-      }
+      t.refreshConnections();
     }
   }
 

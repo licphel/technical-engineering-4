@@ -22,6 +22,7 @@ import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
+import java.util.function.IntSupplier;
 
 @OnlyIn(Dist.CLIENT)
 public final class EnhancedGuiGraphics {
@@ -102,13 +103,13 @@ public final class EnhancedGuiGraphics {
     }
   }
 
-  public void drawFluid(Fluid fluid, int x, int y, int width, int height, boolean flowing) {
+  public void drawFluid(Fluid fluid, int x, int y, int width, int height, boolean flowing, IntSupplier tinter) {
     if (fluid == Fluids.EMPTY) {
       return;
     }
 
     IClientFluidTypeExtensions fluidType = IClientFluidTypeExtensions.of(fluid);
-    int color = fluidType.getTintColor();
+    int color = tinter.getAsInt();
     ResourceLocation stillTexture = flowing ? fluidType.getFlowingTexture() : fluidType.getStillTexture();
 
     RenderSystem.enableBlend();

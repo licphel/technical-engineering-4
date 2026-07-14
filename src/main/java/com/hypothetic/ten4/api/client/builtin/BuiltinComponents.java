@@ -16,8 +16,11 @@ import com.hypothetic.ten4.util.DisplayUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
 
@@ -25,7 +28,6 @@ public final class BuiltinComponents {
   public static final ResourceLocation TEXTURE = Ten4.id("textures/gui/components.png");
   public static final ResourceLocation PANELS = Ten4.id("textures/gui/panels.png");
   public static final TextureRegion ENERGY_EMPTY = TextureRegion.of(TEXTURE, 204, 0, 8, 50);
-  public static final TextureRegion ENERGY_FULL = TextureRegion.of(TEXTURE, 204, 50, 8, 50);
   public static final TextureRegion FUEL_EMPTY = TextureRegion.of(TEXTURE, 168, 0, 14, 14);
   public static final TextureRegion FUEL_FULL = TextureRegion.of(TEXTURE, 168, 14, 14, 14);
   public static final TextureRegion PROGRESS_EMPTY = TextureRegion.of(TEXTURE, 234, 0, 22, 16);
@@ -35,17 +37,18 @@ public final class BuiltinComponents {
   private BuiltinComponents() {
   }
 
-  public static GaugeVertical energyGauge(int x, int y, SyncedFieldReader reader) {
-    return new GaugeVertical(x, y, 8, 50,
-        () -> reader.getInt(BuiltinSyncedFields.ENERGY),
+  public static GaugeFluid energyGauge(int x, int y, SyncedFieldReader reader) {
+    // Use a fluid gauge to simulate
+    return new GaugeFluid(x, y, 8, 50, 6, 48,
+        () -> new FluidStack(Fluids.WATER, reader.getInt(BuiltinSyncedFields.ENERGY)),
         () -> reader.getInt(BuiltinSyncedFields.MAX_ENERGY)
     ) {
       @Override
       public void onCollectingTooltips(List<Component> tooltips) {
-        super.onCollectingTooltips(tooltips);
-        tooltips.add(DisplayUtil.forgeEnergy(partial.getAsInt(), full.getAsInt()));
+        FluidStack stack = stackSupplier.get();
+        tooltips.add(DisplayUtil.forgeEnergy(stack.getAmount(), capacity.getAsInt()));
       }
-    }.withTexture(ENERGY_EMPTY, ENERGY_FULL);
+    }.withTexture(ENERGY_EMPTY, null).withTinter(() -> 0xFF52B380);
   }
 
   public static GaugeVertical fuelGauge(int x, int y, SyncedFieldReader reader) {
@@ -218,5 +221,28 @@ public final class BuiltinComponents {
     rightPanels.addPanel(BuiltinComponents.ioPanel(screen));
     rightPanels.addPanel(BuiltinComponents.augmentPanel(screen));
     return new UiComponent[] {leftPanels, rightPanels};
+  }
+
+  public static UiComponent showMiscs(ComponentedContainerScreen<ContainerMenu> screen) {
+    return new UiComponent(4, 4, 32, 8) {
+      @Override
+      public void onCollectingTooltips(List<Component> tooltips) {
+        super.onCollectingTooltips(tooltips);
+
+        SyncedFieldReader syncer = screen.getMenu().fieldsReader();
+        MutableComponent mc = Component.translatable(Ten4.lang("misc.power"));
+        mc.append(DisplayUtil.compactInt(syncer.get(BuiltinSyncedFields.POWER)) + "FE/t");
+        tooltips.add(mc);
+        mc = Component.translatable(Ten4.lang("misc.throughput.energy"));
+        mc.append(DisplayUtil.compactInt(syncer.get(BuiltinSyncedFields.ENERGY_THROUGHPUT)) + "FE/t");
+        tooltips.add(mc);
+        mc = Component.translatable(Ten4.lang("misc.throughput.item"));
+        mc.append(DisplayUtil.compactInt(syncer.get(BuiltinSyncedFields.ITEM_THROUGHPUT)) + "S/t");
+        tooltips.add(mc);
+        mc = Component.translatable(Ten4.lang("misc.throughput.fluid"));
+        mc.append(DisplayUtil.compactInt(syncer.get(BuiltinSyncedFields.FLUID_THROUGHPUT)) + "mB/t");
+        tooltips.add(mc);
+      }
+    };
   }
 }
