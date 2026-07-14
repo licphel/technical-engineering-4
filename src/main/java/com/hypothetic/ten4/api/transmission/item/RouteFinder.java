@@ -13,14 +13,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 final class RouteFinder {
-  static byte @Nullable [] findRoute(ItemNetwork network, BlockPos start, ItemStack stack) {
+  private static final byte[] ZERO = new byte[0];
+
+  static byte[] findRoute(ItemNetwork network, BlockPos start, ItemStack stack) {
     ItemTransmitter tr = network.findTransmitter(start);
     if (tr == null) {
-      return null;
+      return ZERO;
     }
     Level level = tr.getLevel();
     if (level == null) {
-      return null;
+      return ZERO;
     }
 
     List<byte[]> allRoutes = new ArrayList<>();
@@ -68,7 +70,7 @@ final class RouteFinder {
     }
 
     if (allRoutes.isEmpty()) {
-      return null;
+      return ZERO;
     }
     // Round-robin: pick next route
     int idx = network.nextRouteIndex.getAndIncrement() % allRoutes.size();

@@ -1,8 +1,9 @@
-package com.hypothetic.ten4.core.block;
+package com.hypothetic.ten4.api.block;
 
-import com.hypothetic.ten4.api.IRedstoneBlockEntity;
-import com.hypothetic.ten4.api.ILootProvider;
+import com.hypothetic.ten4.api.blockentity.ILootProvider;
+import com.hypothetic.ten4.api.blockentity.IRedstoneBlockEntity;
 import com.hypothetic.ten4.api.blockentity.SimpleTicker;
+import com.hypothetic.ten4.api.registry.BlockEntityBridges;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,27 +17,33 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockEntityCreatorBlock extends BaseEntityBlock {
-  @Nullable BlockEntityType.BlockEntitySupplier<?> supplier;
-  boolean tickable;
+public class BridgedEntityBlock extends BaseEntityBlock {
+  boolean serverTicker;
+  boolean clientTicker;
 
-  public BlockEntityCreatorBlock(Properties props) {
+  public BridgedEntityBlock(Properties props) {
     super(props);
   }
 
-  public BlockEntityCreatorBlock builder(@Nullable BlockEntityType.BlockEntitySupplier<?> supplier) {
-    this.supplier = supplier;
+  public BridgedEntityBlock tickBothSide() {
+    this.serverTicker = true;
+    this.clientTicker = true;
     return this;
   }
 
-  public BlockEntityCreatorBlock tickable(boolean tickable) {
-    this.tickable = tickable;
+  public BridgedEntityBlock tickServer() {
+    this.serverTicker = true;
+    return this;
+  }
+
+  public BridgedEntityBlock tickClient() {
+    this.clientTicker = true;
     return this;
   }
 
   @Override
   protected MapCodec<? extends BaseEntityBlock> codec() {
-    return simpleCodec(pp -> new BlockEntityCreatorBlock(properties).builder(supplier));
+    return simpleCodec(pp -> new BridgedEntityBlock(properties));
   }
 
   @Override
@@ -47,15 +54,16 @@ public class BlockEntityCreatorBlock extends BaseEntityBlock {
 
   @Override
   public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-    if (supplier == null) {
-      return null;
-    }
-    return supplier.create(pos, state);
+    @Nullable BlockEntityType<?> type = BlockEntityBridges.getEntity(this);
+    return type != null ? type.create(pos, state) : null;
   }
 
   @Override
   public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-    return tickable ? new SimpleTicker<>() : null;
+    if (level.isClientSide()) {
+      return clientTicker ? new SimpleTicker<>() : null;
+    }
+    return serverTicker ? new SimpleTicker<>() : null;
   }
 
   @Override
@@ -65,12 +73,12 @@ public class BlockEntityCreatorBlock extends BaseEntityBlock {
   }
 
   @Override
-  public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
-    return IRedstoneBlockEntity.canConnect(level, pos, direction);
+  protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    return IRedstoneBlockEntity.getAnalogSignal(level, pos);
   }
 
   @Override
-  protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
-    return IRedstoneBlockEntity.getAnalogSignal(level, pos);
+  public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
+    return IRedstoneBlockEntity.canConnect(level, pos, direction);
   }
 }

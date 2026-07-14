@@ -19,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-import java.util.Arrays;
 import java.util.List;
 
 public final class BuiltinComponents {
@@ -119,7 +118,7 @@ public final class BuiltinComponents {
       @Override
       protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
         g.draw(TextureRegion.of(PANELS, 165, 84, 91, 72), bx, by);
-        g.drawString(Component.translatable(Ten4.getLangKey("misc.info_label")),
+        g.drawString(Component.translatable(Ten4.lang("misc.info_label")),
             bx + 15, by + 4, 0xDCFFFFFF, false);
 
         if (verticalH == -1) {
@@ -147,7 +146,7 @@ public final class BuiltinComponents {
       @Override
       protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
         g.draw(TextureRegion.of(PANELS, 165, 17, 91, 48), bx, by);
-        g.drawString(Component.translatable(Ten4.getLangKey("misc.sigmode_label")),
+        g.drawString(Component.translatable(Ten4.lang("misc.sigmode_label")),
             bx + 15, by + 4, 0xDCFFFFFF, false);
       }
     }.expandLeft();
@@ -171,7 +170,7 @@ public final class BuiltinComponents {
       @Override
       protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
         g.draw(TextureRegion.of(PANELS, 0, 84, 91, 90), bx, by);
-        g.drawString(Component.translatable(Ten4.getLangKey("misc.io_label")),
+        g.drawString(Component.translatable(Ten4.lang("misc.io_label")),
             bx + 15, by + 4, 0xDCFFFFFF, false);
       }
     };
@@ -197,7 +196,7 @@ public final class BuiltinComponents {
       @Override
       protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
         g.draw(TextureRegion.of(PANELS, 0, 17, 91, 48), bx, by);
-        g.drawString(Component.translatable(Ten4.getLangKey("misc.augment_label")),
+        g.drawString(Component.translatable(Ten4.lang("misc.augment_label")),
             bx + 15, by + 4, 0xDCFFFFFF, false);
       }
     };

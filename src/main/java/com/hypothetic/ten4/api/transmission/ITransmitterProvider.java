@@ -17,5 +17,5 @@ public interface ITransmitterProvider {
 
   void notifyChanges();
 
-  @Nullable Transmitter<?, ?, ?> getTransmitter();
+  Transmitter<?, ?, ?> getTransmitter();
 }

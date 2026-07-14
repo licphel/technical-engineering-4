@@ -1,4 +1,4 @@
-package com.hypothetic.ten4.api;
+package com.hypothetic.ten4.api.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -7,10 +7,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public interface IRedstoneBlockEntity {
-  boolean canConnectRedstone(@Nullable Direction side);
-
-  int getComparatorSignal();
-
   static boolean canConnect(BlockGetter level, BlockPos pos, @Nullable Direction direction) {
     BlockEntity blockEntity = level.getBlockEntity(pos);
 
@@ -30,4 +26,8 @@ public interface IRedstoneBlockEntity {
 
     return 0;
   }
+
+  boolean canConnectRedstone(@Nullable Direction side);
+
+  int getComparatorSignal();
 }

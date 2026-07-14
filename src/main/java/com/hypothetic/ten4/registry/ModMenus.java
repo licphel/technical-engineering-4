@@ -17,21 +17,16 @@ public class ModMenus {
   public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, Ten4.ID);
   private static final Supplier<MenuType<ContainerMenu>> DEVICE_MENU_GENERATOR = (() -> IMenuTypeExtension.create(
       (id, inv, buf) -> {
-        AbstractDeviceBlockEntity be = (AbstractDeviceBlockEntity)
-            inv.player.level().getBlockEntity(buf.readBlockPos());
+        AbstractDeviceBlockEntity be = (AbstractDeviceBlockEntity) inv.player.level().getBlockEntity(buf.readBlockPos());
         assert be != null;
         AbstractContainerMenu menu = be.createMenu(id, inv, inv.player);
         return (ContainerMenu) Objects.requireNonNull(menu);
       }));
 
-  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> PULVERIZER =
-      MENUS.register("pulverizer", DEVICE_MENU_GENERATOR);
-  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> HEAT_GENERATOR =
-      MENUS.register("heat_generator", DEVICE_MENU_GENERATOR);
-  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> WATER_PUMP =
-      MENUS.register("water_pump", DEVICE_MENU_GENERATOR);
+  // Devices
+  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> PULVERIZER = MENUS.register("pulverizer", DEVICE_MENU_GENERATOR);
+  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> WATER_PUMP = MENUS.register("water_pump", DEVICE_MENU_GENERATOR);
 
-  public static void trigger() {
-    // just trigger the class loader
-  }
+  // Generators
+  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> HEAT_GENERATOR = MENUS.register("heat_generator", DEVICE_MENU_GENERATOR);
 }

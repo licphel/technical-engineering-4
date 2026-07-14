@@ -1,4 +1,4 @@
-package com.hypothetic.ten4.api;
+package com.hypothetic.ten4.api.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;

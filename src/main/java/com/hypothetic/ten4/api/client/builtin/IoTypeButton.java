@@ -30,7 +30,7 @@ class IoTypeButton extends Button {
   public void onCollectingTooltips(List<Component> tooltips) {
     super.onCollectingTooltips(tooltips);
 
-    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.current_configuring"));
+    MutableComponent mc = Component.translatable(Ten4.lang("misc.current_configuring"));
     mc.append(state.getComponent());
     tooltips.add(mc);
   }

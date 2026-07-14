@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.api.blockentity.transmission;
 
-import com.hypothetic.ten4.api.ITickable;
+import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.api.network.duct.DuctFluidPayload;
 import com.hypothetic.ten4.api.transmission.fluid.FluidNetwork;
 import com.hypothetic.ten4.api.transmission.fluid.FluidTransmitter;
@@ -10,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -21,8 +20,8 @@ public abstract class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmit
   private final IFluidHandler fluidHandler;
   private int tickCount;
 
-  public FluidDuctBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-    super(type, pos, state);
+  public FluidDuctBlockEntity(BlockPos pos, BlockState state) {
+    super(pos, state);
     this.transmitter = new FluidTransmitter(this, info.bufferCapacity, info.throughput);
     this.fluidHandler = new TransmitterFluidHandler(transmitter);
   }

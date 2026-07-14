@@ -25,6 +25,6 @@ public enum FaceMode implements ITranslatable {
 
   @Override
   public String createGroupKey() {
-    return Ten4.getLangKey("misc.facemode");
+    return Ten4.lang("misc.facemode");
   }
 }

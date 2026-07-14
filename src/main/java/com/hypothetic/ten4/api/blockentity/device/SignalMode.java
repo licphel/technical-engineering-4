@@ -14,6 +14,6 @@ public enum SignalMode implements ITranslatable {
 
   @Override
   public String createGroupKey() {
-    return Ten4.getLangKey("misc.sigmode");
+    return Ten4.lang("misc.sigmode");
   }
 }

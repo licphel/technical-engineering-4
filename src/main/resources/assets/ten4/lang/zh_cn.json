@@ -1,8 +1,5 @@
 {
-  "ten4.creative_mode_tab.block": "科能工程 IV - 方块",
-  "ten4.creative_mode_tab.device": "科能工程 IV - 机器",
-  "ten4.creative_mode_tab.material": "科能工程 IV - 材料",
-  "ten4.creative_mode_tab.tool": "科能工程 IV - 工具",
+  "ten4.creative_mode_tab.default": "科能工程 IV",
 
   "ten4.misc.info_label": "关于",
   "ten4.misc.sigmode_label": "配置",

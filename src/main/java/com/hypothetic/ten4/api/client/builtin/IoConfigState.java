@@ -35,9 +35,9 @@ class IoConfigState {
 
   public Component getComponent() {
     return switch (type) {
-      case 0 -> Component.translatable(Ten4.getLangKey("misc.energy"));
-      case 1 -> Component.translatable(Ten4.getLangKey("misc.item"));
-      case 2 -> Component.translatable(Ten4.getLangKey("misc.fluid"));
+      case 0 -> Component.translatable(Ten4.lang("misc.energy"));
+      case 1 -> Component.translatable(Ten4.lang("misc.item"));
+      case 2 -> Component.translatable(Ten4.lang("misc.fluid"));
       default -> Component.empty();
     };
   }

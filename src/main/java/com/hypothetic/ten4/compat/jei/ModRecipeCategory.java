@@ -43,7 +43,7 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
 
   public ModRecipeCategory(IGuiHelper helper, RecipeType<T> type, ItemStack iconStack) {
     this.type = type;
-    this.title = Component.translatable(Ten4.getLangKey(type.getUid().getPath()));
+    this.title = Component.translatable(Ten4.lang(type.getUid().getPath()));
     this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, iconStack);
   }
 

@@ -47,7 +47,7 @@ class SigModeButton extends Button {
     int mode = reader.getInt(BuiltinSyncedFields.SIG_MODE);
     SignalMode sig = SignalMode.of(mode);
 
-    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.sigmode"));
+    MutableComponent mc = Component.translatable(Ten4.lang("misc.sigmode"));
     mc.append(sig.createTranslation());
     tooltips.add(mc);
     tooltips.add(sig.createDescription().withStyle(ChatFormatting.GRAY));

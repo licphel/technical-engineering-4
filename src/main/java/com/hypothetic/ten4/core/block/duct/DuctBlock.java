@@ -1,16 +1,17 @@
 package com.hypothetic.ten4.core.block.duct;
 
 import com.google.common.collect.Maps;
-import com.hypothetic.ten4.core.block.BlockEntityCreatorBlock;
+import com.hypothetic.ten4.api.block.BridgedEntityBlock;
 import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -33,7 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public abstract class DuctBlock extends BlockEntityCreatorBlock implements SimpleWaterloggedBlock {
+public abstract class DuctBlock extends BridgedEntityBlock implements SimpleWaterloggedBlock {
   public static final Map<Direction, BooleanProperty> CONNECTIONS;
   private static final VoxelShape SHAPE = Block.box(4, 4, 4, 12, 12, 12);
 

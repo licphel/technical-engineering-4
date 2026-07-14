@@ -1,17 +1,18 @@
 package com.hypothetic.ten4.core.blockentity.duct;
 
-import com.hypothetic.ten4.api.blockentity.device.SignalMode;
 import com.hypothetic.ten4.api.blockentity.transmission.DuctInfo;
 import com.hypothetic.ten4.api.blockentity.transmission.EnergyDuctBlockEntity;
-import com.hypothetic.ten4.registry.ModBlockEntities;
+import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class CopperControllerEnergyDuctBlockEntity extends EnergyDuctBlockEntity {
+  private boolean lastPowered;
+
   public CopperControllerEnergyDuctBlockEntity(BlockPos pos, BlockState state) {
-    super(ModBlockEntities.COPPER_CONTROLLER_ENERGY_DUCT.get(), pos, state);
+    super(pos, state);
 
     for (Direction side : Direction.values()) {
       transmitter.setBlocker(side, d -> isRedstonePowered());
@@ -28,8 +29,6 @@ public class CopperControllerEnergyDuctBlockEntity extends EnergyDuctBlockEntity
     return DuctTiers.COPPER_ENERGY;
   }
 
-  private boolean lastPowered;
-
   @Override
   public void onLoad() {
     super.onLoad();
@@ -41,8 +40,9 @@ public class CopperControllerEnergyDuctBlockEntity extends EnergyDuctBlockEntity
   public void tick() {
     super.tick();
 
-    if (lastPowered != isRedstonePowered()) {
-      lastPowered = isRedstonePowered();
+    boolean powered = isRedstonePowered();
+    if (lastPowered != powered) {
+      lastPowered = BuiltinBlockStates.toggleActive(this, lastPowered, powered);
       transmitter.rebuild();
     }
   }

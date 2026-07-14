@@ -41,13 +41,13 @@ class StrictInputButton extends Button {
     super.onCollectingTooltips(tooltips);
 
     boolean b = reader.getBool(BuiltinSyncedFields.STRICT_INPUT);
-    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.strict_input"));
+    MutableComponent mc = Component.translatable(Ten4.lang("misc.strict_input"));
     if (b) {
-      mc.append(Component.translatable(Ten4.getLangKey("misc.enabled")));
+      mc.append(Component.translatable(Ten4.lang("misc.enabled")));
     } else {
-      mc.append(Component.translatable(Ten4.getLangKey("misc.disabled")));
+      mc.append(Component.translatable(Ten4.lang("misc.disabled")));
     }
     tooltips.add(mc);
-    tooltips.add(Component.translatable(Ten4.getLangKey("misc.strict_input.desc")).withStyle(ChatFormatting.GRAY));
+    tooltips.add(Component.translatable(Ten4.lang("misc.strict_input.desc")).withStyle(ChatFormatting.GRAY));
   }
 }

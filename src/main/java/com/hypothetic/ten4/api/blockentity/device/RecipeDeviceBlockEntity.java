@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
-import com.hypothetic.ten4.api.ITickable;
+import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.Syncer;
 import com.hypothetic.ten4.api.recipe.Complex;
@@ -11,7 +11,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -31,8 +30,8 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   protected int progress = 0;
   protected int maxProgress = 0;
 
-  public RecipeDeviceBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-    super(type, pos, state);
+  public RecipeDeviceBlockEntity(BlockPos pos, BlockState state) {
+    super(pos, state);
     this.recipeType = getRecipeType();
   }
 

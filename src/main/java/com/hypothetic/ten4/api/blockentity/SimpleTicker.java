@@ -1,6 +1,5 @@
 package com.hypothetic.ten4.api.blockentity;
 
-import com.hypothetic.ten4.api.ITickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;

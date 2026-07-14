@@ -91,10 +91,10 @@ class IoFaceButton extends Button {
   public void onCollectingTooltips(List<Component> tooltips) {
     super.onCollectingTooltips(tooltips);
 
-    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.facemode"));
+    MutableComponent mc = Component.translatable(Ten4.lang("misc.facemode"));
     mc.append(state.get(dir).createTranslation());
     tooltips.add(mc);
-    tooltips.add(Component.translatable(Ten4.getLangKey("misc." + relSide)).withStyle(ChatFormatting.GRAY));
+    tooltips.add(Component.translatable(Ten4.lang("misc." + relSide)).withStyle(ChatFormatting.GRAY));
     tooltips.add(state.get(dir).createDescription().withStyle(ChatFormatting.GRAY));
   }
 }

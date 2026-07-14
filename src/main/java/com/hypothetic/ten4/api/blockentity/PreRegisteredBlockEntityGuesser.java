@@ -10,16 +10,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 @FunctionalInterface
 public interface PreRegisteredBlockEntityGuesser<T extends BlockEntity> {
-  T create(BlockEntityType<?> type, BlockPos pos, BlockState state);
-
-  default T create(BlockPos pos, BlockState state) {
-    BlockEntityType<?> type = MAPPING.getOrDefault(state.getBlock(), null);
-    if (type == null) {
-      throw new IllegalStateException("Unknown block entity type: " + state.getBlock());
-    }
-    return create(type, pos, state);
-  }
-
   BiMap<Block, BlockEntityType<?>> MAPPING = HashBiMap.create();
 
   static void register(Block block, BlockEntityType<?> entity) {
@@ -28,5 +18,15 @@ public interface PreRegisteredBlockEntityGuesser<T extends BlockEntity> {
 
   static <R extends BlockEntity> BlockEntityType.BlockEntitySupplier<R> map(PreRegisteredBlockEntityGuesser<R> guesser) {
     return guesser::create;
+  }
+
+  T create(BlockEntityType<?> type, BlockPos pos, BlockState state);
+
+  default T create(BlockPos pos, BlockState state) {
+    BlockEntityType<?> type = MAPPING.getOrDefault(state.getBlock(), null);
+    if (type == null) {
+      throw new IllegalStateException("Unknown block entity type: " + state.getBlock());
+    }
+    return create(type, pos, state);
   }
 }

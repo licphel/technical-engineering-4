@@ -3,7 +3,6 @@ package com.hypothetic.ten4.api;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.ItemStack;
 
 public interface ITranslatable extends StringRepresentable {
   @Override

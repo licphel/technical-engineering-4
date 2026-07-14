@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
-import com.hypothetic.ten4.api.ILootProvider;
 import com.hypothetic.ten4.api.ITranslatable;
+import com.hypothetic.ten4.api.blockentity.ILootProvider;
 import com.hypothetic.ten4.api.blockentity.RedstoneAwareBlockEntity;
 import com.hypothetic.ten4.api.capability.energy.DirectionalEnergyStorage;
 import com.hypothetic.ten4.api.capability.energy.EnergyQueue;
@@ -30,7 +30,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -43,12 +42,9 @@ import java.util.*;
 
 public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     implements ILootProvider, ITranslatable, IDirectionalEnergyProvider, IDirectionalFluidProvider, IDirectionalItemProvider, MenuProvider {
-  public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IEnergyStorage> ENERGY =
-      AbstractDeviceBlockEntity::getEnergyStorage;
-  public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IItemHandler> ITEM =
-      AbstractDeviceBlockEntity::getItemHandler;
-  public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IFluidHandler> FLUID =
-      AbstractDeviceBlockEntity::getFluidHandler;
+  public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IEnergyStorage> ENERGY = AbstractDeviceBlockEntity::getEnergyStorage;
+  public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IItemHandler> ITEM = AbstractDeviceBlockEntity::getItemHandler;
+  public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IFluidHandler> FLUID = AbstractDeviceBlockEntity::getFluidHandler;
 
   protected final Map<Direction, DirectionalEnergyStorage> energyHandlers = new HashMap<>();
   protected final Map<Direction, FaceMode> energyFaceConfig = new HashMap<>();
@@ -65,8 +61,8 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   protected final Queue<Direction> fluidPushingQueue = new LinkedList<>();
   protected final Queue<Direction> fluidPullingQueue = new LinkedList<>();
   protected final Syncer syncer = new Syncer();
-  protected int energy = 0;
   protected final DeviceInfo info;
+  protected int energy = 0;
   protected boolean active;
   protected SignalMode sigMode = SignalMode.IGNORE;
   protected boolean strictInput = false;
@@ -74,8 +70,8 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   protected int requestInterval = 1;
   protected int delayPushBuffer;
 
-  public AbstractDeviceBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-    super(type, pos, state);
+  public AbstractDeviceBlockEntity(BlockPos pos, BlockState state) {
+    super(pos, state);
 
     registerAdditionalSyncFields(syncer);
 
@@ -310,18 +306,7 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   }
 
   public void setActive(boolean a) {
-    if (level == null) {
-      return;
-    }
-
-    if (active != a) {
-      active = a;
-      BlockState state = getBlockState();
-      if (getBlockState().hasProperty(BuiltinBlockStates.ACTIVE)) {
-        level.setBlockAndUpdate(worldPosition, state.setValue(BuiltinBlockStates.ACTIVE, a));
-      }
-      setChanged();
-    }
+    active = BuiltinBlockStates.toggleActive(this, active, a);
   }
 
   protected void delayPushFor(int ticks) {
@@ -413,6 +398,11 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     return Collections.emptyList();
   }
 
+  @Override
+  public boolean canConnectRedstone(@Nullable Direction side) {
+    return sigMode != SignalMode.IGNORE;
+  }
+
   public int getComparatorSignal() {
     return switch (comparatorMode) {
       case OUTPUT_ITEMS -> {
@@ -455,11 +445,6 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
       case ACTIVE -> isActive() ? 15 : 0;
       case OFF -> 0;
     };
-  }
-
-  @Override
-  public boolean canConnectRedstone(@Nullable Direction side) {
-    return sigMode != SignalMode.IGNORE;
   }
 
   public boolean isValidInput(ItemStack stack) {

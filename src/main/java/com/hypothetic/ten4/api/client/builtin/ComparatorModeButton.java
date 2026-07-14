@@ -48,7 +48,7 @@ public class ComparatorModeButton extends Button {
     int mode = reader.getInt(BuiltinSyncedFields.COMPARATOR_MODE);
     ComparatorMode cm = ComparatorMode.of(mode);
 
-    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.comparator_mode"));
+    MutableComponent mc = Component.translatable(Ten4.lang("misc.comparator_mode"));
     mc.append(cm.createTranslation());
     tooltips.add(mc);
     tooltips.add(cm.createDescription().withStyle(ChatFormatting.GRAY));

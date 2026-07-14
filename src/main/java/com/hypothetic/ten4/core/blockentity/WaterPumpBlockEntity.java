@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.core.blockentity;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.ITickable;
+import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.api.blockentity.device.AugmentableDeviceBlockEntity;
 import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
 import com.hypothetic.ten4.api.capability.fluid.FluidTank;
@@ -11,7 +11,6 @@ import com.hypothetic.ten4.api.container.ContainerMenuLayout;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;
 import com.hypothetic.ten4.api.container.sync.Syncer;
-import com.hypothetic.ten4.registry.ModBlockEntities;
 import com.hypothetic.ten4.registry.ModMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,7 +34,7 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
   public static final SyncedFluidStack TANK_0 = new SyncedFluidStack(0);
 
   public WaterPumpBlockEntity(BlockPos pos, BlockState state) {
-    super(ModBlockEntities.WATER_PUMP.get(), pos, state);
+    super(pos, state);
   }
 
   @Override
@@ -121,6 +120,6 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
 
   @Override
   public String createTranslationKey() {
-    return Ten4.getLangKey("water_pump.desc");
+    return Ten4.lang("water_pump.desc");
   }
 }

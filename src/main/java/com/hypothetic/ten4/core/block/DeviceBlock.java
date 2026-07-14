@@ -1,11 +1,8 @@
 package com.hypothetic.ten4.core.block;
 
-import com.hypothetic.ten4.api.ILootProvider;
-import com.hypothetic.ten4.api.blockentity.SimpleTicker;
-import com.hypothetic.ten4.api.blockentity.PreRegisteredBlockEntityGuesser;
+import com.hypothetic.ten4.api.block.BridgedEntityBlock;
 import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
 import com.hypothetic.ten4.api.blockentity.device.ComparatorMode;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -14,19 +11,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class DeviceBlock extends BlockEntityCreatorBlock {
+public class DeviceBlock extends BridgedEntityBlock {
   public DeviceBlock(Properties p) {
     super(p);
 
@@ -46,11 +39,6 @@ public class DeviceBlock extends BlockEntityCreatorBlock {
     super.createBlockStateDefinition(builder);
     builder.add(BlockStateProperties.HORIZONTAL_FACING);
     builder.add(BuiltinBlockStates.ACTIVE);
-  }
-
-  @Override
-  public boolean hasAnalogOutputSignal(BlockState state) {
-    return true;
   }
 
   @Override
@@ -74,5 +62,10 @@ public class DeviceBlock extends BlockEntityCreatorBlock {
       player.openMenu(menuProvider, pos);
     }
     return ItemInteractionResult.CONSUME;
+  }
+
+  @Override
+  public boolean hasAnalogOutputSignal(BlockState state) {
+    return true;
   }
 }

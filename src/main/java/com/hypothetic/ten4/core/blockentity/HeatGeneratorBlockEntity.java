@@ -7,7 +7,6 @@ import com.hypothetic.ten4.api.capability.item.ItemSlot;
 import com.hypothetic.ten4.api.capability.item.SlotOption;
 import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
 import com.hypothetic.ten4.api.container.ContainerMenuLayout;
-import com.hypothetic.ten4.registry.ModBlockEntities;
 import com.hypothetic.ten4.registry.ModMenus;
 import com.hypothetic.ten4.util.ItemStackUtil;
 import net.minecraft.core.BlockPos;
@@ -22,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
   public HeatGeneratorBlockEntity(BlockPos pos, BlockState state) {
-    super(ModBlockEntities.HEAT_GENERATOR.get(), pos, state);
+    super(pos, state);
   }
 
   @Override
@@ -44,7 +43,7 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
 
   @Override
   public Component getDisplayName() {
-    return Component.translatable(Ten4.getLangKey("heat_generator"));
+    return Component.translatable(Ten4.lang("heat_generator"));
   }
 
   @Override
@@ -56,7 +55,7 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
 
   @Override
   public String createTranslationKey() {
-    return Ten4.getLangKey("heat_generator.desc");
+    return Ten4.lang("heat_generator.desc");
   }
 
   @Override

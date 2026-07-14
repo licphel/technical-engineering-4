@@ -22,41 +22,17 @@ public class RenderEnergyDuct extends RenderTransmitterBlock<EnergyDuctBlockEnti
   private static final ResourceLocation INNER_CORE = Ten4.id("block/connectable/inner_core");
   private static final ResourceLocation INNER_PART = Ten4.id("block/connectable/inner_part");
   private static final TextureAtlasSprite WATER = ClientUtil.getBlockSprite(ResourceLocation.withDefaultNamespace("block/water_still"));
-  private final ResourceLocation texture;
   private final DuctModelBaker innerBaker = new DuctModelBaker(INNER_CORE, INNER_PART, INNER_PART, INNER_PART);
 
   public RenderEnergyDuct(BlockEntityRendererProvider.Context ctx, ResourceLocation textureName) {
-    super(ctx, MODEL_CORE, MODEL_PART, MODEL_PULL, MODEL_PUSH);
-    texture = textureName;
-  }
-
-  @Override
-  protected ResourceLocation coreTexture() {
-    return texture;
-  }
-
-  @Override
-  protected ResourceLocation partTexture() {
-    return texture;
-  }
-
-  @Override
-  protected boolean hasConnection(EnergyDuctBlockEntity be, Direction d) {
-    return be.transmitter.getConnectionType(d) != ConnectionType.NONE;
-  }
-
-  @Override
-  protected String partName(EnergyDuctBlockEntity be, Direction d) {
-    return switch (be.transmitter.getConnectionType(d)) {
-      case PULL -> "pull";
-      case PUSH -> "push";
-      default -> "part";
-    };
+    super(ctx, MODEL_CORE, MODEL_PART, MODEL_PULL, MODEL_PUSH,
+        textureName,
+        ResourceLocation.parse(textureName + "_active"));
   }
 
   @Override
   protected void renderContents(EnergyDuctBlockEntity be, float pt, PoseStack pose,
-                                MultiBufferSource buffers, TextureAtlasSprite cs, TextureAtlasSprite ss,
+                                MultiBufferSource buffers, TextureAtlasSprite cs,
                                 int light, int overlay) {
     float scale = be.transmitter.getClientScale();
     if (scale <= 0) {
@@ -87,7 +63,7 @@ public class RenderEnergyDuct extends RenderTransmitterBlock<EnergyDuctBlockEnti
       if (be.transmitter.getConnectionType(d) != ConnectionType.NORMAL) {
         continue;
       }
-      for (BakedQuad q : innerBaker.getPart(d.getSerializedName() + "_" + partName(be, d), WATER)) {
+      for (BakedQuad q : innerBaker.getPart(d.getSerializedName() + "_" + getPartName(be, d), WATER)) {
         vc.putBulkData(entry, q, r, g, b, alpha, light, overlay, true);
       }
     }

@@ -23,43 +23,18 @@ public class RenderFluidDuct extends RenderTransmitterBlock<FluidDuctBlockEntity
   private static final ResourceLocation MODEL_PUSH = Ten4.id("block/connectable/connectable_push");
   private static final ResourceLocation INNER_CORE = Ten4.id("block/connectable/inner_core");
   private static final ResourceLocation INNER_PART = Ten4.id("block/connectable/inner_part");
-  private static final TextureAtlasSprite WATER = ClientUtil.getBlockSprite(
-      ResourceLocation.withDefaultNamespace("block/water_still"));
-  private final ResourceLocation texture;
+  private static final TextureAtlasSprite WATER = ClientUtil.getBlockSprite(ResourceLocation.withDefaultNamespace("block/water_still"));
   private final DuctModelBaker innerBaker = new DuctModelBaker(INNER_CORE, INNER_PART, INNER_PART, INNER_PART);
 
   public RenderFluidDuct(BlockEntityRendererProvider.Context ctx, ResourceLocation textureName) {
-    super(ctx, MODEL_CORE, MODEL_PART, MODEL_PULL, MODEL_PUSH);
-    texture = textureName;
-  }
-
-  @Override
-  protected ResourceLocation coreTexture() {
-    return texture;
-  }
-
-  @Override
-  protected ResourceLocation partTexture() {
-    return texture;
-  }
-
-  @Override
-  protected boolean hasConnection(FluidDuctBlockEntity be, Direction d) {
-    return be.transmitter.getConnectionType(d) != ConnectionType.NONE;
-  }
-
-  @Override
-  protected String partName(FluidDuctBlockEntity be, Direction d) {
-    return switch (be.transmitter.getConnectionType(d)) {
-      case PULL -> "pull";
-      case PUSH -> "push";
-      default -> "part";
-    };
+    super(ctx, MODEL_CORE, MODEL_PART, MODEL_PULL, MODEL_PUSH,
+        textureName,
+        ResourceLocation.parse(textureName + "_active"));
   }
 
   @Override
   protected void renderContents(FluidDuctBlockEntity be, float pt, PoseStack pose,
-                                MultiBufferSource buffers, TextureAtlasSprite cs, TextureAtlasSprite ss,
+                                MultiBufferSource buffers, TextureAtlasSprite cs,
                                 int light, int overlay) {
     float scale = be.transmitter.getClientScale();
     if (scale <= 0) {
@@ -97,7 +72,7 @@ public class RenderFluidDuct extends RenderTransmitterBlock<FluidDuctBlockEntity
       if (be.transmitter.getConnectionType(d) != ConnectionType.NORMAL) {
         continue;
       }
-      for (BakedQuad q : innerBaker.getPart(d.getSerializedName() + "_" + partName(be, d), fs)) {
+      for (BakedQuad q : innerBaker.getPart(d.getSerializedName() + "_" + getPartName(be, d), fs)) {
         vc.putBulkData(entry, q, r, g, b, alpha, light, overlay, true);
       }
     }

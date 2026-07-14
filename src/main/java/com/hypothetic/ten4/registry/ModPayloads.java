@@ -16,8 +16,8 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 @EventBusSubscriber(modid = Ten4.ID)
 public final class ModPayloads {
   @SubscribeEvent
-  public static void listen(RegisterPayloadHandlersEvent e) {
-    PayloadRegistrar r = e.registrar("26.1");
+  public static void onRegisterPayloads(RegisterPayloadHandlersEvent e) {
+    PayloadRegistrar r = e.registrar(Ten4.VERSION);
     r.playToServer(IoFacePayload.TYPE, IoFacePayload.CODEC, IoFacePayload::handle);
     r.playToServer(SigmodePayload.TYPE, SigmodePayload.CODEC, SigmodePayload::handle);
     r.playToServer(DeviceConfigPayload.TYPE, DeviceConfigPayload.CODEC, DeviceConfigPayload::handle);

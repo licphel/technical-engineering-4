@@ -1,13 +1,10 @@
 package com.hypothetic.ten4.registry.client;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.container.ContainerMenu;
 import com.hypothetic.ten4.core.client.screen.HeatGeneratorScreen;
 import com.hypothetic.ten4.core.client.screen.PulverizerScreen;
 import com.hypothetic.ten4.core.client.screen.WaterPumpScreen;
 import com.hypothetic.ten4.registry.ModMenus;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -16,7 +13,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 @EventBusSubscriber(modid = Ten4.ID, value = Dist.CLIENT)
 public class ModScreens {
   @SubscribeEvent
-  public static void registerScreens(RegisterMenuScreensEvent event) {
+  public static void onRegisterScreens(RegisterMenuScreensEvent event) {
     event.register(ModMenus.PULVERIZER.get(), PulverizerScreen::new);
     event.register(ModMenus.HEAT_GENERATOR.get(), HeatGeneratorScreen::new);
     event.register(ModMenus.WATER_PUMP.get(), WaterPumpScreen::new);

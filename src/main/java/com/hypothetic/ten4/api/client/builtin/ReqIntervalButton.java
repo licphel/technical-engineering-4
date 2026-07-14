@@ -61,10 +61,10 @@ class ReqIntervalButton extends Button {
     super.onCollectingTooltips(tooltips);
 
     int v = reader.getInt(BuiltinSyncedFields.REQUEST_INTERVAL);
-    MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.request_interval"));
+    MutableComponent mc = Component.translatable(Ten4.lang("misc.request_interval"));
     mc.append(Component.literal(Integer.toString(v)));
 
     tooltips.add(mc);
-    tooltips.add(Component.translatable(Ten4.getLangKey("misc.request_interval.desc")).withStyle(ChatFormatting.GRAY));
+    tooltips.add(Component.translatable(Ten4.lang("misc.request_interval.desc")).withStyle(ChatFormatting.GRAY));
   }
 }

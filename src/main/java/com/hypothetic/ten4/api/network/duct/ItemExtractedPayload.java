@@ -11,9 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/**
- * Server → Client: an item was just pulled into the pipe network. Client handles everything else locally.
- */
 public record ItemExtractedPayload(BlockPos pos, TransitEntry entry) implements CustomPacketPayload {
   public static final Type<ItemExtractedPayload> TYPE = new Type<>(Ten4.id("item_extracted"));
 

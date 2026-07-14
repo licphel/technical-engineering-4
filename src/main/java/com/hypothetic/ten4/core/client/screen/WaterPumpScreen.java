@@ -15,14 +15,14 @@ public class WaterPumpScreen extends ComponentedContainerScreen<ContainerMenu> {
   }
 
   @Override
+  protected ResourceLocation getBackground() {
+    return Ten4.id("textures/gui/water_pump.png");
+  }
+
+  @Override
   protected void buildElements() {
     add(BuiltinComponents.defaultPanels(this));
     add(BuiltinComponents.energyGauge(9, 18, menu.fieldsReader()));
     add(BuiltinComponents.fluidGauge(79, 18, menu.fieldsReader(), WaterPumpBlockEntity.TANK_0));
-  }
-
-  @Override
-  protected ResourceLocation getBackground() {
-    return Ten4.id("textures/gui/water_pump.png");
   }
 }

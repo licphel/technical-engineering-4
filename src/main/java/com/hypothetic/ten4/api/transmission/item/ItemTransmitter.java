@@ -44,6 +44,10 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
     return e;
   }
 
+  int allocateId() {
+    return nextId++;
+  }
+
   public int getSpeed() {
     return speed;
   }
@@ -156,8 +160,22 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
       }
     }
 
+    // Route initialization for externally inserted items (PUSH via insertItem)
+    if (snapshot != null && (snapshot.route == null || snapshot.index >= snapshot.route.length)) {
+      byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
+      if (newRoute != null) {
+        snapshot.route = newRoute;
+        snapshot.index = 0;
+        snapshot.exitSide = newRoute[0];
+      }
+    }
+
     // Advance (only if in snapshot — prevents same-tick multi-hop)
     if (snapshot == null) {
+      return;
+    }
+    if (snapshot.route == null) {
+      snapshot.progress = 0; // no route available yet, wait until next tick
       return;
     }
     snapshot.progress += speed;

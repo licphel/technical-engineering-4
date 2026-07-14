@@ -1,13 +1,16 @@
 package com.hypothetic.ten4.api.transmission.item;
 
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 
 public class TransmitterItemHandler implements IItemHandler {
-  ItemTransmitter transmitter;
+  final ItemTransmitter transmitter;
+  final Direction side;
 
-  public TransmitterItemHandler(ItemTransmitter transmitter) {
+  public TransmitterItemHandler(ItemTransmitter transmitter, Direction side) {
     this.transmitter = transmitter;
+    this.side = side;
   }
 
   @Override
@@ -23,7 +26,43 @@ public class TransmitterItemHandler implements IItemHandler {
 
   @Override
   public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-    return stack; // push via network, not direct insertion
+    if (stack.isEmpty() || transmitter.getNetwork() == null) {
+      return ItemStack.EMPTY;
+    }
+    ItemTransmitter.TransitEntry e = transmitter.transitEntry;
+    // Clean up stale empty entry
+    if (e != null && e.stack.isEmpty()) {
+      e = null;
+    }
+    int space = getSlotLimit(slot);
+    if (e != null) {
+      if (!ItemStack.isSameItemSameComponents(e.stack, stack)) {
+        return stack;
+      }
+      space -= e.stack.getCount();
+      if (space <= 0) {
+        return stack;
+      }
+    }
+    int limit = Math.min(stack.getCount(), space);
+    if (!simulate) {
+      if (e == null) {
+        e = new ItemTransmitter.TransitEntry();
+        e.id = transmitter.allocateId();
+        e.stack = stack.copyWithCount(limit);
+        e.entrySide = (byte) side.ordinal();
+        e.route = RouteFinder.findRoute(transmitter.getNetwork(), transmitter.getBlockPos(), e.stack);
+        e.index = 0;
+        e.progress = 0;
+        e.exitSide = e.route.length > 0 ? e.route[0] : 0;
+        transmitter.transitEntry = e;
+      } else {
+        e.stack.grow(limit);
+      }
+    }
+    ItemStack leftover = stack.copy();
+    leftover.shrink(limit);
+    return leftover.isEmpty() ? ItemStack.EMPTY : leftover;
   }
 
   @Override

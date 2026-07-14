@@ -1,8 +1,5 @@
 {
-  "ten4.creative_mode_tab.block": "Technical Engineering IV - Blocks",
-  "ten4.creative_mode_tab.device": "Technical Engineering IV - Devices",
-  "ten4.creative_mode_tab.material": "Technical Engineering IV - Materials",
-  "ten4.creative_mode_tab.tool": "Technical Engineering IV - Tools",
+  "ten4.creative_mode_tab.default": "Technical Engineering IV",
 
   "ten4.misc.info_label": "Information",
   "ten4.misc.sigmode_label": "Configs",

@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -19,8 +18,8 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
 
   protected ItemInventory augments;
 
-  public AugmentableDeviceBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-    super(type, pos, state);
+  public AugmentableDeviceBlockEntity(BlockPos pos, BlockState state) {
+    super(pos, state);
 
     augments = new ItemInventory();
     augments.setChangeListener(this::setChanged);

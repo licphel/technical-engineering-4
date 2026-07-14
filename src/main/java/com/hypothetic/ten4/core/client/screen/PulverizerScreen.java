@@ -14,14 +14,14 @@ public class PulverizerScreen extends ComponentedContainerScreen<ContainerMenu> 
   }
 
   @Override
+  protected ResourceLocation getBackground() {
+    return Ten4.id("textures/gui/pulverizer.png");
+  }
+
+  @Override
   protected void buildElements() {
     add(BuiltinComponents.defaultPanels(this));
     add(BuiltinComponents.energyGauge(9, 18, menu.fieldsReader()));
     add(BuiltinComponents.progressGauge(68, 35, menu.fieldsReader()));
-  }
-
-  @Override
-  protected ResourceLocation getBackground() {
-    return Ten4.id("textures/gui/pulverizer.png");
   }
 }

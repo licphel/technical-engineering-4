@@ -1,10 +1,10 @@
 package com.hypothetic.ten4.api.blockentity.transmission;
 
-import com.hypothetic.ten4.api.ILootProvider;
-import com.hypothetic.ten4.api.ITickable;
-import com.hypothetic.ten4.api.transmission.item.TransmitterItemHandler;
+import com.hypothetic.ten4.api.blockentity.ILootProvider;
+import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.api.transmission.item.ItemTransmitter;
 import com.hypothetic.ten4.api.transmission.item.ItemTransmitter.TransitEntry;
+import com.hypothetic.ten4.api.transmission.item.TransmitterItemHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -12,25 +12,27 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitter> implements ILootProvider, ITickable {
-  private final IItemHandler itemHandler;
+  private final EnumMap<Direction, TransmitterItemHandler> itemHandlers = new EnumMap<>(Direction.class);
 
-  public ItemDuctBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-    super(type, pos, state);
+  public ItemDuctBlockEntity(BlockPos pos, BlockState state) {
+    super(pos, state);
     this.transmitter = new ItemTransmitter(this, info.throughput, info.bufferCapacity);
-    this.itemHandler = new TransmitterItemHandler(transmitter);
+    for (Direction dir : Direction.values()) {
+      itemHandlers.put(dir, new TransmitterItemHandler(transmitter, dir));
+    }
   }
 
   public @Nullable IItemHandler getItemHandler(@Nullable Direction side) {
-    return itemHandler;
+    return side != null ? itemHandlers.get(side) : null;
   }
 
   @Override

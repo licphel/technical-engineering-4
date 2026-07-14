@@ -16,7 +16,7 @@ public enum ConnectionType implements StringRepresentable, ITranslatable {
 
   @Override
   public String createGroupKey() {
-    return Ten4.getLangKey("misc.connection_type");
+    return Ten4.lang("misc.connection_type");
   }
 
   public ConnectionType next() {

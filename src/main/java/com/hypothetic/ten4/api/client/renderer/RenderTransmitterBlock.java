@@ -1,6 +1,8 @@
 package com.hypothetic.ten4.api.client.renderer;
 
+import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
+import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import com.hypothetic.ten4.util.ClientUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -16,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -23,50 +26,61 @@ import java.util.List;
 
 public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements BlockEntityRenderer<BE> {
   public static final int LOD_DISTANCE = 32;
-  private static final TextureAtlasSprite OVERLAY = ClientUtil.getBlockSprite(
-      ResourceLocation.withDefaultNamespace("block/white_concrete"));
+
+  private static final TextureAtlasSprite OVERLAY = ClientUtil.getBlockSprite(ResourceLocation.withDefaultNamespace("block/white_concrete"));
   protected final DuctModelBaker baker;
-  private TextureAtlasSprite spriteCore, spriteSide;
+  private TextureAtlasSprite sprite;
+  private ResourceLocation[] textures;
 
   protected RenderTransmitterBlock(BlockEntityRendererProvider.Context ctx,
-                                   ResourceLocation core, ResourceLocation part,
-                                   ResourceLocation pull, ResourceLocation push) {
+                                   ResourceLocation core,
+                                   ResourceLocation part,
+                                   ResourceLocation pull,
+                                   ResourceLocation push,
+                                   ResourceLocation... textures) {
     this.baker = new DuctModelBaker(core, part, pull, push);
+    this.textures = textures;
   }
 
   private static int applyDirectionalLight(int packed, Direction face) {
     int block = (packed >> 4) & 0xF;
     int sky = (packed >> 20) & 0xF;
     float factor = switch (face) {
-      case UP -> 1.0f;
-      case DOWN -> 0.6f;
-      default -> 0.8f;
+      case UP -> 1.0F;
+      case DOWN -> 0.31F;
+      default -> 0.58F;
     };
     int adjSky = (int) (sky * factor);
     int adjBlock = (int) (block * factor);
     return (adjBlock << 4) | (adjSky << 20);
   }
 
-  protected abstract ResourceLocation coreTexture();
-
-  protected abstract ResourceLocation partTexture();
-
-  protected abstract boolean hasConnection(BE be, Direction d);
-
-  protected abstract String partName(BE be, Direction d);
-
-  protected TextureAtlasSprite core() {
-    if (spriteCore == null) {
-      spriteCore = ClientUtil.getBlockSprite(coreTexture());
+  protected ResourceLocation getTexture(BE be) {
+    BlockState state = be.getBlockState();
+    if (state.getValue(BuiltinBlockStates.ACTIVE)) {
+      return textures[1];
     }
-    return spriteCore;
+    return textures[0];
   }
 
-  protected TextureAtlasSprite part() {
-    if (spriteSide == null) {
-      spriteSide = ClientUtil.getBlockSprite(partTexture());
+  protected ConnectionType getCT(BE be, Direction side) {
+    ITransmitterProvider provider = (ITransmitterProvider) be;
+    return provider.getTransmitter().getConnectionType(side);
+  }
+
+  protected String getPartName(BE be, Direction side) {
+    return switch (getCT(be, side)) {
+      case PULL ->  "pull";
+      case PUSH -> "push";
+      default -> "part";
+    };
+  }
+
+  protected TextureAtlasSprite getSprite(BE be) {
+    if (sprite == null) {
+      sprite = ClientUtil.getBlockSprite(getTexture(be));
     }
-    return spriteSide;
+    return sprite;
   }
 
   protected boolean shouldRenderLess(BE be) {
@@ -76,10 +90,10 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
   @Override
   public void render(BE be, float pt, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
-    TextureAtlasSprite cs = core();
-    TextureAtlasSprite ss = part();
-    renderBody(be, pose, buffers, cs, ss, 1.0F, 1.0F, 1.0F, 1.0F, light, overlay);
-    renderContents(be, pt, pose, buffers, cs, ss, light, overlay);
+    TextureAtlasSprite cs = getSprite(be);
+
+    renderBody(be, pose, buffers, cs, 1.0F, 1.0F, 1.0F, 1.0F, light, overlay);
+    renderContents(be, pt, pose, buffers, cs, light, overlay);
 
     // Colored overlay when dyed
     DyeColor dye = getDyeColor(be);
@@ -92,7 +106,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
       pose.pushPose();
       pose.translate(off, off, off);
       pose.scale(s, s, s);
-      renderBody(be, pose, buffers, OVERLAY, OVERLAY, cr, cg, cb, 0.45F, light, overlay);
+      renderBody(be, pose, buffers, OVERLAY, cr, cg, cb, 0.45F, light, overlay);
       pose.popPose();
     }
   }
@@ -110,8 +124,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
     return null;
   }
 
-  protected void renderBody(BE be, PoseStack pose, MultiBufferSource buffers,
-                            TextureAtlasSprite cs, TextureAtlasSprite ss,
+  protected void renderBody(BE be, PoseStack pose, MultiBufferSource buffers, TextureAtlasSprite cs,
                             float r, float g, float b, float a, int light, int overlay) {
     VertexConsumer vc = buffers.getBuffer(a == 1 ? RenderType.cutout() : RenderType.translucent());
     PoseStack.Pose entry = pose.last();
@@ -119,7 +132,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
     // Core: skip faces where connections exist (avoid overlap with parts)
     for (BakedQuad q : baker.getPart("core", cs)) {
-      if (!hasConnection(be, q.getDirection())) {
+      if (getCT(be, q.getDirection()) == ConnectionType.NONE) {
         int faceLight = applyDirectionalLight(light, q.getDirection());
         vc.putBulkData(entry, q, r, g, b, a, faceLight, overlay, false);
       }
@@ -127,17 +140,17 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
     // Parts per direction
     for (Direction d : Direction.values()) {
-      if (!hasConnection(be, d)) {
+      if (getCT(be, d) == ConnectionType.NONE) {
         continue;
       }
       names.clear();
-      names.add(d.getSerializedName() + "_" + partName(be, d));
-      drawParts(entry, vc, ss, names, r, g, b, a, light, overlay);
+      names.add(d.getSerializedName() + "_" + getPartName(be, d));
+      drawParts(entry, vc, cs, names, r, g, b, a, light, overlay);
     }
   }
 
   protected void renderContents(BE be, float pt, PoseStack pose, MultiBufferSource buffers,
-                                TextureAtlasSprite cs, TextureAtlasSprite ss, int light, int overlay) {
+                                TextureAtlasSprite cs, int light, int overlay) {
   }
 
   protected void drawParts(PoseStack.Pose entry, VertexConsumer vc, TextureAtlasSprite sprite,

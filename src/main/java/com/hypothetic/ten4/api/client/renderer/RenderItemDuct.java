@@ -23,35 +23,11 @@ public class RenderItemDuct extends RenderTransmitterBlock<ItemDuctBlockEntity> 
   private static final ResourceLocation MODEL_PART = Ten4.id("block/connectable/connectable_part");
   private static final ResourceLocation MODEL_PULL = Ten4.id("block/connectable/connectable_pull");
   private static final ResourceLocation MODEL_PUSH = Ten4.id("block/connectable/connectable_push");
-  private final ResourceLocation tex;
 
-  public RenderItemDuct(BlockEntityRendererProvider.Context ctx, ResourceLocation t) {
-    super(ctx, MODEL_CORE, MODEL_PART, MODEL_PULL, MODEL_PUSH);
-    tex = t;
-  }
-
-  @Override
-  protected ResourceLocation coreTexture() {
-    return tex;
-  }
-
-  @Override
-  protected ResourceLocation partTexture() {
-    return tex;
-  }
-
-  @Override
-  protected boolean hasConnection(ItemDuctBlockEntity be, Direction d) {
-    return be.getTransmitter().getConnectionType(d) != ConnectionType.NONE;
-  }
-
-  @Override
-  protected String partName(ItemDuctBlockEntity be, Direction d) {
-    return switch (be.getTransmitter().getConnectionType(d)) {
-      case PULL -> "pull";
-      case PUSH -> "push";
-      default -> "part";
-    };
+  public RenderItemDuct(BlockEntityRendererProvider.Context ctx, ResourceLocation textureName) {
+    super(ctx, MODEL_CORE, MODEL_PART, MODEL_PULL, MODEL_PUSH,
+        textureName,
+        ResourceLocation.parse(textureName + "_active"));
   }
 
   @Override
@@ -80,14 +56,14 @@ public class RenderItemDuct extends RenderTransmitterBlock<ItemDuctBlockEntity> 
           : Direction.values()[e.exitSide];               // 50~100%: going TO exit side
       float t = displayProg / ItemTransmitter.DUCT_LENGTH - 0.5F; // -0.5 ~ +0.5
       double x = 0.5 + side.getStepX() * t;
-      double y = 0.25 + side.getStepY() * t;
+      double y = 0.35 + side.getStepY() * t;
       double z = 0.5 + side.getStepZ() * t;
 
       pose.pushPose();
       pose.translate(x, y, z);
       pose.scale(0.75f, 0.75f, 0.75f);
       long tick = System.currentTimeMillis();
-      pose.mulPose(Axis.YP.rotationDegrees((float) (tick / 20.0) % 360));
+      pose.mulPose(Axis.YP.rotationDegrees((long) (tick / 20.0) % 360));
       Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, light, OverlayTexture.NO_OVERLAY, pose, buffers, be.getLevel(), 0);
       pose.popPose();
     }

@@ -11,16 +11,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public abstract class DuctBlockEntity<T extends Transmitter<?, ?, ?>> extends RedstoneAwareBlockEntity implements ITransmitterProvider {
-  public T transmitter;
   protected final DuctInfo info;
+  public T transmitter;
 
-  public DuctBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
-    super(type, pos, blockState);
+  public DuctBlockEntity(BlockPos pos, BlockState blockState) {
+    super(pos, blockState);
 
     info = makeDuctInfo();
   }

@@ -1,20 +1,19 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
-import com.hypothetic.ten4.api.ITickable;
+import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.Syncer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockEntity implements ITickable {
   public int fuel;
   public int maxFuel;
 
-  public SimpleGeneratorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-    super(type, pos, state);
+  public SimpleGeneratorBlockEntity(BlockPos pos, BlockState state) {
+    super(pos, state);
   }
 
   @Override
