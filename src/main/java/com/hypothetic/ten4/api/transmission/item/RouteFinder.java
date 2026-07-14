@@ -38,7 +38,7 @@ final class RouteFinder {
       }
 
       for (Direction d : Direction.values()) {
-        if (!curr.getConnectionTypeRaw(d).canSendTo()) {
+        if (!curr.getConnectionTypeRaw(d).canBorrow()) {
           continue;
         }
         BlockPos next = node.pos.relative(d);

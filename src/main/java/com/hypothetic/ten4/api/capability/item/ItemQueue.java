@@ -82,7 +82,7 @@ public final class ItemQueue {
       }
 
       // 4. Distribute to targets matching planned amounts
-      for (var e : planned.entrySet()) {
+      for (Map.Entry<Direction, Integer> e : planned.entrySet()) {
         IItemHandler h = cache[e.getKey().ordinal()];
         int amt = Math.min(e.getValue(), realExtracted.getCount());
         if (amt <= 0) {

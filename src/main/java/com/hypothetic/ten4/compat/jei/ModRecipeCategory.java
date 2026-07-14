@@ -4,8 +4,8 @@ import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.client.builtin.BuiltinComponents;
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.api.client.gui.TextureRegion;
-import com.hypothetic.ten4.api.recipe.RecipeEntry;
-import com.hypothetic.ten4.api.recipe.ModRecipe;
+import com.hypothetic.ten4.api.recipe.Complex;
+import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -20,6 +20,23 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
+  private static final IDrawable fluidTank = new IDrawable() {
+    @Override
+    public int getWidth() {
+      return 18;
+    }
+
+    @Override
+    public int getHeight() {
+      return 50;
+    }
+
+    @Override
+    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+      EnhancedGuiGraphics g = new EnhancedGuiGraphics(guiGraphics);
+      g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, 214, 0, 18, 50), xOffset - 1, yOffset - 1);
+    }
+  };
   private final RecipeType<T> type;
   private final Component title;
   private final IDrawable icon;
@@ -51,13 +68,13 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
     return icon;
   }
 
-  protected void addItemInput(IRecipeLayoutBuilder builder, RecipeEntry input, int x, int y) {
+  protected void addItemInput(IRecipeLayoutBuilder builder, Complex input, int x, int y) {
     builder.addInputSlot(x, y)
         .addItemStacks(input.itemStacks())
         .setStandardSlotBackground();
   }
 
-  protected void addItemOutput(IRecipeLayoutBuilder builder, RecipeEntry output, int x, int y) {
+  protected void addItemOutput(IRecipeLayoutBuilder builder, Complex output, int x, int y) {
     builder.addOutputSlot(x, y)
         .addItemStack(output.symbolItem())
         .addRichTooltipCallback((recipeSlotView, tooltip) -> {
@@ -68,25 +85,7 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
         .setStandardSlotBackground();
   }
 
-  private static final IDrawable fluidTank = new IDrawable() {
-    @Override
-    public int getWidth() {
-      return 18;
-    }
-
-    @Override
-    public int getHeight() {
-      return 50;
-    }
-
-    @Override
-    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
-      EnhancedGuiGraphics g = new EnhancedGuiGraphics(guiGraphics);
-      g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, 214, 0, 18, 50), xOffset - 1, yOffset - 1);
-    }
-  };
-
-  protected void addFluidInput(IRecipeLayoutBuilder builder, RecipeEntry input, int x, int y) {
+  protected void addFluidInput(IRecipeLayoutBuilder builder, Complex input, int x, int y) {
     builder.addInputSlot(x, y)
         .addIngredients(NeoForgeTypes.FLUID_STACK, input.fluidStacks())
         .setFluidRenderer(input.count(), false, 16, 48)
@@ -167,7 +166,7 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
     });
   }
 
-  protected void addProgressGauge(IRecipeExtrasBuilder builder, ModRecipe recipe, int x, int y) {
+  protected void addProgressGauge(IRecipeExtrasBuilder builder, IComplexRecipe recipe, int x, int y) {
     builder.addDrawable(new IDrawable() {
       final int width = 22;
       final int height = 16;

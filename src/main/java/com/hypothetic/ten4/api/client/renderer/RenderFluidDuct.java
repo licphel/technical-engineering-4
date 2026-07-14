@@ -1,12 +1,11 @@
 package com.hypothetic.ten4.api.client.renderer;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.internet.FluidDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.transmission.FluidDuctBlockEntity;
 import com.hypothetic.ten4.api.transmission.ConnectionType;
-import com.hypothetic.ten4.util.RenderHelper;
+import com.hypothetic.ten4.util.ClientUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -14,8 +13,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -26,7 +23,7 @@ public class RenderFluidDuct extends RenderTransmitterBlock<FluidDuctBlockEntity
   private static final ResourceLocation MODEL_PUSH = Ten4.id("block/connectable/connectable_push");
   private static final ResourceLocation INNER_CORE = Ten4.id("block/connectable/inner_core");
   private static final ResourceLocation INNER_PART = Ten4.id("block/connectable/inner_part");
-  private static final TextureAtlasSprite WATER = RenderHelper.getBlockSprite(
+  private static final TextureAtlasSprite WATER = ClientUtil.getBlockSprite(
       ResourceLocation.withDefaultNamespace("block/water_still"));
   private final ResourceLocation texture;
   private final DuctModelBaker innerBaker = new DuctModelBaker(INNER_CORE, INNER_PART, INNER_PART, INNER_PART);
@@ -42,7 +39,7 @@ public class RenderFluidDuct extends RenderTransmitterBlock<FluidDuctBlockEntity
   }
 
   @Override
-  protected ResourceLocation sideTexture() {
+  protected ResourceLocation partTexture() {
     return texture;
   }
 
@@ -65,13 +62,18 @@ public class RenderFluidDuct extends RenderTransmitterBlock<FluidDuctBlockEntity
                                 MultiBufferSource buffers, TextureAtlasSprite cs, TextureAtlasSprite ss,
                                 int light, int overlay) {
     float scale = be.transmitter.getClientScale();
-    if (scale <= 0) return;
+    if (scale <= 0) {
+      return;
+    }
 
-    Player player = Minecraft.getInstance().player;
-    if (player == null || !player.blockPosition().closerThan(be.getBlockPos(), 32)) return;
+    if (shouldRenderLess(be)) {
+      return;
+    }
 
     FluidStack fluid = be.transmitter.getSyncedFluid();
-    if (fluid.isEmpty()) return;
+    if (fluid.isEmpty()) {
+      return;
+    }
 
     VertexConsumer vc = buffers.getBuffer(RenderType.translucent());
     float alpha = Math.min(scale, 0.8f);
@@ -84,15 +86,17 @@ public class RenderFluidDuct extends RenderTransmitterBlock<FluidDuctBlockEntity
     pose.pushPose();
     pose.translate(off, off, off);
     pose.scale(s, s, s);
-    var entry = pose.last();
+    PoseStack.Pose entry = pose.last();
 
-    TextureAtlasSprite fs = RenderHelper.getBlockSprite(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture());
+    TextureAtlasSprite fs = ClientUtil.getBlockSprite(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture());
     for (BakedQuad q : innerBaker.getPart("core", fs)) {
       vc.putBulkData(entry, q, r, g, b, alpha, light, overlay, true);
     }
 
     for (Direction d : Direction.values()) {
-      if (be.transmitter.getConnectionType(d) != ConnectionType.NORMAL) continue;
+      if (be.transmitter.getConnectionType(d) != ConnectionType.NORMAL) {
+        continue;
+      }
       for (BakedQuad q : innerBaker.getPart(d.getSerializedName() + "_" + partName(be, d), fs)) {
         vc.putBulkData(entry, q, r, g, b, alpha, light, overlay, true);
       }

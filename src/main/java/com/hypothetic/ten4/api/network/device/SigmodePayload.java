@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.api.network.device;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.device.SignalMode;
 import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
+import com.hypothetic.ten4.api.blockentity.device.SignalMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

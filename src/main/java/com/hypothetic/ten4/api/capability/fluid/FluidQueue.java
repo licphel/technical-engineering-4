@@ -79,7 +79,7 @@ public final class FluidQueue {
 
       // 3. Distribute matching planned amounts
       FluidStack toDistribute = drained.copy();
-      for (var e : planned.entrySet()) {
+      for (Map.Entry<Direction, Integer> e : planned.entrySet()) {
         IFluidHandler h = cache[e.getKey().ordinal()];
         int amt = Math.min(e.getValue(), toDistribute.getAmount());
         if (amt <= 0) {

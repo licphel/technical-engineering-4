@@ -1,6 +1,5 @@
 package com.hypothetic.ten4.api.transmission.energy;
 
-import com.hypothetic.ten4.api.blockentity.internet.EnergyDuctBlockEntity;
 import com.hypothetic.ten4.api.transmission.BufferedTransmitter;
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
 import com.hypothetic.ten4.api.transmission.Transmitter;
@@ -15,26 +14,65 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class EnergyTransmitter extends BufferedTransmitter<IEnergyStorage, EnergyNetwork, Long, EnergyTransmitter> {
-  private final long capacity;
-  private long buffer; // local buffer when orphaned; network buffer when connected
+  private long buffer;
 
-  public EnergyTransmitter(ITransmitterProvider tile, long capacity) {
-    super(tile);
-    this.capacity = capacity;
+  public EnergyTransmitter(ITransmitterProvider tile, long capacity, long throughput) {
+    super(tile, capacity, throughput);
   }
 
-  // ---- BufferedTransmitter ----
-  @Override public long getCapacity() { return capacity; }
-
-  @Override public Long releaseShare() {
+  @Override
+  public Long releaseShare() {
     long share = buffer;
     buffer = 0;
     return share;
   }
 
-  @Override public void takeShare() {
+  @Override
+  @Nullable
+  public IEnergyStorage getAcceptor(Direction side, Level level, BlockPos targetPos) {
+    return level.getCapability(Capabilities.EnergyStorage.BLOCK, targetPos, side.getOpposite());
+  }
+
+  public long getBuffer() {
+    return buffer;
+  }
+
+  public void setBuffer(long v) {
+    buffer = v;
+  }
+
+  public long getNetworkEnergy() {
     EnergyNetwork net = getNetwork();
-    if (net != null && net.getBuffer() != null) {
+    return net != null ? net.getBuffer() : 0;
+  }
+
+  @Override
+  public EnergyNetwork createEmptyNetwork(UUID id) {
+    return new EnergyNetwork(id);
+  }
+
+  @Override
+  public EnergyNetwork createNetworkByMerging(Collection<EnergyNetwork> nets) {
+    return new EnergyNetwork(nets);
+  }
+
+  @Override
+  public boolean supportsTransmission(Transmitter<?, ?, ?> other) {
+    return other instanceof EnergyTransmitter;
+  }
+
+  @Override
+  protected boolean isValidAcceptor(Direction side) {
+    if (getLevel() == null) {
+      return false;
+    }
+    return getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, getBlockPos().relative(side), side.getOpposite()) != null;
+  }
+
+  @Override
+  public void takeShare() {
+    EnergyNetwork net = getNetwork();
+    if (net != null) {
       int size = net.getTransmitters().size();
       if (size > 0) {
         long share = net.getBuffer() / size;
@@ -42,33 +80,5 @@ public class EnergyTransmitter extends BufferedTransmitter<IEnergyStorage, Energ
         buffer = share;
       }
     }
-  }
-
-  /** Local buffer for orphaned state or BE access. */
-  public long getBuffer() { return buffer; }
-  public void setBuffer(long v) { buffer = v; }
-
-  /** Network-level energy (if connected). Called by external capability. */
-  public long getNetworkEnergy() {
-    EnergyNetwork net = getNetwork();
-    return net != null ? net.getBuffer() : 0;
-  }
-
-  @Override
-  @Nullable public IEnergyStorage getAcceptor(Direction side, Level level, BlockPos targetPos) {
-    return level.getCapability(Capabilities.EnergyStorage.BLOCK, targetPos, side.getOpposite());
-  }
-
-  // ---- Transmitter boilerplate ----
-  @Override public EnergyNetwork createEmptyNetwork(UUID id) { return new EnergyNetwork(id); }
-  @Override public EnergyNetwork createNetworkByMerging(Collection<EnergyNetwork> nets) { return new EnergyNetwork(nets); }
-  @Override public boolean supportsTransmission(Transmitter<?, ?, ?> other) { return other instanceof EnergyTransmitter; }
-  @Override protected boolean isValidAcceptor(Direction side) {
-    if (getLevel() == null) return false;
-    return getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, getBlockPos().relative(side), side.getOpposite()) != null;
-  }
-  @Override protected @Nullable Transmitter<?, ?, ?> getTransmitter(ITransmitterProvider t) {
-    if (t instanceof EnergyDuctBlockEntity be) return be.transmitter;
-    return null;
   }
 }

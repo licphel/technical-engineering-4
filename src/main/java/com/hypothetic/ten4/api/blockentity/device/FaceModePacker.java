@@ -6,8 +6,9 @@ import java.util.Map;
 
 public final class FaceModePacker {
   private static final Direction[] ORDER = {Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
+
   private FaceModePacker() {
-  }  private static final int BITS = 3, MASK = (1 << BITS) - 1;
+  }
 
   public static int shift(Direction d) {
     return switch (d) {
@@ -18,7 +19,7 @@ public final class FaceModePacker {
       case WEST -> BITS * 4;
       case EAST -> BITS * 5;
     };
-  }
+  }  private static final int BITS = 3, MASK = (1 << BITS) - 1;
 
   public static FaceMode get(int packed, Direction d) {
     return FaceMode.of((packed >> shift(d)) & MASK);
@@ -42,4 +43,6 @@ public final class FaceModePacker {
     }
     return packed;
   }
+
+
 }

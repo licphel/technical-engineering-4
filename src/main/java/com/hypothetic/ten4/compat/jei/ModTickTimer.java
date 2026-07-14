@@ -18,6 +18,16 @@ public class ModTickTimer implements ITickTimer {
     this.startTime = System.currentTimeMillis();
   }
 
+  public static int getValue(long startTime, long currentTime, int maxValue, int msPerCycle, boolean countDown) {
+    long msPassed = (currentTime - startTime) % msPerCycle;
+    int value = (int) Math.floorDiv(msPassed * (maxValue + 1), msPerCycle);
+    if (countDown) {
+      return maxValue - value;
+    } else {
+      return value;
+    }
+  }
+
   @Override
   public int getValue() {
     long currentTime = System.currentTimeMillis();
@@ -27,15 +37,5 @@ public class ModTickTimer implements ITickTimer {
   @Override
   public int getMaxValue() {
     return maxValue;
-  }
-
-  public static int getValue(long startTime, long currentTime, int maxValue, int msPerCycle, boolean countDown) {
-    long msPassed = (currentTime - startTime) % msPerCycle;
-    int value = (int) Math.floorDiv(msPassed * (maxValue + 1), msPerCycle);
-    if (countDown) {
-      return maxValue - value;
-    } else {
-      return value;
-    }
   }
 }

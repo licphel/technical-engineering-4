@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.api.network.duct;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.internet.ItemDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
 import com.hypothetic.ten4.api.transmission.item.ItemTransmitter.TransitEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -11,46 +11,54 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/** Server → Client: an item was just pulled into the pipe network. Client handles everything else locally. */
+/**
+ * Server → Client: an item was just pulled into the pipe network. Client handles everything else locally.
+ */
 public record ItemExtractedPayload(BlockPos pos, TransitEntry entry) implements CustomPacketPayload {
   public static final Type<ItemExtractedPayload> TYPE = new Type<>(Ten4.id("item_extracted"));
 
   public static final StreamCodec<RegistryFriendlyByteBuf, ItemExtractedPayload> CODEC = new StreamCodec<>() {
-    @Override public ItemExtractedPayload decode(RegistryFriendlyByteBuf buf) {
+    @Override
+    public ItemExtractedPayload decode(RegistryFriendlyByteBuf buf) {
       BlockPos pos = buf.readBlockPos();
       TransitEntry e = new TransitEntry();
       e.id = buf.readVarInt();
       e.stack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
-      e.entryDir = buf.readByte();
+      e.entrySide = buf.readByte();
       boolean hasRoute = buf.readBoolean();
       if (hasRoute) {
         e.route = buf.readByteArray();
-        e.routeIdx = buf.readVarInt();
-        e.direction = e.route.length > 0 ? e.route[0] : 0;
+        e.index = buf.readVarInt();
+        e.exitSide = e.route.length > 0 ? e.route[0] : 0;
       }
       return new ItemExtractedPayload(pos, e);
     }
-    @Override public void encode(RegistryFriendlyByteBuf buf, ItemExtractedPayload pkt) {
+
+    @Override
+    public void encode(RegistryFriendlyByteBuf buf, ItemExtractedPayload pkt) {
       buf.writeBlockPos(pkt.pos);
       TransitEntry e = pkt.entry;
       buf.writeVarInt(e.id);
       ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, e.stack);
-      buf.writeByte(e.entryDir);
+      buf.writeByte(e.entrySide);
       boolean hasRoute = e.route != null;
       buf.writeBoolean(hasRoute);
       if (hasRoute) {
         buf.writeByteArray(e.route);
-        buf.writeVarInt(e.routeIdx);
+        buf.writeVarInt(e.index);
       }
     }
   };
-
-  @Override public Type<ItemExtractedPayload> type() { return TYPE; }
 
   public static void handle(ItemExtractedPayload pkt, IPayloadContext ctx) {
     Level level = ctx.player().level();
     if (level.getBlockEntity(pkt.pos) instanceof ItemDuctBlockEntity duct) {
       duct.transmitter.addToClientTransit(pkt.entry);
     }
+  }
+
+  @Override
+  public Type<ItemExtractedPayload> type() {
+    return TYPE;
   }
 }

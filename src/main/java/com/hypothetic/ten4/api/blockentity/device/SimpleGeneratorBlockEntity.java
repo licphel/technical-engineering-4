@@ -69,16 +69,16 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
   public abstract int tryFueling(boolean simulate);
 
   @Override
-  protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
-    super.saveAdditional(tag, reg);
-    tag.putInt("Fuel", fuel);
-    tag.putInt("MaxFuel", maxFuel);
-  }
-
-  @Override
   protected void loadAdditional(CompoundTag tag, HolderLookup.Provider reg) {
     super.loadAdditional(tag, reg);
     fuel = tag.getInt("Fuel");
     maxFuel = tag.getInt("MaxFuel");
+  }
+
+  @Override
+  protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
+    super.saveAdditional(tag, reg);
+    tag.putInt("Fuel", fuel);
+    tag.putInt("MaxFuel", maxFuel);
   }
 }

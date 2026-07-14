@@ -90,6 +90,12 @@
   "block.ten4.pulverizer": "磨粉机",
   "block.ten4.heat_generator": "热力发电机",
   "block.ten4.water_pump": "水泵",
+  "block.ten4.copper_energy_duct": "铜制能量管道",
+  "block.ten4.copper_item_duct": "铜制物品管道",
+  "block.ten4.copper_fluid_duct": "铜制流体管道",
+  "block.ten4.copper_controller_energy_duct": "铜制控制器能量管道",
+  "block.ten4.copper_controller_item_duct": "铜制控制器物品管道",
+  "block.ten4.copper_controller_fluid_duct": "铜制控制器流体管道",
 
   "item.ten4.iron_dust": "铁粉",
   "item.ten4.iron_plate": "铁板",

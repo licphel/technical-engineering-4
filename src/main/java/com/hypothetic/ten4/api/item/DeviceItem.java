@@ -13,12 +13,12 @@ public class DeviceItem extends Item {
     super(properties);
   }
 
+  public static ItemStack createStorage(AbstractDeviceBlockEntity blockEntity) {
+    return ItemStack.EMPTY;//TODO
+  }
+
   @Override
   public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> list, TooltipFlag flag) {
     super.appendHoverText(stack, ctx, list, flag);
-  }
-
-  public static ItemStack createStorage(AbstractDeviceBlockEntity blockEntity) {
-    return ItemStack.EMPTY;//TODO
   }
 }

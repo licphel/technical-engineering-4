@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.api.client.gui;
 
-import com.hypothetic.ten4.util.RenderHelper;
+import com.hypothetic.ten4.util.ClientUtil;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
@@ -35,7 +35,7 @@ public record TextureRegion(Texture texture, int u, int v, int width, int height
   }
 
   public static @Nullable TextureRegion ofFluid(Fluid fluid, boolean flowing) {
-    return ofSprite(RenderHelper.getFluidTexture(fluid, flowing));
+    return ofSprite(ClientUtil.getFluidTexture(fluid, flowing));
   }
 
   public ResourceLocation resource() {

@@ -13,17 +13,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.UUID;
 
-public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T extends Transmitter<AC, NET, T>> {
+public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends Transmitter<AC, NET, T>> {
   final ITransmitterProvider tile;
-  byte currentTransmitterConnections;
-  byte currentAcceptorConnections;
-  private @Nullable DyeColor color;
   private final ConnectionType[] connectionTypes = {
       ConnectionType.NORMAL, ConnectionType.NORMAL, ConnectionType.NORMAL,
       ConnectionType.NORMAL, ConnectionType.NORMAL, ConnectionType.NORMAL
   };
+  private final TransmitterFilter<?>[] filters = new TransmitterFilter<?>[6];
+  private final TransmitterBlocker[] blockers = new TransmitterBlocker[6];
+  byte currentTransmitterConnections;
+  byte currentAcceptorConnections;
+  private @Nullable DyeColor color;
   private @Nullable NET network;
   private boolean orphan = true;
+  private float clientScale;
 
   protected Transmitter(ITransmitterProvider tile) {
     this.tile = tile;
@@ -43,6 +46,30 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
 
   public void setColor(@Nullable DyeColor c) {
     this.color = c;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <F> @Nullable TransmitterFilter<F> getFilter(Direction side) {
+    return (TransmitterFilter<F>) filters[side.ordinal()];
+  }
+
+  public void setFilter(Direction side, @Nullable TransmitterFilter<?> filter) {
+    filters[side.ordinal()] = filter;
+  }
+
+  public @Nullable TransmitterBlocker getBlocker(Direction side) {
+    return blockers[side.ordinal()];
+  }
+
+  public void setBlocker(Direction side, @Nullable TransmitterBlocker blocker) {
+    blockers[side.ordinal()] = blocker;
+  }
+
+  public void rebuild() {
+    if (!isRemote() && hasNetwork()) {
+      TransmitterNetworkRegistry.remove(self());
+      TransmitterNetworkRegistry.join(self());
+    }
   }
 
   public boolean isColorCompatible(Transmitter<?, ?, ?> other) {
@@ -70,9 +97,9 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
     this.clientScale = scale;
   }
 
-  private float clientScale;
-
-  public float getClientScale() { return clientScale; }
+  public float getClientScale() {
+    return clientScale;
+  }
 
   @SuppressWarnings("unchecked")
   T self() {
@@ -168,8 +195,6 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
 
   protected abstract boolean isValidAcceptor(Direction side);
 
-  protected abstract @Nullable Transmitter<?, ?, ?> getTransmitter(ITransmitterProvider t);
-
   public void refreshConnections() {
     if (isRemote()) {
       return;
@@ -223,7 +248,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
     for (Direction d : Direction.values()) {
       BlockEntity be = level.getBlockEntity(p.relative(d));
       if (be instanceof ITransmitterProvider tb) {
-        Transmitter<?, ?, ?> o = getTransmitter(tb);
+        Transmitter<?, ?, ?> o = tb.getTransmitter();
         if (o != null && supportsTransmission(o) && isColorCompatible(o)) {
           b |= (byte) (1 << d.ordinal());
         }
@@ -260,7 +285,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
 
     BlockEntity be = level.getBlockEntity(getBlockPos().relative(side));
     if (be instanceof ITransmitterProvider tb) {
-      Transmitter<?, ?, ?> o = getTransmitter(tb);
+      Transmitter<?, ?, ?> o = tb.getTransmitter();
       return o != null && supportsTransmission(o) && isColorCompatible(o);
     }
     return false;
@@ -290,7 +315,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
       if (connectionBit(ne, d)) {
         BlockEntity be = level.getBlockEntity(p.relative(d));
         if (be instanceof ITransmitterProvider tb) {
-          Transmitter<?, ?, ?> o = getTransmitter(tb);
+          Transmitter<?, ?, ?> o = tb.getTransmitter();
           if (o != null) {
             o.refreshConnections(d.getOpposite());
           }
@@ -310,7 +335,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
       if (connectionBit(removed, d)) {
         BlockEntity be = level.getBlockEntity(p.relative(d));
         if (be instanceof ITransmitterProvider tb) {
-          Transmitter<?, ?, ?> o = getTransmitter(tb);
+          Transmitter<?, ?, ?> o = tb.getTransmitter();
           if (o != null) {
             o.refreshConnections(d.getOpposite());
           }
@@ -324,7 +349,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
     if (getPossibleTransmitterConnections() != currentTransmitterConnections) {
       markDirtyTransmitters();
     }
-    tile.setChanged();
+    tile.notifyChanges();
   }
 
   public void onNeighborBlockChange(Direction side) {
@@ -332,7 +357,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
   }
 
   void markDirtyTransmitters() {
-    tile.notifyTileChange();
+    tile.notifyChanges();
     requestsUpdate();
   }
 
@@ -353,17 +378,28 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
 
   public abstract void takeShare();
 
-  /** Create a validator for orphan BFS. Override in subclasses for fluid/chemical checks. */
   public CompatibleTransmitterValidator<?, ?, ?> getNewOrphanValidator() {
     return new CompatibleTransmitterValidator<>(self());
   }
 
-  /** Mekanism-style: called during BFS to check if we should traverse to a neighbor. */
   public boolean isValidTransmitterBasic(ITransmitterProvider neighborTile, Direction side) {
     Transmitter<?, ?, ?> other = neighborTile.getTransmitter();
-    if (other == null || !supportsTransmission(other)) return false;
-    // Color check: different non-null colors → not connected (applies to all duct types)
-    if (color != null && other.color != null && color != other.color) return false;
+    if (other == null || !supportsTransmission(other)) {
+      return false;
+    }
+    // Color check: different non-null colors cannot connect
+    if (color != null && other.color != null && color != other.color) {
+      return false;
+    }
+    // Blocker check: either side can block (energy/fluid network separation)
+    TransmitterBlocker b = getBlocker(side);
+    if (b != null && b.isBlocked(side)) {
+      return false;
+    }
+    b = other.getBlocker(side.getOpposite());
+    if (b != null && b.isBlocked(side.getOpposite())) {
+      return false;
+    }
     return getConnectionTypeRaw(side) != ConnectionType.NONE
         && other.getConnectionTypeRaw(side.getOpposite()) != ConnectionType.NONE;
   }
@@ -425,7 +461,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
           return false;
         }
       }
-      DynamicNetwork<?, ?, ?> cn = TransmitterNetworkRegistry.getClientNetwork(id);
+      Network<?, ?, ?> cn = TransmitterNetworkRegistry.getClientNetwork(id);
       if (cn == null) {
         NET n = createEmptyNetwork(id);
         n.register();
@@ -452,7 +488,7 @@ public abstract class Transmitter<AC, NET extends DynamicNetwork<AC, NET, T>, T 
     if (tag.contains("CT", Tag.TAG_INT_ARRAY)) {
       int[] r = tag.getIntArray("CT");
       for (int i = 0; i < r.length && i < 6; i++) {
-        connectionTypes[i] = ConnectionType.VALUES[r[i] % ConnectionType.VALUES.length];
+        connectionTypes[i] = ConnectionType.of(r[i]);
       }
     }
   }

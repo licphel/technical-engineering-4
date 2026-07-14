@@ -90,6 +90,12 @@
   "block.ten4.pulverizer": "Pulverizer",
   "block.ten4.heat_generator": "Heat Generator",
   "block.ten4.water_pump": "Water Pump",
+  "block.ten4.copper_energy_duct": "Copper Energy Duct",
+  "block.ten4.copper_item_duct": "Copper Item Duct",
+  "block.ten4.copper_fluid_duct": "Copper Fluid Duct",
+  "block.ten4.copper_controller_energy_duct": "Copper Controller Energy Duct",
+  "block.ten4.copper_controller_item_duct": "Copper Controller Item Duct",
+  "block.ten4.copper_controller_fluid_duct": "Copper Controller Fluid Duct",
 
   "item.ten4.iron_dust": "Iron Dust",
   "item.ten4.iron_plate": "Iron Plate",

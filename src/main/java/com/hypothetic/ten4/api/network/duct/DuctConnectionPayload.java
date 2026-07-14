@@ -26,7 +26,7 @@ public record DuctConnectionPayload(BlockPos pos, byte conn, byte acc,
       byte acc = buf.readByte();
       ConnectionType[] types = new ConnectionType[6];
       for (int i = 0; i < 6; i++) {
-        types[i] = ConnectionType.VALUES[buf.readByte() % ConnectionType.VALUES.length];
+        types[i] = ConnectionType.of(buf.readByte());
       }
       byte colorOrd = buf.readByte();
       DyeColor color = colorOrd < 0 ? null : DyeColor.values()[colorOrd % DyeColor.values().length];
@@ -45,16 +45,18 @@ public record DuctConnectionPayload(BlockPos pos, byte conn, byte acc,
     }
   };
 
-  @Override
-  public Type<DuctConnectionPayload> type() {
-    return TYPE;
-  }
-
   public static void handle(DuctConnectionPayload pkt, IPayloadContext ctx) {
     Level level = ctx.player().level();
     if (level.getBlockEntity(pkt.pos) instanceof ITransmitterProvider duct) {
       Transmitter<?, ?, ?> t = duct.getTransmitter();
-      if (t != null) t.applyConnectionSync(pkt.conn, pkt.acc, pkt.types, pkt.color);
+      if (t != null) {
+        t.applyConnectionSync(pkt.conn, pkt.acc, pkt.types, pkt.color);
+      }
     }
+  }
+
+  @Override
+  public Type<DuctConnectionPayload> type() {
+    return TYPE;
   }
 }

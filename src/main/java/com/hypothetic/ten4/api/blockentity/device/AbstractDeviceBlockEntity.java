@@ -1,18 +1,22 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
-import com.hypothetic.ten4.core.block.BuiltinBlockStates;
+import com.hypothetic.ten4.api.ILootProvider;
+import com.hypothetic.ten4.api.ITranslatable;
+import com.hypothetic.ten4.api.blockentity.RedstoneAwareBlockEntity;
 import com.hypothetic.ten4.api.capability.energy.DirectionalEnergyStorage;
 import com.hypothetic.ten4.api.capability.energy.EnergyQueue;
 import com.hypothetic.ten4.api.capability.energy.IDirectionalEnergyProvider;
 import com.hypothetic.ten4.api.capability.fluid.DirectionalFluidHandler;
-import com.hypothetic.ten4.api.capability.fluid.FluidQueue;
 import com.hypothetic.ten4.api.capability.fluid.FluidInventory;
+import com.hypothetic.ten4.api.capability.fluid.FluidQueue;
 import com.hypothetic.ten4.api.capability.fluid.IDirectionalFluidProvider;
-import com.hypothetic.ten4.api.capability.item.*;
+import com.hypothetic.ten4.api.capability.item.DirectionalItemHandler;
+import com.hypothetic.ten4.api.capability.item.IDirectionalItemProvider;
+import com.hypothetic.ten4.api.capability.item.ItemInventory;
+import com.hypothetic.ten4.api.capability.item.ItemQueue;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.Syncer;
-import com.hypothetic.ten4.api.IDescriptionProvider;
-import com.hypothetic.ten4.api.ILootProvider;
+import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -26,7 +30,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
@@ -38,8 +41,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class AbstractDeviceBlockEntity extends BlockEntity
-    implements ILootProvider, IDescriptionProvider, IDirectionalEnergyProvider, IDirectionalFluidProvider, IDirectionalItemProvider, MenuProvider {
+public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
+    implements ILootProvider, ITranslatable, IDirectionalEnergyProvider, IDirectionalFluidProvider, IDirectionalItemProvider, MenuProvider {
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IEnergyStorage> ENERGY =
       AbstractDeviceBlockEntity::getEnergyStorage;
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IItemHandler> ITEM =
@@ -63,7 +66,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
   protected final Queue<Direction> fluidPullingQueue = new LinkedList<>();
   protected final Syncer syncer = new Syncer();
   protected int energy = 0;
-  protected DeviceInfo info;
+  protected final DeviceInfo info;
   protected boolean active;
   protected SignalMode sigMode = SignalMode.IGNORE;
   protected boolean strictInput = false;
@@ -152,16 +155,19 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
     if (level == null) {
       return false;
     }
-    boolean hasSig = level.hasNeighborSignal(worldPosition);
+    boolean hasSig = isRedstonePowered();
     return switch (sigMode) {
       case IGNORE -> true;
-      case HIGH -> hasSig;
-      case LOW -> !hasSig;
+      case HIGH_LEVEL -> hasSig;
+      case LOW_LEVEL -> !hasSig;
     };
   }
 
   public void setSigMode(SignalMode mode) {
     this.sigMode = mode;
+    if (level != null) {
+      level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+    }
   }
 
   public boolean isStrictInput() {
@@ -412,7 +418,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
       case OUTPUT_ITEMS -> {
         List<Integer> sigSlots = getComparatorSignalTanks();
         if (sigSlots.isEmpty()) {
-          yield  0;
+          yield 0;
         }
 
         float f = 0.0F;
@@ -430,7 +436,7 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
       case OUTPUT_FLUID -> {
         List<Integer> sigTanks = getComparatorSignalTanks();
         if (sigTanks.isEmpty()) {
-          yield  0;
+          yield 0;
         }
 
         float f = 0.0F;
@@ -449,6 +455,11 @@ public abstract class AbstractDeviceBlockEntity extends BlockEntity
       case ACTIVE -> isActive() ? 15 : 0;
       case OFF -> 0;
     };
+  }
+
+  @Override
+  public boolean canConnectRedstone(@Nullable Direction side) {
+    return sigMode != SignalMode.IGNORE;
   }
 
   public boolean isValidInput(ItemStack stack) {

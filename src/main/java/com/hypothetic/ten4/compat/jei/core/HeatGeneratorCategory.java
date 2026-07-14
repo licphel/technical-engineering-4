@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.compat.jei.core;
 
+import com.hypothetic.ten4.api.recipe.Complex;
 import com.hypothetic.ten4.compat.jei.ModRecipeCategory;
 import com.hypothetic.ten4.registry.ModBlocks;
-import com.hypothetic.ten4.api.recipe.RecipeEntry;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -28,8 +28,8 @@ public class HeatGeneratorCategory extends ModRecipeCategory<ItemStack> {
 
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, ItemStack fuel, IFocusGroup focuses) {
-    addItemInput(builder, RecipeEntry.of(
-        RecipeEntry.Kind.ITEM,
+    addItemInput(builder, Complex.of(
+        Complex.Kind.ITEM,
         BuiltInRegistries.ITEM.getKey(fuel.getItem()),
         fuel.getCount(),
         1.0

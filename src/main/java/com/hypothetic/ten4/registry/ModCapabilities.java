@@ -2,8 +2,9 @@ package com.hypothetic.ten4.registry;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
-import com.hypothetic.ten4.api.blockentity.internet.EnergyDuctBlockEntity;
-import com.hypothetic.ten4.api.blockentity.internet.FluidDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.transmission.EnergyDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.transmission.FluidDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -34,5 +35,7 @@ public class ModCapabilities {
         ModBlockEntities.COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
     event.registerBlockEntity(Capabilities.FluidHandler.BLOCK,
         ModBlockEntities.COPPER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
+    event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+        ModBlockEntities.COPPER_ITEM_DUCT.get(), ItemDuctBlockEntity::getItemHandler);
   }
 }

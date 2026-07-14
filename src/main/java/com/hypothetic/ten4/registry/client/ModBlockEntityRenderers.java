@@ -1,10 +1,10 @@
 package com.hypothetic.ten4.registry.client;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.registry.ModBlockEntities;
 import com.hypothetic.ten4.api.client.renderer.RenderEnergyDuct;
 import com.hypothetic.ten4.api.client.renderer.RenderFluidDuct;
 import com.hypothetic.ten4.api.client.renderer.RenderItemDuct;
+import com.hypothetic.ten4.registry.ModBlockEntities;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -20,5 +20,11 @@ public class ModBlockEntityRenderers {
         ctx -> new RenderItemDuct(ctx, Ten4.id("block/duct/copper_item_duct")));
     e.registerBlockEntityRenderer(ModBlockEntities.COPPER_FLUID_DUCT.get(),
         ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_fluid_duct")));
+    e.registerBlockEntityRenderer(ModBlockEntities.COPPER_CONTROLLER_ENERGY_DUCT.get(),
+        ctx -> new RenderEnergyDuct(ctx, Ten4.id("block/duct/copper_controller_energy_duct")));
+    e.registerBlockEntityRenderer(ModBlockEntities.COPPER_CONTROLLER_ITEM_DUCT.get(),
+        ctx -> new RenderItemDuct(ctx, Ten4.id("block/duct/copper_controller_item_duct")));
+    e.registerBlockEntityRenderer(ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT.get(),
+        ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_controller_fluid_duct")));
   }
 }

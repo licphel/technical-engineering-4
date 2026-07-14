@@ -1,46 +1,33 @@
 package com.hypothetic.ten4.api.transmission;
 
 import com.hypothetic.ten4.Ten4;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import com.hypothetic.ten4.api.ITranslatable;
 import net.minecraft.util.StringRepresentable;
 
-public enum ConnectionType implements StringRepresentable {
+public enum ConnectionType implements StringRepresentable, ITranslatable {
   NONE,
   NORMAL,
   PUSH,
   PULL;
 
-  public static final ConnectionType[] VALUES = values();
-
-  @Override
-  public String toString() {
-    return switch (this) {
-      case NONE -> "none";
-      case NORMAL -> "normal";
-      case PUSH -> "push";
-      case PULL -> "pull";
-    };
+  public static ConnectionType of(int colorOrd) {
+    return values()[colorOrd % values().length];
   }
 
   @Override
-  public String getSerializedName() {
-    return toString();
+  public String createGroupKey() {
+    return Ten4.getLangKey("misc.connection_type");
   }
 
   public ConnectionType next() {
-    return VALUES[(ordinal() + 1) % VALUES.length];
+    return ConnectionType.of(ordinal() + 1);
   }
 
   public boolean canAccept() {
     return this == NORMAL || this == PULL;
   }
 
-  public boolean canSendTo() {
+  public boolean canBorrow() {
     return this == NORMAL || this == PUSH;
-  }
-
-  public MutableComponent getComponent() {
-    return Component.translatable(Ten4.getLangKey("misc.connection_type." + this));
   }
 }

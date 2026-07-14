@@ -3,12 +3,11 @@ package com.hypothetic.ten4.api.blockentity.device;
 import com.hypothetic.ten4.api.ITickable;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.Syncer;
-import com.hypothetic.ten4.api.recipe.RecipeEntry;
-import com.hypothetic.ten4.api.recipe.ModRecipe;
+import com.hypothetic.ten4.api.recipe.Complex;
+import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -26,9 +25,9 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   protected final List<Integer> inputTanks = new ArrayList<>();
   protected final List<Integer> outputSlots = new ArrayList<>();
   protected final List<Integer> outputTanks = new ArrayList<>();
-  protected final RecipeType<ModRecipe> recipeType;
-  protected @Nullable ModRecipe recipe;
-  protected @Nullable ModRecipe lastRecipe;
+  protected final RecipeType<IComplexRecipe> recipeType;
+  protected @Nullable IComplexRecipe recipe;
+  protected @Nullable IComplexRecipe lastRecipe;
   protected int progress = 0;
   protected int maxProgress = 0;
 
@@ -67,7 +66,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
 
     return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
         .anyMatch(h -> {
-          for (RecipeEntry in : h.value().itemInputs()) {
+          for (Complex in : h.value().itemInputs()) {
             if (in.test(stack)) {
               return true;
             }
@@ -146,7 +145,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     if (recipe == null) {
       return true;
     }
-    for (RecipeEntry entry : recipe.itemOutputs()) {
+    for (Complex entry : recipe.itemOutputs()) {
       ItemStack s = entry.symbolItem();
       if (s.isEmpty()) {
         continue;
@@ -155,7 +154,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
         return false;
       }
     }
-    for (RecipeEntry entry : recipe.fluidOutputs()) {
+    for (Complex entry : recipe.fluidOutputs()) {
       FluidStack f = entry.symbolFluid();
       if (f.isEmpty()) {
         continue;
@@ -203,7 +202,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
   protected void shrinkInputs() {
     assert recipe != null;
 
-    for (RecipeEntry in : recipe.itemInputs()) {
+    for (Complex in : recipe.itemInputs()) {
       int n = in.count();
       for (Integer i : inputSlots) {
         ItemStack s = inventory.getStackInSlot(i);
@@ -214,7 +213,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
         }
       }
     }
-    for (RecipeEntry in : recipe.fluidInputs()) {
+    for (Complex in : recipe.fluidInputs()) {
       int n = in.count();
       for (Integer i : inputTanks) {
         FluidStack f = fluidInventory.getFluidInTank(i);
@@ -227,8 +226,8 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
     }
   }
 
-  protected boolean doesRecipeMatch(ModRecipe r) {
-    for (RecipeEntry in : r.itemInputs()) {
+  protected boolean doesRecipeMatch(IComplexRecipe r) {
+    for (Complex in : r.itemInputs()) {
       boolean f = false;
       for (Integer i : inputSlots) {
         if (in.test(inventory.getStackInSlot(i))) {
@@ -240,7 +239,7 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
         return false;
       }
     }
-    for (RecipeEntry in : r.fluidInputs()) {
+    for (Complex in : r.fluidInputs()) {
       boolean f = false;
       for (Integer i : inputTanks) {
         if (in.test(fluidInventory.getFluidInTank(i))) {
@@ -279,9 +278,9 @@ public abstract class RecipeDeviceBlockEntity extends AugmentableDeviceBlockEnti
 
   protected abstract void initializeRecipeAutomation();
 
-  protected abstract RecipeType<ModRecipe> getRecipeType();
+  protected abstract RecipeType<IComplexRecipe> getRecipeType();
 
-  protected @Nullable ModRecipe findRecipe() {
+  protected @Nullable IComplexRecipe findRecipe() {
     if (level == null || level.isClientSide()) {
       return null;
     }

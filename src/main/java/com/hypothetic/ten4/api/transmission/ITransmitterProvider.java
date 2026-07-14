@@ -15,15 +15,7 @@ public interface ITransmitterProvider {
 
   void sendUpdatePacket();
 
-  void setChanged();
-
-  void notifyTileChange();
-
-  /** Force immediate transit-data sync after items move. */
-  default void sendTransitSync() {}
-
-  /** Force immediate fluid-data sync after buffer changes. */
-  default void sendFluidSync() {}
+  void notifyChanges();
 
   @Nullable Transmitter<?, ?, ?> getTransmitter();
 }

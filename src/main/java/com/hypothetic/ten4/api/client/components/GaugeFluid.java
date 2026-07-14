@@ -2,7 +2,7 @@ package com.hypothetic.ten4.api.client.components;
 
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.api.client.gui.TextureRegion;
-import com.hypothetic.ten4.util.DisplayHelper;
+import com.hypothetic.ten4.util.DisplayUtil;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
@@ -68,6 +68,6 @@ public class GaugeFluid extends UiComponent {
       tooltips.add(stack.getHoverName());
     }
 
-    tooltips.add(DisplayHelper.getMB(stack.getAmount(), capacity.getAsInt()));
+    tooltips.add(DisplayUtil.milliBucket(stack.getAmount(), capacity.getAsInt()));
   }
 }

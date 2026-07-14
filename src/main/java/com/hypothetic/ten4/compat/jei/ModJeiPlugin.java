@@ -1,14 +1,15 @@
 package com.hypothetic.ten4.compat.jei;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.client.TenScreen;
+import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
+import com.hypothetic.ten4.api.recipe.ComplexRecipe;
+import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import com.hypothetic.ten4.compat.jei.core.HeatGeneratorCategory;
 import com.hypothetic.ten4.compat.jei.core.PulverizerCategory;
-import com.hypothetic.ten4.core.device.HeatGeneratorScreen;
-import com.hypothetic.ten4.core.device.PulverizerScreen;
+import com.hypothetic.ten4.core.client.screen.HeatGeneratorScreen;
+import com.hypothetic.ten4.core.client.screen.PulverizerScreen;
 import com.hypothetic.ten4.registry.ModBlocks;
 import com.hypothetic.ten4.registry.ModRecipes;
-import com.hypothetic.ten4.api.recipe.ModRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
@@ -25,7 +26,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -35,19 +37,19 @@ import java.util.List;
 
 @JeiPlugin
 public class ModJeiPlugin implements IModPlugin {
-  public static final RecipeType<ModRecipe> PULVERIZER =
-      new RecipeType<>(Ten4.id("pulverizer"), ModRecipe.class);
+  public static final RecipeType<IComplexRecipe> PULVERIZER =
+      new RecipeType<>(Ten4.id("pulverizer"), ComplexRecipe.class);
   public static final RecipeType<ItemStack> HEAT_GENERATOR =
       new RecipeType<>(Ten4.id("heat_generator"), ItemStack.class);
 
   private static void register(IRecipeRegistration registry,
                                RecipeManager rm,
                                DeferredHolder<?, ?> holder,
-                               RecipeType<ModRecipe> jeiType) {
-    net.minecraft.world.item.crafting.RecipeType<ModRecipe> type =
-        (net.minecraft.world.item.crafting.RecipeType<ModRecipe>) holder.get();
-    List<RecipeHolder<ModRecipe>> holders = rm.getAllRecipesFor(type);
-    List<ModRecipe> recipes = holders.stream().map(RecipeHolder::value).toList();
+                               RecipeType<IComplexRecipe> jeiType) {
+    net.minecraft.world.item.crafting.RecipeType<IComplexRecipe> type =
+        (net.minecraft.world.item.crafting.RecipeType<IComplexRecipe>) holder.get();
+    List<RecipeHolder<IComplexRecipe>> holders = rm.getAllRecipesFor(type);
+    List<IComplexRecipe> recipes = holders.stream().map(RecipeHolder::value).toList();
     registry.addRecipes(jeiType, recipes);
   }
 
@@ -96,10 +98,10 @@ public class ModJeiPlugin implements IModPlugin {
     registry.addRecipeClickArea(HeatGeneratorScreen.class, 80, 36, 14, 14, HEAT_GENERATOR);
 
     // Excluded areas
-    registry.addGenericGuiContainerHandler(TenScreen.class, new IGuiContainerHandler<>() {
+    registry.addGenericGuiContainerHandler(ComponentedContainerScreen.class, new IGuiContainerHandler<>() {
       @Override
       public List<Rect2i> getGuiExtraAreas(AbstractContainerScreen<?> containerScreen) {
-        if (containerScreen instanceof TenScreen<?> cs) {
+        if (containerScreen instanceof ComponentedContainerScreen<?> cs) {
           return cs.getComponentAreas();
         }
         return Collections.emptyList();

@@ -26,11 +26,6 @@ public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
     return this;
   }
 
-  public ItemSlot setSlotLimit(int slotLimit) {
-    this.slotLimit = slotLimit;
-    return this;
-  }
-
   @Override
   public ItemStack getStack() {
     return stack;
@@ -65,6 +60,11 @@ public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
       return slotLimit;
     }
     return Math.min(stack.getMaxStackSize(), slotLimit);
+  }
+
+  public ItemSlot setSlotLimit(int slotLimit) {
+    this.slotLimit = slotLimit;
+    return this;
   }
 
   @Override

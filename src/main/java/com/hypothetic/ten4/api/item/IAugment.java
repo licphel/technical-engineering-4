@@ -10,18 +10,15 @@ public interface IAugment<T extends AugmentableDeviceBlockEntity> {
   default void apply(T entity) {
   }
 
-  default int modifier(ModifiableEntry entry, int value) {
+  default int modifier(AugmentableField field, int value) {
     return value;
   }
 
-  enum ModifiableEntry {
+  enum AugmentableField {
     EFFICIENCY,
     ENERGY_THROUGHPUT,
-    MAX_ENERGY_RECEIVE,
     ENERGY_CAPACITY,
     ITEM_THROUGHPUT,
-    MAX_ITEM_RECEIVE,
-    FLUID_THROUGHPUT,
-    MAX_FLUID_RECEIVE
+    FLUID_THROUGHPUT
   }
 }

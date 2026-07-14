@@ -1,9 +1,10 @@
 package com.hypothetic.ten4.api.client.renderer;
 
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
-import com.hypothetic.ten4.util.RenderHelper;
+import com.hypothetic.ten4.util.ClientUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -20,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements BlockEntityRenderer<BE> {
-  private static final TextureAtlasSprite OVERLAY = RenderHelper.getBlockSprite(
+  public static final int LOD_DISTANCE = 32;
+  private static final TextureAtlasSprite OVERLAY = ClientUtil.getBlockSprite(
       ResourceLocation.withDefaultNamespace("block/white_concrete"));
-
   protected final DuctModelBaker baker;
   private TextureAtlasSprite spriteCore, spriteSide;
 
@@ -47,7 +49,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
   protected abstract ResourceLocation coreTexture();
 
-  protected abstract ResourceLocation sideTexture();
+  protected abstract ResourceLocation partTexture();
 
   protected abstract boolean hasConnection(BE be, Direction d);
 
@@ -55,22 +57,27 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
   protected TextureAtlasSprite core() {
     if (spriteCore == null) {
-      spriteCore = RenderHelper.getBlockSprite(coreTexture());
+      spriteCore = ClientUtil.getBlockSprite(coreTexture());
     }
     return spriteCore;
   }
 
-  protected TextureAtlasSprite side() {
+  protected TextureAtlasSprite part() {
     if (spriteSide == null) {
-      spriteSide = RenderHelper.getBlockSprite(sideTexture());
+      spriteSide = ClientUtil.getBlockSprite(partTexture());
     }
     return spriteSide;
+  }
+
+  protected boolean shouldRenderLess(BE be) {
+    Player player = Minecraft.getInstance().player;
+    return player == null || player.blockPosition().distManhattan(be.getBlockPos()) > LOD_DISTANCE;
   }
 
   @Override
   public void render(BE be, float pt, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
     TextureAtlasSprite cs = core();
-    TextureAtlasSprite ss = side();
+    TextureAtlasSprite ss = part();
     renderBody(be, pose, buffers, cs, ss, 1.0F, 1.0F, 1.0F, 1.0F, light, overlay);
     renderContents(be, pt, pose, buffers, cs, ss, light, overlay);
 
@@ -96,7 +103,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
   }
 
   @Nullable
-  protected net.minecraft.world.item.DyeColor getDyeColor(BE be) {
+  protected DyeColor getDyeColor(BE be) {
     if (be instanceof ITransmitterProvider provider && provider.getTransmitter() != null) {
       return provider.getTransmitter().getColor();
     }
@@ -107,7 +114,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
                             TextureAtlasSprite cs, TextureAtlasSprite ss,
                             float r, float g, float b, float a, int light, int overlay) {
     VertexConsumer vc = buffers.getBuffer(a == 1 ? RenderType.cutout() : RenderType.translucent());
-    var entry = pose.last();
+    PoseStack.Pose entry = pose.last();
     List<String> names = new ArrayList<>(6);
 
     // Core: skip faces where connections exist (avoid overlap with parts)

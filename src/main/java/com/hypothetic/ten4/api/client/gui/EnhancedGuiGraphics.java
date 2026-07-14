@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.api.client.gui;
 
-import com.hypothetic.ten4.util.RenderHelper;
+import com.hypothetic.ten4.util.ClientUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -117,7 +117,7 @@ public final class EnhancedGuiGraphics {
     RenderSystem.setShaderColor((float) (color >> 16 & 255) / 255.0F, (float) (color >> 8 & 255) / 255.0F, (float) (color & 255) / 255.0F, 1.0F);
     RenderSystem.setShaderTexture(0, BLOCK_ATLAS);
 
-    TextureAtlasSprite sprite = RenderHelper.getBlockSprite(stillTexture);
+    TextureAtlasSprite sprite = ClientUtil.getBlockSprite(stillTexture);
     for (int i = 0; i < width; i += 16) {
       for (int j = 0; j < height; j += 16) {
         drawSprite(sprite, x + i, y + j, Math.min(width - i, 16), Math.min(height - j, 16));

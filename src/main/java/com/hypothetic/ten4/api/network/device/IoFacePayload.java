@@ -1,8 +1,9 @@
 package com.hypothetic.ten4.api.network.device;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.device.FaceModePacker;
 import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
+import com.hypothetic.ten4.api.blockentity.device.FaceMode;
+import com.hypothetic.ten4.api.blockentity.device.FaceModePacker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -45,7 +46,7 @@ public class IoFacePayload implements CustomPacketPayload {
         BlockEntity be = level.getBlockEntity(pkt.pos);
         if (be instanceof AbstractDeviceBlockEntity device) {
           for (Direction d : Direction.values()) {
-            var mode = FaceModePacker.get(pkt.packed, d);
+            FaceMode mode = FaceModePacker.get(pkt.packed, d);
             switch (pkt.type) {
               case 0 -> device.setEnergyFaceMode(d, mode);
               case 1 -> device.setItemFaceMode(d, mode);

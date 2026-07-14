@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.api.capability.energy;
 
-import com.hypothetic.ten4.util.DataComponentHelper;
+import com.hypothetic.ten4.util.DataComponentUtil;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemEnergyProvider implements IEnergyProvider {
@@ -16,12 +16,12 @@ public class ItemEnergyProvider implements IEnergyProvider {
 
   @Override
   public int getEnergy() {
-    return DataComponentHelper.getInt(stack, "Energy");
+    return DataComponentUtil.getInt(stack, "Energy");
   }
 
   @Override
   public void setEnergy(int e) {
-    DataComponentHelper.setInt(stack, "Energy", Math.clamp(e, 0, capacity));
+    DataComponentUtil.setInt(stack, "Energy", Math.clamp(e, 0, capacity));
   }
 
   @Override

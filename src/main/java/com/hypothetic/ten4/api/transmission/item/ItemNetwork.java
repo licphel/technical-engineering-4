@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.api.transmission.item;
 
-import com.hypothetic.ten4.api.transmission.DynamicNetwork;
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
+import com.hypothetic.ten4.api.transmission.Network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -12,10 +12,12 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ItemNetwork extends DynamicNetwork<IItemHandler, ItemNetwork, ItemTransmitter> {
+public class ItemNetwork extends Network<IItemHandler, ItemNetwork, ItemTransmitter> {
   final AtomicInteger nextRouteIndex = new AtomicInteger();
 
   public ItemNetwork(UUID id) {
@@ -30,19 +32,24 @@ public class ItemNetwork extends DynamicNetwork<IItemHandler, ItemNetwork, ItemT
   @Override
   public void onUpdate() {
     Level level = null;
+    // Snapshot all transits at tick start — prevent same-tick multi-hop
+    Map<ItemTransmitter, ItemTransmitter.TransitEntry> snapshots = new HashMap<>();
     for (ItemTransmitter t : getTransmitters()) {
+      snapshots.put(t, t.transitEntry);
       if (level == null) {
         level = t.getLevel();
       }
-      if (level == null) {
-        continue;
-      }
-      t.onUpdateServer(this, level);
+    }
+    if (level == null) {
+      return;
+    }
+    for (var e : snapshots.entrySet()) {
+      e.getKey().onUpdateServer(this, level, e.getValue());
     }
   }
 
   boolean canAnyAccept(ItemStack stack, ItemTransmitter asker) {
-    for (var e : positionedTransmitters.entrySet()) {
+    for (Map.Entry<BlockPos, ItemTransmitter> e : positionedTransmitters.entrySet()) {
       ItemTransmitter tr = e.getValue();
       Level level = tr.getLevel();
 
@@ -51,7 +58,7 @@ public class ItemNetwork extends DynamicNetwork<IItemHandler, ItemNetwork, ItemT
       }
 
       for (Direction d : Direction.values()) {
-        if (!tr.getConnectionTypeRaw(d).canSendTo()) {
+        if (!tr.getConnectionTypeRaw(d).canBorrow()) {
           continue;
         }
         BlockPos t = e.getKey().relative(d);

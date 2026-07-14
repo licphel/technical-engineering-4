@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.api.client.builtin;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.IDescriptionProvider;
-import com.hypothetic.ten4.api.client.DeviceScreen;
+import com.hypothetic.ten4.api.ITranslatable;
+import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
 import com.hypothetic.ten4.api.client.components.*;
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.api.client.gui.TextureRegion;
@@ -12,13 +12,14 @@ import com.hypothetic.ten4.api.container.ManualSlot;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.SyncedFieldReader;
 import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;
-import com.hypothetic.ten4.util.DisplayHelper;
+import com.hypothetic.ten4.util.DisplayUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
+import java.util.Arrays;
 import java.util.List;
 
 public final class BuiltinComponents {
@@ -43,7 +44,7 @@ public final class BuiltinComponents {
       @Override
       public void onCollectingTooltips(List<Component> tooltips) {
         super.onCollectingTooltips(tooltips);
-        tooltips.add(DisplayHelper.getFE(partial.getAsInt(), full.getAsInt()));
+        tooltips.add(DisplayUtil.forgeEnergy(partial.getAsInt(), full.getAsInt()));
       }
     }.withTexture(ENERGY_EMPTY, ENERGY_FULL);
   }
@@ -100,10 +101,10 @@ public final class BuiltinComponents {
     return new PanelLayout(bgWidth, 8).panelGap(2);
   }
 
-  public static Panel infoPanel(DeviceScreen screen) {
+  public static Panel infoPanel(ComponentedContainerScreen<ContainerMenu> screen) {
     SyncedFieldReader reader = screen.getMenu().fieldsReader();
-    IDescriptionProvider ip = screen.getMenu().getBlockEntity();
-    Component rawText = Component.translatable(ip.getInfoLangKey());
+    ITranslatable ip = screen.getMenu().getBlockEntity();
+    Component rawText = Component.translatable(ip.createTranslationKey());
 
     return new Panel(BuiltinComponents.panelBacking(15, 15, 241, 67, 15, 15), 91, 72, -15) {
       double scrollY;
@@ -132,7 +133,7 @@ public final class BuiltinComponents {
     }.expandLeft();
   }
 
-  public static Panel sigModePanel(DeviceScreen screen) {
+  public static Panel sigModePanel(ComponentedContainerScreen<ContainerMenu> screen) {
     SyncedFieldReader reader = screen.getMenu().fieldsReader();
     BlockPos pos = screen.getMenu().getBlockEntity().getBlockPos();
     return new Panel(BuiltinComponents.panelBacking(15, 15, 241, 0, 15, 15), 91, 48, -15) {
@@ -152,7 +153,7 @@ public final class BuiltinComponents {
     }.expandLeft();
   }
 
-  public static Panel ioPanel(DeviceScreen screen) {
+  public static Panel ioPanel(ComponentedContainerScreen<ContainerMenu> screen) {
     IoConfigState state = new IoConfigState(screen.getMenu().fieldsReader());
     return new Panel(BuiltinComponents.panelBacking(15, 15, 0, 67, 15, 15), 91, 90, -15) {
       {
@@ -176,7 +177,7 @@ public final class BuiltinComponents {
     };
   }
 
-  public static Panel augmentPanel(DeviceScreen screen) {
+  public static Panel augmentPanel(ComponentedContainerScreen<ContainerMenu> screen) {
     Panel panel = new Panel(BuiltinComponents.panelBacking(15, 15, 0, 0, 15, 15), 91, 48, -15) {
       @Override
       public void onTick() {
@@ -208,5 +209,15 @@ public final class BuiltinComponents {
       }
     }
     return panel;
+  }
+
+  public static UiComponent[] defaultPanels(ComponentedContainerScreen<ContainerMenu> screen) {
+    PanelLayout leftPanels = BuiltinComponents.leftPanels();
+    PanelLayout rightPanels = BuiltinComponents.rightPanels(screen.getGuiSize()[0]);
+    leftPanels.addPanel(BuiltinComponents.infoPanel(screen));
+    leftPanels.addPanel(BuiltinComponents.sigModePanel(screen));
+    rightPanels.addPanel(BuiltinComponents.ioPanel(screen));
+    rightPanels.addPanel(BuiltinComponents.augmentPanel(screen));
+    return new UiComponent[] {leftPanels, rightPanels};
   }
 }

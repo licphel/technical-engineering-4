@@ -3,7 +3,6 @@ package com.hypothetic.ten4.api.transmission;
 import com.hypothetic.ten4.Ten4;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -13,150 +12,205 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 @EventBusSubscriber(modid = Ten4.ID)
 public final class TransmitterNetworkRegistry {
-  private static final Set<DynamicNetwork<?, ?, ?>> networks = new HashSet<>();
-  private static final Map<UUID, DynamicNetwork<?, ?, ?>> clientNetworks = new HashMap<>();
+  private static final Set<Network<?, ?, ?>> networks = new HashSet<>();
+  private static final Map<UUID, Network<?, ?, ?>> clientNetworks = new HashMap<>();
+  private static final Set<Transmitter<?, ?, ?>> pendingJoins = new HashSet<>();
+  private static final Set<Transmitter<?, ?, ?>> pendingRemovals = new HashSet<>();
   private static int pruneCounter;
 
-  private TransmitterNetworkRegistry() {}
+  private TransmitterNetworkRegistry() {
+  }
 
   @SubscribeEvent
   public static void onLevelTick(LevelTickEvent.Post e) {
     Level level = e.getLevel();
-    if (level.isClientSide()) return;
-
-    for (DynamicNetwork<?, ?, ?> net : networks) {
-      net.onUpdate();
+    if (level.isClientSide()) {
+      return;
     }
 
+    // Process pending removals first (deferred from setRemoved/setPlacedBy/paint)
+    processPendingRemovals();
+    // Then process pending joins (deferred from onLoad/onPlace/paint/removals)
+    processPendingJoins();
+    // Network update
+    for (Network<?, ?, ?> net : networks) {
+      net.onUpdate();
+    }
+    // Prune
     if (++pruneCounter >= 100) {
       pruneCounter = 0;
-      networks.removeIf(DynamicNetwork::isEmpty);
+      networks.removeIf(Network::isEmpty);
     }
   }
 
-  // ---- Client networks ----
-  public static void addClientNetwork(UUID id, DynamicNetwork<?, ?, ?> net) { clientNetworks.putIfAbsent(id, net); }
-  public static DynamicNetwork<?, ?, ?> getClientNetwork(UUID id) { return clientNetworks.get(id); }
-  public static void removeClientNetwork(DynamicNetwork<?, ?, ?> net) { clientNetworks.remove(net.getUUID()); }
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private static void processPendingJoins() {
+    if (pendingJoins.isEmpty()) {
+      return;
+    }
+    Set<Transmitter<?, ?, ?>> batch = new HashSet<>(pendingJoins);
+    pendingJoins.clear();
 
-  // ---- Server networks ----
-  public static void registerNetwork(DynamicNetwork<?, ?, ?> net) { networks.add(net); }
-  public static void removeNetwork(DynamicNetwork<?, ?, ?> net) { networks.remove(net); }
-
-  // ---- Synchronous network join: called from onLoad/onPlace ----
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public static void joinNetwork(Transmitter<?, ?, ?> start) {
-    if (start.isRemote()) return;
-    Level world = start.getLevel();
-    if (world == null) return;
-
-    CompatibleTransmitterValidator validator = start.getNewOrphanValidator();
-    Set<Transmitter> connected = new HashSet<>();
-    Set<DynamicNetwork> foundNetworks = new HashSet<>();
-    Set<BlockPos> visited = new HashSet<>();
-    Deque<BlockPos> queue = new ArrayDeque<>();
-
-    // BFS: find all physically+logically connected transmitters
-    queue.add(start.getBlockPos());
-    while (!queue.isEmpty()) {
-      BlockPos pos = queue.pollFirst();
-      if (!visited.add(pos)) continue;
-
-      BlockEntity be = world.getBlockEntity(pos);
-      if (!(be instanceof ITransmitterProvider tb)) continue;
-      Transmitter t = tb.getTransmitter();
-      if (t == null || !t.isValid() || !start.supportsTransmission(t)) continue;
-
-      DynamicNetwork net = t.getNetwork();
-      if (net != null) {
-        if (validator.isNetworkCompatible(net)) {
-          foundNetworks.add(net);
-        }
-        continue; // already networked, don't add to connected
+    for (Transmitter start : batch) {
+      if (!start.isValid() || start.isRemote()) {
+        continue;
+      }
+      Level world = start.getLevel();
+      if (world == null) {
+        continue;
       }
 
-      // Orphan or new transmitter — check compatibility
-      if (!validator.isTransmitterCompatible(t)) continue;
-      connected.add(t);
+      CompatibleTransmitterValidator validator = start.getNewOrphanValidator();
+      Set<Transmitter> connected = new HashSet<>();
+      Set<Network> foundNetworks = new HashSet<>();
+      Set<BlockPos> visited = new HashSet<>();
+      Deque<BlockPos> queue = new ArrayDeque<>();
 
-      // Expand to neighbors via isValidTransmitterBasic (Mekanism pattern)
-      for (Direction d : Direction.values()) {
-        BlockPos next = pos.relative(d);
-        if (!visited.contains(next)) {
-          BlockEntity neighborBe = world.getBlockEntity(next);
-          if (neighborBe instanceof ITransmitterProvider ntb) {
-            Transmitter<?, ?, ?> neighbor = ntb.getTransmitter();
-            if (neighbor != null && t.isValidTransmitterBasic(ntb, d)) {
-              queue.addLast(next);
+      queue.add(start.getBlockPos());
+      while (!queue.isEmpty()) {
+        BlockPos pos = queue.pollFirst();
+        if (!visited.add(pos)) {
+          continue;
+        }
+        BlockEntity be = world.getBlockEntity(pos);
+        if (!(be instanceof ITransmitterProvider tb)) {
+          continue;
+        }
+        Transmitter t = tb.getTransmitter();
+        if (t == null || !t.isValid() || !start.supportsTransmission(t)) {
+          continue;
+        }
+
+        Network net = t.getNetwork();
+        if (net != null) {
+          if (validator.isNetworkCompatible(net)) {
+            foundNetworks.add(net);
+          }
+          continue;
+        }
+
+        if (!validator.isTransmitterCompatible(t)) {
+          continue;
+        }
+        connected.add(t);
+
+        for (Direction d : Direction.values()) {
+          BlockPos next = pos.relative(d);
+          if (!visited.contains(next)) {
+            BlockEntity neighborBe = world.getBlockEntity(next);
+            if (neighborBe instanceof ITransmitterProvider ntb) {
+              Transmitter<?, ?, ?> neighbor = ntb.getTransmitter();
+              if (neighbor != null && t.isValidTransmitterBasic(ntb, d)) {
+                queue.addLast(next);
+              }
             }
           }
         }
       }
-    }
 
-    // Create or merge network
-    DynamicNetwork network;
-    if (foundNetworks.isEmpty()) {
-      network = start.createEmptyNetwork(UUID.randomUUID());
-      network.register();
-    } else if (foundNetworks.size() == 1) {
-      network = foundNetworks.iterator().next();
-    } else {
-      network = start.createNetworkByMerging((Collection) foundNetworks);
-    }
-
-    // Remove all connected transmitters from their old networks first
-    for (Transmitter t : connected) {
-      DynamicNetwork oldNet = t.getNetwork();
-      if (oldNet != null && oldNet != network) {
-        oldNet.removeTransmitter(t);
-        t.setNetwork(null, false);
+      Network network;
+      if (foundNetworks.isEmpty()) {
+        network = start.createEmptyNetwork(UUID.randomUUID());
+        network.register();
+      } else if (foundNetworks.size() == 1) {
+        network = foundNetworks.iterator().next();
+      } else {
+        network = start.createNetworkByMerging(foundNetworks);
       }
-    }
 
-    network.addNewTransmitters(connected, validator);
-    network.commit();
+      for (Transmitter t : connected) {
+        Network oldNet = t.getNetwork();
+        if (oldNet != null && oldNet != network) {
+          oldNet.removeTransmitter(t);
+          t.setNetwork(null, false);
+        }
+      }
+
+      network.addNewTransmitters(connected, validator);
+      network.commit();
+    }
   }
 
-  /** Called when a transmitter is removed — destroy old network, rebuild from each neighbor. */
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public static void onTransmitterRemoved(Transmitter<?, ?, ?> removed) {
-    if (removed.isRemote()) return;
-    Level world = removed.getLevel();
-    if (world == null) return;
-
-    DynamicNetwork oldNet = removed.getNetwork();
-
-    // Destroy old network: orphan all members
-    if (oldNet != null) {
-      for (Object o : new ArrayList<>(oldNet.getTransmitters())) {
-        Transmitter t = (Transmitter) o;
-        t.takeShare();
-        t.setNetwork(null, false);
-      }
-      oldNet.deregister();
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private static void processPendingRemovals() {
+    if (pendingRemovals.isEmpty()) {
+      return;
     }
-    removed.setNetwork(null, false);
+    Set<Transmitter<?, ?, ?>> batch = new HashSet<>(pendingRemovals);
+    pendingRemovals.clear();
 
-    // Rebuild from each valid neighbor
-    for (Direction d : Direction.values()) {
-      BlockPos neighborPos = removed.getBlockPos().relative(d);
-      BlockEntity be = world.getBlockEntity(neighborPos);
-      if (be instanceof ITransmitterProvider tb && removed.isValidTransmitterBasic(tb, d)) {
-        Transmitter t = tb.getTransmitter();
-        if (t != null && t.isValid()) {
-          joinNetwork(t);
+    for (Transmitter removed : batch) {
+      if (removed.isRemote()) {
+        continue;
+      }
+      Level world = removed.getLevel();
+      if (world == null) {
+        continue;
+      }
+
+      Network oldNet = removed.getNetwork();
+      if (oldNet != null) {
+        for (Object o : new ArrayList<>(oldNet.getTransmitters())) {
+          Transmitter t = (Transmitter) o;
+          t.takeShare();
+          t.setNetwork(null, false);
+        }
+        oldNet.deregister();
+      }
+      removed.setNetwork(null, false);
+
+      // Queue neighbors for re-join
+      for (Direction d : Direction.values()) {
+        BlockPos neighborPos = removed.getBlockPos().relative(d);
+        BlockEntity be = world.getBlockEntity(neighborPos);
+        if (be instanceof ITransmitterProvider tb && removed.isValidTransmitterBasic(tb, d)) {
+          Transmitter t = tb.getTransmitter();
+          if (t != null && t.isValid()) {
+            pendingJoins.add(t);
+          }
         }
       }
     }
   }
 
-  // ---- Fluid conflict ----
+  public static void addClientNetwork(UUID id, Network<?, ?, ?> net) {
+    clientNetworks.putIfAbsent(id, net);
+  }
+
+  public static @Nullable Network<?, ?, ?> getClientNetwork(UUID id) {
+    return clientNetworks.getOrDefault(id, null);
+  }
+
+  public static void removeClientNetwork(Network<?, ?, ?> net) {
+    clientNetworks.remove(net.getUUID());
+  }
+
+  public static void registerNetwork(Network<?, ?, ?> net) {
+    networks.add(net);
+  }
+
+  public static void removeNetwork(Network<?, ?, ?> net) {
+    networks.remove(net);
+  }
+
+  public static void join(Transmitter<?, ?, ?> t) {
+    if (!t.isRemote()) {
+      pendingJoins.add(t);
+    }
+  }
+
+  public static void remove(Transmitter<?, ?, ?> removed) {
+    if (!removed.isRemote()) {
+      pendingRemovals.add(removed);
+    }
+  }
+
   static void destroyFluidConflict(Level level, BlockPos pos) {
     if (level instanceof ServerLevel sl) {
       sl.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
@@ -166,5 +220,7 @@ public final class TransmitterNetworkRegistry {
     }
   }
 
-  public static int networkCount() { return networks.size(); }
+  public static int networkCount() {
+    return networks.size();
+  }
 }

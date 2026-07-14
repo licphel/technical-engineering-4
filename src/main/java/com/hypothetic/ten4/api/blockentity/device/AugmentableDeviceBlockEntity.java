@@ -44,7 +44,7 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
     return j;
   }
 
-  public int applyAugments(IAugment.ModifiableEntry entry, int value) {
+  public int applyAugments(IAugment.AugmentableField entry, int value) {
     for (int i = 0; i < augments.size(); i++) {
       ItemStack stack = augments.getItem(i);
 
@@ -61,27 +61,27 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
 
   @Override
   public int getEnergyCapacity() {
-    return applyAugments(IAugment.ModifiableEntry.ENERGY_CAPACITY, super.getEnergyCapacity());
+    return applyAugments(IAugment.AugmentableField.ENERGY_CAPACITY, super.getEnergyCapacity());
   }
 
   @Override
   public int getEnergyThroughput() {
-    return applyAugments(IAugment.ModifiableEntry.ENERGY_THROUGHPUT, super.getEnergyThroughput());
+    return applyAugments(IAugment.AugmentableField.ENERGY_THROUGHPUT, super.getEnergyThroughput());
   }
 
   @Override
   public int getFluidThroughput() {
-    return applyAugments(IAugment.ModifiableEntry.FLUID_THROUGHPUT, super.getFluidThroughput());
+    return applyAugments(IAugment.AugmentableField.FLUID_THROUGHPUT, super.getFluidThroughput());
   }
 
   @Override
   public int getItemThroughput() {
-    return applyAugments(IAugment.ModifiableEntry.ITEM_THROUGHPUT, super.getItemThroughput());
+    return applyAugments(IAugment.AugmentableField.ITEM_THROUGHPUT, super.getItemThroughput());
   }
 
   @Override
   public int getActualPower() {
-    return applyAugments(IAugment.ModifiableEntry.EFFICIENCY, super.getActualPower());
+    return applyAugments(IAugment.AugmentableField.EFFICIENCY, super.getActualPower());
   }
 
   @Override

@@ -23,6 +23,7 @@ public class ModMenus {
         AbstractContainerMenu menu = be.createMenu(id, inv, inv.player);
         return (ContainerMenu) Objects.requireNonNull(menu);
       }));
+
   public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> PULVERIZER =
       MENUS.register("pulverizer", DEVICE_MENU_GENERATOR);
   public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> HEAT_GENERATOR =

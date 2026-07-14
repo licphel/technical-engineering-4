@@ -3,12 +3,13 @@ package com.hypothetic.ten4.api.client.builtin;
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.blockentity.device.FaceMode;
 import com.hypothetic.ten4.api.blockentity.device.FaceModePacker;
-import com.hypothetic.ten4.api.client.DeviceScreen;
+import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
 import com.hypothetic.ten4.api.client.components.Button;
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.api.client.gui.TextureRegion;
+import com.hypothetic.ten4.api.container.ContainerMenu;
 import com.hypothetic.ten4.api.network.device.IoFacePayload;
-import com.hypothetic.ten4.util.RenderHelper;
+import com.hypothetic.ten4.util.ClientUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -20,11 +21,11 @@ import java.util.List;
 
 class IoFaceButton extends Button {
   final Direction dir;
-  final DeviceScreen screen;
+  final ComponentedContainerScreen<ContainerMenu> screen;
   final IoConfigState state;
   final String relSide;
 
-  IoFaceButton(int x, int y, Direction dir, DeviceScreen screen, IoConfigState state, String relSide) {
+  IoFaceButton(int x, int y, Direction dir, ComponentedContainerScreen<ContainerMenu> screen, IoConfigState state, String relSide) {
     super(x, y, 16, 16);
     this.dir = dir;
     this.screen = screen;
@@ -77,13 +78,13 @@ class IoFaceButton extends Button {
     super.onRender(g, pt);
 
     BlockState blockState = screen.getMenu().getBlockEntity().getBlockState();
-    TextureRegion faceTex = RenderHelper.getFaceSprite(blockState, dir);
+    TextureRegion faceTex = ClientUtil.getFaceSprite(blockState, dir);
     if (faceTex != null) {
       g.draw(faceTex, x, y, 16, 16);
     }
     FaceMode mode = state.get(dir);
 
-    renderFaceModeIcon(g, x + 11, y + 10, mode);
+    renderFaceModeIcon(g, x + 9, y + 9, mode);
   }
 
   @Override
@@ -91,9 +92,9 @@ class IoFaceButton extends Button {
     super.onCollectingTooltips(tooltips);
 
     MutableComponent mc = Component.translatable(Ten4.getLangKey("misc.facemode"));
-    mc.append(state.get(dir).getComponent());
+    mc.append(state.get(dir).createTranslation());
     tooltips.add(mc);
     tooltips.add(Component.translatable(Ten4.getLangKey("misc." + relSide)).withStyle(ChatFormatting.GRAY));
-    tooltips.add(state.get(dir).getDesc().withStyle(ChatFormatting.GRAY));
+    tooltips.add(state.get(dir).createDescription().withStyle(ChatFormatting.GRAY));
   }
 }
