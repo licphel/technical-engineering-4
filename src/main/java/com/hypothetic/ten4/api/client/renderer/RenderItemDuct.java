@@ -2,7 +2,6 @@ package com.hypothetic.ten4.api.client.renderer;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
-import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.api.transmission.item.ItemTransmitter;
 import com.hypothetic.ten4.api.transmission.item.ItemTransmitter.TransitEntry;
 import com.mojang.blaze3d.vertex.PoseStack;

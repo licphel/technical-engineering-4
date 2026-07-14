@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements BlockEntityRenderer<BE> {
@@ -30,7 +31,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
   private static final TextureAtlasSprite OVERLAY = ClientUtil.getBlockSprite(ResourceLocation.withDefaultNamespace("block/white_concrete"));
   protected final DuctModelBaker baker;
   private TextureAtlasSprite sprite;
-  private ResourceLocation[] textures;
+  private final TextureAtlasSprite[] loadedTextures;
 
   protected RenderTransmitterBlock(BlockEntityRendererProvider.Context ctx,
                                    ResourceLocation core,
@@ -39,7 +40,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
                                    ResourceLocation push,
                                    ResourceLocation... textures) {
     this.baker = new DuctModelBaker(core, part, pull, push);
-    this.textures = textures;
+    this.loadedTextures = Arrays.stream(textures).map(ClientUtil::getBlockSprite).toArray(TextureAtlasSprite[]::new);
   }
 
   private static int applyDirectionalLight(int packed, Direction face) {
@@ -55,14 +56,6 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
     return (adjBlock << 4) | (adjSky << 20);
   }
 
-  protected ResourceLocation getTexture(BE be) {
-    BlockState state = be.getBlockState();
-    if (state.getValue(BuiltinBlockStates.ACTIVE)) {
-      return textures[1];
-    }
-    return textures[0];
-  }
-
   protected ConnectionType getCT(BE be, Direction side) {
     ITransmitterProvider provider = (ITransmitterProvider) be;
     return provider.getTransmitter().getConnectionType(side);
@@ -70,17 +63,18 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
   protected String getPartName(BE be, Direction side) {
     return switch (getCT(be, side)) {
-      case PULL ->  "pull";
+      case PULL -> "pull";
       case PUSH -> "push";
       default -> "part";
     };
   }
 
   protected TextureAtlasSprite getSprite(BE be) {
-    if (sprite == null) {
-      sprite = ClientUtil.getBlockSprite(getTexture(be));
+    BlockState state = be.getBlockState();
+    if (state.getValue(BuiltinBlockStates.ACTIVE)) {
+      return loadedTextures[1];
     }
-    return sprite;
+    return loadedTextures[0];
   }
 
   protected boolean shouldRenderLess(BE be) {
