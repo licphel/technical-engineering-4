@@ -9,9 +9,6 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/**
- * Network-level energy scale sync (0..1). All transmitters in the same network share the same scale.
- */
 public record DuctEnergyPayload(BlockPos pos, float scale) implements CustomPacketPayload {
   public static final Type<DuctEnergyPayload> TYPE = new Type<>(Ten4.id("duct_energy"));
   public static final StreamCodec<RegistryFriendlyByteBuf, DuctEnergyPayload> CODEC = new StreamCodec<>() {

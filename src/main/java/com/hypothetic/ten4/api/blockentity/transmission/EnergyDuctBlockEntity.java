@@ -1,6 +1,8 @@
 package com.hypothetic.ten4.api.blockentity.transmission;
 
 import com.hypothetic.ten4.api.blockentity.ITickable;
+import com.hypothetic.ten4.api.client.renderer.RenderTransmitterBlock;
+import com.hypothetic.ten4.api.network.PacketDist;
 import com.hypothetic.ten4.api.network.duct.DuctEnergyPayload;
 import com.hypothetic.ten4.api.transmission.energy.EnergyNetwork;
 import com.hypothetic.ten4.api.transmission.energy.EnergyTransmitter;
@@ -12,7 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> implements ITickable {
@@ -55,8 +56,7 @@ public abstract class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransm
     if (level instanceof ServerLevel sl) {
       EnergyNetwork net = transmitter.getNetwork();
       float scale = net != null ? net.currentScale : (transmitter.getCapacity() > 0 ? (float) transmitter.getBuffer() / transmitter.getCapacity() : 0);
-      PacketDistributor.sendToPlayersTrackingChunk(sl, sl.getChunkAt(worldPosition).getPos(),
-          new DuctEnergyPayload(worldPosition, scale));
+      PacketDist.sendToNearbyPlayers(sl, new DuctEnergyPayload(worldPosition, scale), getBlockPos(), RenderTransmitterBlock.LOD_DISTANCE);
     }
   }
 

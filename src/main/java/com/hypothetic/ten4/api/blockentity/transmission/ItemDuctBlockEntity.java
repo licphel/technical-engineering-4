@@ -35,21 +35,16 @@ public abstract class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitte
 
   @Override
   public void tick() {
-    if (level == null) {
-      return;
-    }
-
-    if (level.isClientSide()) {
-      transmitter.onUpdateClient(level);
+    if (level != null && !level.isClientSide()) {
+      syncToClient();
     }
   }
 
   @Override
   public void getLoot(List<ItemStack> loot) {
-    for (TransitEntry e : transmitter.getTransit()) {
-      if (!e.stack.isEmpty()) {
-        loot.add(e.stack.copy());
-      }
+    TransitEntry e = transmitter.transitEntry;
+    if (e != null && !e.stack.isEmpty()) {
+      loot.add(e.stack.copy());
     }
   }
 
@@ -67,7 +62,7 @@ public abstract class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitte
       e.exitSide = c.getByte("D");
       e.route = c.getByteArray("R");
       e.index = c.getInt("Ri");
-      transmitter.getTransitMap().put(c.getInt("Id"), e);
+      transmitter.transitEntry = e;
     }
   }
 
@@ -89,5 +84,6 @@ public abstract class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitte
 
   @Override
   protected void syncToClient() {
+    transmitter.syncToTracking();
   }
 }

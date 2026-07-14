@@ -10,9 +10,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/**
- * Network-level fluid scale sync (0..1) + fluid type for color.
- */
 public record DuctFluidPayload(BlockPos pos, float scale, FluidStack fluid) implements CustomPacketPayload {
   public static final Type<DuctFluidPayload> TYPE = new Type<>(Ten4.id("duct_fluid"));
   public static final StreamCodec<RegistryFriendlyByteBuf, DuctFluidPayload> CODEC = new StreamCodec<>() {

@@ -1,7 +1,8 @@
 package com.hypothetic.ten4.api.transmission.item;
 
-import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
-import com.hypothetic.ten4.api.network.duct.ItemExtractedPayload;
+import com.hypothetic.ten4.api.client.renderer.RenderTransmitterBlock;
+import com.hypothetic.ten4.api.network.PacketDist;
+import com.hypothetic.ten4.api.network.duct.DuctItemPayload;
 import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
 import com.hypothetic.ten4.api.transmission.Transmitter;
@@ -14,17 +15,19 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 
 public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, ItemTransmitter> {
   public static final int DUCT_LENGTH = 64;
   final int speed, slotCapacity;
-
   public @Nullable TransitEntry transitEntry;
-  public @Nullable TransitEntry clientEntry;
+  public @Nullable TransitEntry syncedEntry;
+  public int lastSyncedProgress = -1;
   private int nextId;
 
   public ItemTransmitter(ITransmitterProvider tile, int ticksPerBlock, int slotCapacity) {
@@ -56,16 +59,14 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
     return slotCapacity;
   }
 
-  public Collection<TransitEntry> getTransit() {
-    return transitEntry == null ? Collections.emptyList() : Collections.singletonList(transitEntry);
-  }
-
-  public List<TransitEntry> getClientTransit() {
-    return clientEntry == null ? Collections.emptyList() : Collections.singletonList(clientEntry);
-  }
-
-  public void addToClientTransit(TransitEntry e) {
-    clientEntry = e;
+  public void setSyncedEntry(@Nullable TransitEntry e) {
+    if (syncedEntry != null && e != null
+        && ItemStack.isSameItemSameComponents(syncedEntry.stack, e.stack)) {
+      lastSyncedProgress = syncedEntry.progress;
+    } else {
+      lastSyncedProgress = -1;
+    }
+    syncedEntry = e;
   }
 
   public Map<Integer, TransitEntry> getTransitMap() {
@@ -76,45 +77,9 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
     transitEntry = map.isEmpty() ? null : map.values().iterator().next();
   }
 
-  public void onUpdateClient(Level level) {
-    if (clientEntry == null) {
-      return;
-    }
-    TransitEntry e = clientEntry;
-    e.progress += speed;
-    if (e.progress < DUCT_LENGTH) {
-      return;
-    }
-    e.progress -= DUCT_LENGTH;
-
-    if (e.index >= e.route.length) {
-      ItemNetwork net = getNetwork();
-      if (net != null) {
-        byte[] newRoute = RouteFinder.findRoute(net, getBlockPos(), e.stack);
-        e.route = newRoute;
-        e.index = 0;
-        e.exitSide = newRoute.length > 0 ? newRoute[0] : 0;
-      }
-      if (e.index >= e.route.length) {
-        e.progress = 0;
-        return;
-      }
-    }
-
-    Direction nextDir = Direction.values()[e.route[e.index]];
-    BlockPos nextPos = getBlockPos().relative(nextDir);
-
-    if (e.index == e.route.length - 1) {
-      clientEntry = null; // reached destination
-    } else if (level.getBlockEntity(nextPos) instanceof ItemDuctBlockEntity nextDuct) {
-      e.entrySide = (byte) nextDir.getOpposite().ordinal();
-      e.index++;
-      e.exitSide = e.route[e.index];
-      nextDuct.transmitter.clientEntry = e;
-      clientEntry = null;
-    } else {
-      e.route = new byte[0];
-      e.progress = 0;
+  public void syncToTracking() {
+    if (getLevel() instanceof ServerLevel sl) {
+      PacketDist.sendToNearbyPlayers(sl, new DuctItemPayload(getBlockPos(), transitEntry), getBlockPos(), RenderTransmitterBlock.LOD_DISTANCE);
     }
   }
 
@@ -146,10 +111,6 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
           entry.index = 0;
           entry.id = nextId++;
           transitEntry = entry;
-          if (level instanceof ServerLevel sl) {
-            PacketDistributor.sendToPlayersTrackingChunk(sl, sl.getChunkAt(myPos).getPos(),
-                new ItemExtractedPayload(myPos, copyForSync(entry)));
-          }
           break pull;
         }
       }

@@ -10,34 +10,46 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.Nullable;
 
-public record ItemExtractedPayload(BlockPos pos, TransitEntry entry) implements CustomPacketPayload {
-  public static final Type<ItemExtractedPayload> TYPE = new Type<>(Ten4.id("item_extracted"));
+public record DuctItemPayload(BlockPos pos, @Nullable TransitEntry entry) implements CustomPacketPayload {
+  public static final Type<DuctItemPayload> TYPE = new Type<>(Ten4.id("item_extracted"));
 
-  public static final StreamCodec<RegistryFriendlyByteBuf, ItemExtractedPayload> CODEC = new StreamCodec<>() {
+  public static final StreamCodec<RegistryFriendlyByteBuf, DuctItemPayload> CODEC = new StreamCodec<>() {
     @Override
-    public ItemExtractedPayload decode(RegistryFriendlyByteBuf buf) {
+    public DuctItemPayload decode(RegistryFriendlyByteBuf buf) {
       BlockPos pos = buf.readBlockPos();
+      boolean hasEntry = buf.readBoolean();
+      if (!hasEntry) {
+        return new DuctItemPayload(pos, null);
+      }
       TransitEntry e = new TransitEntry();
       e.id = buf.readVarInt();
       e.stack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
+      e.progress = buf.readVarInt();
       e.entrySide = buf.readByte();
+      e.exitSide = buf.readByte();
       boolean hasRoute = buf.readBoolean();
       if (hasRoute) {
         e.route = buf.readByteArray();
         e.index = buf.readVarInt();
-        e.exitSide = e.route.length > 0 ? e.route[0] : 0;
       }
-      return new ItemExtractedPayload(pos, e);
+      return new DuctItemPayload(pos, e);
     }
 
     @Override
-    public void encode(RegistryFriendlyByteBuf buf, ItemExtractedPayload pkt) {
+    public void encode(RegistryFriendlyByteBuf buf, DuctItemPayload pkt) {
       buf.writeBlockPos(pkt.pos);
       TransitEntry e = pkt.entry;
+      buf.writeBoolean(e != null);
+      if (e == null) {
+        return;
+      }
       buf.writeVarInt(e.id);
       ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, e.stack);
+      buf.writeVarInt(e.progress);
       buf.writeByte(e.entrySide);
+      buf.writeByte(e.exitSide);
       boolean hasRoute = e.route != null;
       buf.writeBoolean(hasRoute);
       if (hasRoute) {
@@ -47,15 +59,15 @@ public record ItemExtractedPayload(BlockPos pos, TransitEntry entry) implements 
     }
   };
 
-  public static void handle(ItemExtractedPayload pkt, IPayloadContext ctx) {
+  public static void handle(DuctItemPayload pkt, IPayloadContext ctx) {
     Level level = ctx.player().level();
     if (level.getBlockEntity(pkt.pos) instanceof ItemDuctBlockEntity duct) {
-      duct.transmitter.addToClientTransit(pkt.entry);
+      duct.transmitter.setSyncedEntry(pkt.entry);
     }
   }
 
   @Override
-  public Type<ItemExtractedPayload> type() {
+  public Type<DuctItemPayload> type() {
     return TYPE;
   }
 }

@@ -5,7 +5,7 @@ license = "MIT"
 [[mods]]
 modId = "ten4"
 version = "26.1.0"
-displayName = "Technical Engineering 4"
+displayName = "Technical Engineering IV"
 displayURL = "https://github.com/licphel/technical-engineering-4-1.21.1"
-authors = "${mod_authors}"
-description = '''A tech mod to utilize your survival process'''
+authors = "Licphel"
+description = '''A Minecraft tech-mod, featuring logistics and convenient device'''
