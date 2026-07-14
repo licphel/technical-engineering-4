@@ -72,7 +72,7 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
       return;
     }
 
-    boolean shouldRun = fluidInventory.getTank(0).getSpace() > FluidType.BUCKET_VOLUME
+    boolean shouldRun = fluidInventory.getTank(0).getSpace() >= FluidType.BUCKET_VOLUME
         && isEnergySufficient()
         && isSignalEnabled();
     setActive(shouldRun);
