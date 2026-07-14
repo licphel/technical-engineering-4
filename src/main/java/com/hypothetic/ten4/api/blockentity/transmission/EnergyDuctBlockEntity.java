@@ -32,7 +32,7 @@ public abstract class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransm
       return;
     }
 
-    if (tickCount++ % 10 == 0) {
+    if (tickCount++ % 5 == 0) {
       syncToClient();
     }
   }

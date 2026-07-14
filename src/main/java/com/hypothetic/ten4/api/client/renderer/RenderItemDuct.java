@@ -46,7 +46,6 @@ public class RenderItemDuct extends RenderTransmitterBlock<ItemDuctBlockEntity> 
     float spd = be.transmitter.getSpeed();
     int halfLen = ItemTransmitter.DUCT_LENGTH / 2;
 
-    // Lerp between last synced progress and current
     int prev = be.transmitter.lastSyncedProgress;
     float displayProg;
     if (prev >= 0) {

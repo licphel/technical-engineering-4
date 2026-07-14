@@ -101,15 +101,15 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
     List<IFluidHandler> producers = new ArrayList<>();
     for (var e : positionedTransmitters.entrySet()) {
       BlockPos pos = e.getKey();
-      FluidTransmitter cable = e.getValue();
+      FluidTransmitter tr = e.getValue();
       if (level == null) {
-        level = cable.getLevel();
+        level = tr.getLevel();
       }
       if (level == null) {
         continue;
       }
       for (Direction d : Direction.values()) {
-        if (cable.getConnectionTypeRaw(d) != ConnectionType.PULL) {
+        if (tr.getConnectionTypeRaw(d) != ConnectionType.PULL) {
           continue;
         }
         BlockPos t = pos.relative(d);
@@ -143,8 +143,11 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
         var it = srcs.iterator();
         while (it.hasNext()) {
           IFluidHandler src = it.next();
-          FluidStack drained = src.drain(share, IFluidHandler.FluidAction.EXECUTE);
-          if (!drained.isEmpty() && (buffer.isEmpty() || FluidStack.isSameFluidSameComponents(buffer, drained))) {
+          FluidStack sim = src.drain(share, IFluidHandler.FluidAction.SIMULATE);
+          if (sim.isEmpty()) {
+            it.remove(); // depleted
+          } else if (buffer.isEmpty() || FluidStack.isSameFluidSameComponents(buffer, sim)) {
+            FluidStack drained = src.drain(sim.getAmount(), IFluidHandler.FluidAction.EXECUTE);
             if (buffer.isEmpty()) {
               buffer = drained.copy();
             } else {
@@ -152,9 +155,11 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
             }
             totalPulled += drained.getAmount();
             toPull -= drained.getAmount();
-          }
-          if (drained.getAmount() < share) {
-            it.remove();
+            if (drained.getAmount() < share) {
+              it.remove();
+            }
+          } else {
+            it.remove(); // incompatible fluid type
           }
         }
       }
