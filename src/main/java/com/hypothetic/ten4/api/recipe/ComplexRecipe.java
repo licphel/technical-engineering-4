@@ -107,6 +107,14 @@ public class ComplexRecipe implements IComplexRecipe {
     return recipeType;
   }
 
+  public void setSerializer(RecipeSerializer<?> serializer) {
+    this.serializer = serializer;
+  }
+
+  public void setRecipeType(RecipeType<?> recipeType) {
+    this.recipeType = recipeType;
+  }
+
   @Override
   public ResourceLocation getId() {
     return id;

@@ -18,6 +18,7 @@ public final class ModItems {
   public static final DeferredHolder<Item, Item> WRENCH = ITEMS.register("wrench", () -> new Item(ItemProperties.WRENCH));
 
   // Devices
+  public static final DeferredHolder<Item, BlockItem> DEVICE_CASING = bridgeBlockItem(ModBlocks.DEVICE_CASING);
   public static final DeferredHolder<Item, BlockItem> PULVERIZER = bridgeBlockItem(ModBlocks.PULVERIZER);
   public static final DeferredHolder<Item, BlockItem> SMELTER = bridgeBlockItem(ModBlocks.SMELTER);
   public static final DeferredHolder<Item, BlockItem> WATER_PUMP = bridgeBlockItem(ModBlocks.WATER_PUMP);
@@ -38,9 +39,10 @@ public final class ModItems {
 
   // Augments
   public static final DeferredHolder<Item, Item> OVERCLOCKING_AUGMENT = ITEMS.register("overclocking_augment", () -> 
-      new PowerModifierAugmentItem(ItemProperties.AUGMENT, v -> (int) (v * 1.2F)));
+      new PowerModifierAugmentItem(ItemProperties.AUGMENT, v -> (int) (v * 1.25F)));
 
   // Materials
+  public static final DeferredHolder<Item, Item> CIRCUIT = ITEMS.register("circuit", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> IRON_DUST = ITEMS.register("iron_dust", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> IRON_PLATE = ITEMS.register("iron_plate", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> COPPER_DUST = ITEMS.register("copper_dust", () -> new Item(ItemProperties.NONSPECIAL));

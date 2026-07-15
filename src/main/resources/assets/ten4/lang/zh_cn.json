@@ -86,6 +86,7 @@
   "ten4.heat_generator": "热力发电机",
   "ten4.heat_generator.desc": "通过燃烧燃料发电。",
 
+  "block.ten4.device_casing": "设备外壳",
   "block.ten4.pulverizer": "磨粉机",
   "block.ten4.smelter": "熔炼机",
   "block.ten4.water_pump": "水泵",
@@ -102,10 +103,76 @@
 
   "item.ten4.wrench": "扳手",
   "item.ten4.overclocking_augment": "超频增强",
+  "item.ten4.overclocking_augment.desc": "功率：x1.25",
+  "item.ten4.energy_coil_augment": "能量线圈增强",
+  "item.ten4.energy_coil_augment.desc": "能量吞吐：x2\n能量容量：x2",
+  "item.ten4.piston_augment": "活塞增强",
+  "item.ten4.piston_augment.desc": "物品吞吐：x2",
+  "item.ten4.vacuum_augment": "真空舱增强",
+  "item.ten4.vacuum_augment.desc": "流体吞吐：x2",
+  "item.ten4.circuit": "电路板",
   "item.ten4.iron_dust": "铁粉",
   "item.ten4.iron_plate": "铁板",
   "item.ten4.copper_dust": "铜粉",
   "item.ten4.copper_plate": "铜板",
   "item.ten4.gold_dust": "金粉",
-  "item.ten4.gold_plate": "金板"
+  "item.ten4.gold_plate": "金板",
+
+  "ten4.guide_name": "科能工程 4 指南",
+  "ten4.guide_landing": "欢迎来到科能工程 4！本指南将带你了解能量、物品和流体的物流基础，以及驱动这一切的各类设备。",
+
+  "ten4.category.items": "物品与材料",
+  "ten4.category.items.desc": "工具、元件、增强以及合成材料。",
+  "ten4.category.devices": "设备",
+  "ten4.category.devices.desc": "用于处理、发电及与世界交互的机器。",
+  "ten4.category.transmission": "传输",
+  "ten4.category.transmission.desc": "用于传输能量、物品和流体的管道。",
+
+  "ten4.entry.wrench": "扳手",
+  "ten4.page.wrench0": "$(item)扳手$(0) 是你主要的配置工具。$(br)$(li)右键管道可以打开连接配置。$(br)$(li)潜行右键可以瞬间拆除管道。$(br)$(li)右键设备面可以配置其输入/输出模式。",
+
+  "ten4.entry.circuit": "电路板",
+  "ten4.page.circuit0": "$(item)电路板$(0) 是所有设备的核心合成组件。制作磨粉机、熔炼机、水泵、热力发电机等都需要用到它。",
+
+  "ten4.entry.augments": "增强",
+  "ten4.page.augments0": "$(thing)增强$(0) 是可以安装到设备中的升级物品，每个设备的增强槽位数量有限。",
+  "ten4.page.augments1": "$(item)超频增强$(0) 将设备功率提升 25%。处理速度更快，但能量消耗也更高。",
+  "ten4.page.augments2": "$(item)能量线圈增强$(0) 将设备的能量吞吐和能量存储容量翻倍。",
+  "ten4.page.augments3": "$(item)活塞增强$(0) 将物品吞吐翻倍，使设备推送和拉取物品的速度加倍。",
+  "ten4.page.augments4": "$(item)真空舱增强$(0) 将流体吞吐翻倍，使设备推送和拉取流体的速度加倍。",
+
+  "ten4.entry.materials": "材料",
+  "ten4.page.materials0": "$(thing)粉末$(0) 通过 $(l:devices/pulverizer)磨粉机$(0) 粉碎矿石或锭获得。$(br)$(thing)板$(0) 由锭通过压缩类加工获得。$(br)粉末和板都是各种合成配方中的原料。",
+
+  "ten4.entry.device_casing": "设备外壳",
+  "ten4.page.device_casing0": "$(item)设备外壳$(0) 是所有 TEN4 机器的基础方块。首先合成一个外壳，然后用它作为磨粉机、熔炼机、水泵和热力发电机的基础原料。",
+
+  "ten4.entry.pulverizer": "磨粉机",
+  "ten4.page.pulverizer0": "$(item)磨粉机$(0) 把矿石和材料粉碎成粉末，是你主要的矿物增产机器。$(br)$(li)粉碎矿石可得 2 份粉末$(br)$(li)粉碎锭可得 1 份粉末$(br)$(li)粉碎圆石得砂砾，粉碎砂砾得沙子$(br)$(li)粉碎羊毛得线，粉碎骨头得骨粉，等等！$(br)$(br)需要能量驱动。",
+  "ten4.page.pulverizer1": "磨粉机接受的增强：$(br)$(li)$(item)超频增强$(0) — 加快处理速度$(br)$(li)$(item)能量线圈增强$(0) — 增加能量容量$(br)$(li)$(item)活塞增强$(0) — 加快物品传输$(br)$(li)$(item)真空舱增强$(0) — 加快流体传输",
+
+  "ten4.entry.smelter": "熔炼机",
+  "ten4.page.smelter0": "$(item)熔炼机$(0) 使用能量熔炼物品，功能等同于原版熔炉，但以电力而非燃料驱动。$(br)$(br)可使用与磨粉机相同的增强，以提升速度和效率。",
+
+  "ten4.entry.water_pump": "水泵",
+  "ten4.page.water_pump0": "$(item)水泵$(0) 从周围世界中抽取液体，储存在内部水槽中。$(br)$(br)将水泵放在水源旁边并提供能量即可开始抽水。正确放置时也可以抽取世界中的其他流体。",
+
+  "ten4.entry.heat_generator": "热力发电机",
+  "ten4.page.heat_generator0": "$(item)热力发电机$(0) 通过燃烧可燃燃料产生能量，是 TEN4 中最基本的发电设备。$(br)$(br)任何可以用作熔炉燃料的物品都可以在此使用。发电机会自动将能量输出到相邻的管道或设备。",
+
+  "ten4.entry.duct_basics": "管道基础",
+  "ten4.page.duct_basics0": "$(thing)管道$(0) 是物流网络的骨干，在设备之间传输能量、物品和流体。$(br)$(br)每种管道有三种变体：$(br)$(li)$(item)普通$(0) — 标准管道$(br)$(li)$(item)不透明$(0) — 实心外观，无内部渲染（提升 FPS）$(br)$(li)$(item)控制器$(0) — 可用扳手配置为推/拉模式",
+  "ten4.page.duct_basics1": "使用 $(item)扳手$(0) 配置管道连接。右键管道打开配置界面，可以设置每个面为推、拉或正常模式。$(br)$(br)管道会自动连接同类型的相邻管道以及兼容的设备面。",
+
+  "ten4.entry.energy_duct": "能量管道",
+  "ten4.page.energy_duct0": "$(thing)铜制能量管道$(0) 在设备和能量存储之间传输能量（FE/RF）。$(br)$(br)$(li)$(item)铜制能量管道$(0) — 标准能量传输$(br)$(li)$(item)不透明铜制能量管道$(0) — 实心外壳，无内部渲染$(br)$(li)$(item)铜制控制器能量管道$(0) — 可配置推/拉方向",
+  "ten4.page.energy_duct1": "控制器管道可用 $(item)扳手$(0) 设置为主动推送或拉取能量，让你在网络中实现定向能量流动，无需额外设备处理路由。",
+
+  "ten4.entry.item_duct": "物品管道",
+  "ten4.page.item_duct0": "$(thing)铜制物品管道$(0) 在容器之间传输物品。$(br)$(br)$(li)$(item)铜制物品管道$(0) — 标准物品传输$(br)$(li)$(item)不透明铜制物品管道$(0) — 实心外壳，隐藏内部物品$(br)$(li)$(item)铜制控制器物品管道$(0) — 可配置推/拉和过滤",
+  "ten4.page.item_duct1": "控制器管道可以主动从容器拉取物品或向容器推送物品。使用 $(item)扳手$(0) 来配置方向和过滤器。",
+
+  "ten4.entry.fluid_duct": "流体管道",
+  "ten4.page.fluid_duct0": "$(thing)铜制流体管道$(0) 在水槽和设备之间传输流体。$(br)$(br)$(li)$(item)铜制流体管道$(0) — 标准流体传输$(br)$(li)$(item)不透明铜制流体管道$(0) — 实心外壳，隐藏内部流体$(br)$(li)$(item)铜制控制器流体管道$(0) — 可配置推/拉方向",
+  "ten4.page.fluid_duct1": "控制器管道可用 $(item)扳手$(0) 设置为主动推送或拉取流体。这对建立自动化的流体路由至关重要。"
 }

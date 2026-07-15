@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IAI"
+  ],
+  "key": {
+    "A": {
+      "tag": "c:gems/quartz"
+    },
+    "I": {
+      "tag": "c:ingots/copper"
+    }
+  },
+  "result": {
+    "id": "ten4:opaque_copper_item_duct",
+    "count": 4
+  }
+}

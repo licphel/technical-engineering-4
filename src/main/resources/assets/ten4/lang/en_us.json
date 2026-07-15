@@ -86,6 +86,7 @@
   "ten4.heat_generator": "Heat Generator",
   "ten4.heat_generator.desc": "Generates energy by burning fuels.",
 
+  "block.ten4.device_casing": "Device Casing",
   "block.ten4.pulverizer": "Pulverizer",
   "block.ten4.smelter": "Smelter",
   "block.ten4.water_pump": "Water Pump",
@@ -102,10 +103,76 @@
 
   "item.ten4.wrench": "Wrench",
   "item.ten4.overclocking_augment": "Overclocking Augment",
+  "item.ten4.overclocking_augment.desc": "Power: x1.25",
+  "item.ten4.energy_coil_augment": "Energy Coil Augment",
+  "item.ten4.energy_coil_augment.desc": "Energy Throughput: x2\nEnergy Capacity: x2",
+  "item.ten4.piston_augment": "Piston Augment",
+  "item.ten4.piston_augment.desc": "Item Throughput: x2",
+  "item.ten4.vacuum_augment": "Vacuum Chamber Augment",
+  "item.ten4.vacuum_augment.desc": "Fluid Throughput: x2",
+  "item.ten4.circuit": "Circuit",
   "item.ten4.iron_dust": "Iron Dust",
   "item.ten4.iron_plate": "Iron Plate",
   "item.ten4.copper_dust": "Copper Dust",
   "item.ten4.copper_plate": "Copper Plate",
   "item.ten4.gold_dust": "Gold Dust",
-  "item.ten4.gold_plate": "Gold Plate"
+  "item.ten4.gold_plate": "Gold Plate",
+
+  "ten4.guide_name": "Technical Engineering 4 Guide",
+  "ten4.guide_landing": "Welcome to Technical Engineering 4! This guide will walk you through the basics of energy, items, and fluid logistics, as well as the devices that make it all work.",
+
+  "ten4.category.items": "Items & Materials",
+  "ten4.category.items.desc": "Tools, components, augments, and crafting materials.",
+  "ten4.category.devices": "Devices",
+  "ten4.category.devices.desc": "Machines for processing, generating, and interacting with the world.",
+  "ten4.category.transmission": "Transmission",
+  "ten4.category.transmission.desc": "Ducts for transporting energy, items, and fluids.",
+
+  "ten4.entry.wrench": "Wrench",
+  "ten4.page.wrench0": "The $(item)Wrench$(0) is your primary configuration tool.$(br)$(li)Right-click on a duct to open its connection configuration.$(br)$(li)Shift-right-click to instantly remove a duct.$(br)$(li)Right-click on a device face to configure its I/O mode.",
+
+  "ten4.entry.circuit": "Circuit",
+  "ten4.page.circuit0": "The $(item)Circuit$(0) is a core crafting component used in all devices. You'll need plenty of these to craft pulverizers, smelters, water pumps, heat generators, and more.",
+
+  "ten4.entry.augments": "Augments",
+  "ten4.page.augments0": "$(thing)Augments$(0) are upgrade items that can be installed into devices to enhance their performance. Each device has a limited number of augment slots.",
+  "ten4.page.augments1": "The $(item)Overclocking Augment$(0) increases device power by 25%. Faster processing at the cost of higher energy consumption.",
+  "ten4.page.augments2": "The $(item)Energy Coil Augment$(0) doubles the energy throughput and energy storage capacity of a device.",
+  "ten4.page.augments3": "The $(item)Piston Augment$(0) doubles the item throughput, allowing devices to push and pull items twice as fast.",
+  "ten4.page.augments4": "The $(item)Vacuum Chamber Augment$(0) doubles the fluid throughput, allowing devices to push and pull fluids twice as fast.",
+
+  "ten4.entry.materials": "Materials",
+  "ten4.page.materials0": "$(thing)Dusts$(0) are produced by pulverizing ores or ingots in a $(l:devices/pulverizer)Pulverizer$(0).$(br)$(thing)Plates$(0) are crafted from ingots using a compressor-like process.$(br)Both dusts and plates are used as ingredients in various crafting recipes.",
+
+  "ten4.entry.device_casing": "Device Casing",
+  "ten4.page.device_casing0": "The $(item)Device Casing$(0) is the foundational block for all TEN4 machines. Craft one to get started, then use it as a base ingredient for pulverizers, smelters, water pumps, and heat generators.",
+
+  "ten4.entry.pulverizer": "Pulverizer",
+  "ten4.page.pulverizer0": "The $(item)Pulverizer$(0) crushes ores and materials into dusts. It's your primary ore-doubling machine.$(br)$(li)Pulverizes ores into 2 dusts$(br)$(li)Pulverizes ingots into 1 dust$(br)$(li)Crush cobblestone into gravel, gravel into sand$(br)$(li)Crush wool into string, bones into bone meal, and more!$(br)$(br)Requires energy to operate.",
+  "ten4.page.pulverizer1": "The Pulverizer accepts the following augments:$(br)$(li)$(item)Overclocking Augment$(0) — faster processing$(br)$(li)$(item)Energy Coil Augment$(0) — more energy capacity$(br)$(li)$(item)Piston Augment$(0) — faster item transfer$(br)$(li)$(item)Vacuum Chamber Augment$(0) — faster fluid transfer",
+
+  "ten4.entry.smelter": "Smelter",
+  "ten4.page.smelter0": "The $(item)Smelter$(0) uses energy to smelt items, functioning exactly like a vanilla furnace but powered by electricity rather than fuel.$(br)$(br)It accepts the same augments as the Pulverizer for speed and efficiency upgrades.",
+
+  "ten4.entry.water_pump": "Water Pump",
+  "ten4.page.water_pump0": "The $(item)Water Pump$(0) extracts liquid from the world around it and stores it in its internal tanks.$(br)$(br)Place it adjacent to a water source and provide energy to start pumping. It can also extract other fluids from the world if placed correctly.",
+
+  "ten4.entry.heat_generator": "Heat Generator",
+  "ten4.page.heat_generator0": "The $(item)Heat Generator$(0) produces energy by burning combustible fuels. It's the most basic energy generation device in TEN4.$(br)$(br)Any item that works as furnace fuel can be used here. The generator will automatically output energy to adjacent ducts or devices.",
+
+  "ten4.entry.duct_basics": "Duct Basics",
+  "ten4.page.duct_basics0": "$(thing)Ducts$(0) are the backbone of your logistics network. They transport energy, items, and fluids between devices.$(br)$(br)There are three variants of each duct type:$(br)$(li)$(item)Normal$(0) — standard duct$(br)$(li)$(item)Opaque$(0) — solid appearance, no internal rendering (better FPS)$(br)$(li)$(item)Controller$(0) — can be configured with a wrench to push/pull",
+  "ten4.page.duct_basics1": "Use a $(item)Wrench$(0) to configure duct connections. Right-click a duct to open its configuration GUI, where you can set each face to Push, Pull, or Normal mode.$(br)$(br)Ducts automatically connect to adjacent ducts of the same type and to compatible device faces.",
+
+  "ten4.entry.energy_duct": "Energy Duct",
+  "ten4.page.energy_duct0": "$(thing)Copper Energy Ducts$(0) transfer energy (FE/RF) between devices and energy storage.$(br)$(br)$(li)$(item)Copper Energy Duct$(0) — standard energy transfer$(br)$(li)$(item)Opaque Copper Energy Duct$(0) — solid casing, no internal rendering$(br)$(li)$(item)Copper Controller Energy Duct$(0) — configurable push/pull directions",
+  "ten4.page.energy_duct1": "Controller ducts can be set to actively push or pull energy using a $(item)Wrench$(0). This allows you to create directed energy flow in your network without needing a separate device to handle routing.",
+
+  "ten4.entry.item_duct": "Item Duct",
+  "ten4.page.item_duct0": "$(thing)Copper Item Ducts$(0) transport items between inventories.$(br)$(br)$(li)$(item)Copper Item Duct$(0) — standard item transport$(br)$(li)$(item)Opaque Copper Item Duct$(0) — solid casing, hidden items$(br)$(li)$(item)Copper Controller Item Duct$(0) — configurable push/pull with filtering",
+  "ten4.page.item_duct1": "Controller ducts can actively pull items from an inventory or push items into one. Use a $(item)Wrench$(0) to configure the direction and filters.",
+
+  "ten4.entry.fluid_duct": "Fluid Duct",
+  "ten4.page.fluid_duct0": "$(thing)Copper Fluid Ducts$(0) transport fluids between tanks and devices.$(br)$(br)$(li)$(item)Copper Fluid Duct$(0) — standard fluid transport$(br)$(li)$(item)Opaque Copper Fluid Duct$(0) — solid casing, hidden fluid$(br)$(li)$(item)Copper Controller Fluid Duct$(0) — configurable push/pull directions",
+  "ten4.page.fluid_duct1": "Controller ducts can actively push or pull fluids using a $(item)Wrench$(0). This is essential for setting up automated fluid routing between machines."
 }

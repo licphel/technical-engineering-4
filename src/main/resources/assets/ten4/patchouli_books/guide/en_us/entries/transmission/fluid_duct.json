@@ -1,0 +1,15 @@
+{
+  "name": "ten4.entry.fluid_duct",
+  "category": "ten4:transmission",
+  "icon": "ten4:copper_fluid_duct",
+  "pages": [
+    {
+      "type": "text",
+      "text": "ten4.page.fluid_duct0"
+    },
+    {
+      "type": "text",
+      "text": "ten4.page.fluid_duct1"
+    }
+  ]
+}

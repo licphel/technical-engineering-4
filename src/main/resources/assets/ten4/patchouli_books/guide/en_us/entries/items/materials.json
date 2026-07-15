@@ -1,0 +1,11 @@
+{
+  "name": "ten4.entry.materials",
+  "category": "ten4:items",
+  "icon": "ten4:iron_plate",
+  "pages": [
+    {
+      "type": "text",
+      "text": "ten4.page.materials0"
+    }
+  ]
+}

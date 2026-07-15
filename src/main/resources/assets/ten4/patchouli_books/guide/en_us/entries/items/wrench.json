@@ -1,0 +1,11 @@
+{
+  "name": "ten4.entry.wrench",
+  "category": "ten4:items",
+  "icon": "ten4:wrench",
+  "pages": [
+    {
+      "type": "text",
+      "text": "ten4.page.wrench0"
+    }
+  ]
+}

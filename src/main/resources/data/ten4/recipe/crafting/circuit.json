@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "BCB",
+    " D "
+  ],
+  "key": {
+    "A": {
+      "tag": "c:gems/lapis"
+    },
+    "B": {
+      "tag": "c:dusts/redstone"
+    },
+    "C": {
+      "tag": "c:ingots/copper"
+    },
+    "D": {
+      "tag": "c:nuggets/gold"
+    }
+  },
+  "result": {
+    "id": "ten4:circuit"
+  }
+}
