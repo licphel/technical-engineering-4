@@ -91,11 +91,14 @@ public final class TransmitterNetworkRegistry {
         if (net != null) {
           if (validator.isNetworkCompatible(net)) {
             foundNetworks.add(net);
+          } else {
+            destroyFluidConflict(world, pos);
           }
           continue;
         }
 
         if (!validator.isTransmitterCompatible(t)) {
+          destroyFluidConflict(world, pos);
           continue;
         }
         connected.add(t);
@@ -213,8 +216,7 @@ public final class TransmitterNetworkRegistry {
 
   static void destroyFluidConflict(Level level, BlockPos pos) {
     if (level instanceof ServerLevel sl) {
-      sl.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-          20, 0.3, 0.3, 0.3, 0.05);
+      sl.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 20, 0.3, 0.3, 0.3, 0.05);
       sl.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5f, 1.5f);
       sl.destroyBlock(pos, true);
     }

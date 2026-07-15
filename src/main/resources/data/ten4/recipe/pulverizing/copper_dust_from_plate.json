@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:plates/copper"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:copper_dust"
+    }
+  ],
+  "time": 100
+}

@@ -1,0 +1,26 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:ores/copper"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:copper_dust"
+    },
+    {
+      "item": "ten4:copper_dust",
+      "chance": 0.8
+    },
+    {
+      "item": "ten4:copper_dust",
+      "chance": 0.4
+    },
+    {
+      "item": "ten4:gold_dust",
+      "chance": 0.1
+    }
+  ],
+  "time": 200
+}

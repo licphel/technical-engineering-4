@@ -17,6 +17,8 @@ public class ModCapabilities {
     // Devices
     event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.PULVERIZER.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.PULVERIZER.get(), AbstractDeviceBlockEntity::getItemHandler);
+    event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.SMELTER.get(), AbstractDeviceBlockEntity::getEnergyStorage);
+    event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.SMELTER.get(), AbstractDeviceBlockEntity::getItemHandler);
     event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.WATER_PUMP.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.WATER_PUMP.get(), AbstractDeviceBlockEntity::getFluidHandler);
 

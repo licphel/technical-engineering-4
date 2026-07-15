@@ -1,0 +1,15 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:snow_block"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 4,
+      "item": "minecraft:snowball"
+    }
+  ],
+  "time": 200
+}

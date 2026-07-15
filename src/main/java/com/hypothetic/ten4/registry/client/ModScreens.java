@@ -3,6 +3,7 @@ package com.hypothetic.ten4.registry.client;
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.core.client.screen.HeatGeneratorScreen;
 import com.hypothetic.ten4.core.client.screen.PulverizerScreen;
+import com.hypothetic.ten4.core.client.screen.SmelterScreen;
 import com.hypothetic.ten4.core.client.screen.WaterPumpScreen;
 import com.hypothetic.ten4.registry.ModMenus;
 import net.neoforged.api.distmarker.Dist;
@@ -15,6 +16,7 @@ public class ModScreens {
   @SubscribeEvent
   public static void onRegisterScreens(RegisterMenuScreensEvent event) {
     event.register(ModMenus.PULVERIZER.get(), PulverizerScreen::new);
+    event.register(ModMenus.SMELTER.get(), SmelterScreen::new);
     event.register(ModMenus.HEAT_GENERATOR.get(), HeatGeneratorScreen::new);
     event.register(ModMenus.WATER_PUMP.get(), WaterPumpScreen::new);
   }

@@ -1,9 +1,9 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.ITranslatable;
+import com.hypothetic.ten4.api.IEnumTranslatable;
 
-public enum SignalMode implements ITranslatable {
+public enum SignalMode implements IEnumTranslatable {
   IGNORE,
   LOW_LEVEL,
   HIGH_LEVEL;

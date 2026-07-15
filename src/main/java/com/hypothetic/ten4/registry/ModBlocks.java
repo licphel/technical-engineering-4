@@ -17,6 +17,7 @@ public final class ModBlocks {
 
   // Devices
   public static final DeferredHolder<Block, Block> PULVERIZER = BLOCKS.register("pulverizer", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
+  public static final DeferredHolder<Block, Block> SMELTER = BLOCKS.register("smelter", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
   public static final DeferredHolder<Block, Block> WATER_PUMP = BLOCKS.register("water_pump", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
 
   // Generators

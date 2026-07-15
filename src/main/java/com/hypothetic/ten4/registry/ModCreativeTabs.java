@@ -24,6 +24,5 @@ public final class ModCreativeTabs {
                 output.accept(item);
               }
             }
-          })
-          .build());
+          }).build());
 }

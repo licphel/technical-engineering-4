@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:plates/iron"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:iron_dust"
+    }
+  ],
+  "time": 100
+}

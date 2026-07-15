@@ -1,6 +1,7 @@
 package com.hypothetic.ten4.api.client.builtin;
 
 import com.hypothetic.ten4.Ten4;
+import com.hypothetic.ten4.api.IEnumTranslatable;
 import com.hypothetic.ten4.api.ITranslatable;
 import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
 import com.hypothetic.ten4.api.client.components.*;
@@ -106,7 +107,7 @@ public final class BuiltinComponents {
   public static Panel infoPanel(ComponentedContainerScreen<ContainerMenu> screen) {
     SyncedFieldReader reader = screen.getMenu().fieldsReader();
     ITranslatable ip = screen.getMenu().getBlockEntity();
-    Component rawText = Component.translatable(ip.createTranslationKey());
+    Component rawText = ip.createDescription();
 
     return new Panel(BuiltinComponents.panelBacking(15, 15, 241, 67, 15, 15), 91, 72, -15) {
       double scrollY;
@@ -224,7 +225,7 @@ public final class BuiltinComponents {
   }
 
   public static UiComponent showMiscs(ComponentedContainerScreen<ContainerMenu> screen) {
-    return new UiComponent(4, 4, 32, 8) {
+    return new UiComponent(4, 4, 48, 8) {
       @Override
       public void onCollectingTooltips(List<Component> tooltips) {
         super.onCollectingTooltips(tooltips);

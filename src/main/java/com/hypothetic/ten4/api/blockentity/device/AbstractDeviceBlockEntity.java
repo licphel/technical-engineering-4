@@ -1,5 +1,6 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
+import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.ITranslatable;
 import com.hypothetic.ten4.api.blockentity.ILootProvider;
 import com.hypothetic.ten4.api.blockentity.RedstoneAwareBlockEntity;
@@ -20,8 +21,10 @@ import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
@@ -531,7 +534,17 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
 
   @Override
   public Component getDisplayName() {
-    return getBlockState().getBlock().getName();
+    return createTranslation();
+  }
+
+  @Override
+  public String createTranslationKey() {
+    ResourceLocation id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(getType());
+    if (id == null) {
+      Ten4.LOGGER.warn("Cannot find BlockEntityType: '{}'", getType());
+      return "";
+    }
+    return Ten4.lang(id.getPath());
   }
 
   @Override

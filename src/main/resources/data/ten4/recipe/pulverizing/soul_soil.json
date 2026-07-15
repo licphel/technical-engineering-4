@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:soul_sand"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:soul_soil"
+    }
+  ],
+  "time": 200
+}

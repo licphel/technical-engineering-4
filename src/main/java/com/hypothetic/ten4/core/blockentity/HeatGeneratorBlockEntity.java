@@ -1,6 +1,5 @@
 package com.hypothetic.ten4.core.blockentity;
 
-import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
 import com.hypothetic.ten4.api.blockentity.device.SimpleGeneratorBlockEntity;
 import com.hypothetic.ten4.api.capability.item.ItemSlot;
@@ -10,7 +9,6 @@ import com.hypothetic.ten4.api.container.ContainerMenuLayout;
 import com.hypothetic.ten4.registry.ModMenus;
 import com.hypothetic.ten4.util.ItemStackUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -42,20 +40,10 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
   }
 
   @Override
-  public Component getDisplayName() {
-    return Component.translatable(Ten4.lang("heat_generator"));
-  }
-
-  @Override
   public @Nullable AbstractContainerMenu createMenu(int cid, Inventory inv, Player p) {
     ContainerMenuLayout layout = new ContainerMenuLayout()
         .add(0, 44, 35);
     return new AugmentableContainerMenu(ModMenus.HEAT_GENERATOR.get(), cid, inv, this, layout);
-  }
-
-  @Override
-  public String createTranslationKey() {
-    return Ten4.lang("heat_generator.desc");
   }
 
   @Override

@@ -1,0 +1,22 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:ores/iron"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:iron_dust"
+    },
+    {
+      "item": "ten4:iron_dust",
+      "chance": 0.8
+    },
+    {
+      "item": "ten4:iron_dust",
+      "chance": 0.2
+    }
+  ],
+  "time": 180
+}

@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:sandstone"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "time": 200
+}

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "ten4:deep_tin_ore"
-  },
-  "result": "ten4:tin_ingot",
-  "experience": 0.35,
-  "cookingtime": 100
-}

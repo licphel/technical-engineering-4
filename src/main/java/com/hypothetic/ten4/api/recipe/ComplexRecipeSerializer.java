@@ -23,11 +23,11 @@ public class ComplexRecipeSerializer implements RecipeSerializer<IComplexRecipe>
   public static final int DEFAULT_TIME = 150;
   private static final Codec<List<Complex>> INGREDIENT_LIST_CODEC =
       Complex.CODEC.listOf();
-  private final Supplier<RecipeType<?>> recipeType;
+  private final Supplier<RecipeType<IComplexRecipe>> recipeType;
   private final MapCodec<IComplexRecipe> codec;
   private final StreamCodec<RegistryFriendlyByteBuf, IComplexRecipe> streamCodec;
 
-  public ComplexRecipeSerializer(Supplier<RecipeType<?>> recipeType) {
+  public ComplexRecipeSerializer(Supplier<RecipeType<IComplexRecipe>> recipeType) {
     this.recipeType = recipeType;
     this.codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
         INGREDIENT_LIST_CODEC.fieldOf("inputs").forGetter(IComplexRecipe::inputs),

@@ -4,6 +4,7 @@ import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.registry.BlockEntityBridges;
 import com.hypothetic.ten4.core.blockentity.HeatGeneratorBlockEntity;
 import com.hypothetic.ten4.core.blockentity.PulverizerBlockEntity;
+import com.hypothetic.ten4.core.blockentity.SmelterBlockEntity;
 import com.hypothetic.ten4.core.blockentity.WaterPumpBlockEntity;
 import com.hypothetic.ten4.core.blockentity.duct.*;
 import net.minecraft.core.registries.Registries;
@@ -17,6 +18,7 @@ public class ModBlockEntities {
 
   // Devices
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PulverizerBlockEntity>> PULVERIZER = register("pulverizer", PulverizerBlockEntity::new);
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SmelterBlockEntity>> SMELTER = register("smelter", SmelterBlockEntity::new);
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WaterPumpBlockEntity>> WATER_PUMP = register("water_pump", WaterPumpBlockEntity::new);
 
   // Generators

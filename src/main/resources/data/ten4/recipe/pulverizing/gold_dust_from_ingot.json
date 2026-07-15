@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/gold"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:gold_dust"
+    }
+  ],
+  "time": 100
+}

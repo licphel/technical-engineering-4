@@ -44,6 +44,6 @@ public class PulverizerCategory extends ModRecipeCategory<IComplexRecipe> {
     super.createRecipeExtras(builder, recipe, focuses);
 
     addEnergyGauge(builder, 2, 2, false);
-    addProgressGauge(builder, recipe, 35, 18);
+    addProgressGauge(builder, recipe.time(), 35, 18);
   }
 }

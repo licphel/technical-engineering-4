@@ -1,5 +1,5 @@
 {
-  "ten4.creative_mode_tab.default": "Technical Engineering IV",
+  "ten4.creative_mode_tab.default": "Technical Engineering 4",
 
   "ten4.misc.info_label": "Information",
   "ten4.misc.sigmode_label": "Configs",
@@ -78,15 +78,18 @@
   "ten4.misc.power": "Power: ",
 
   "ten4.pulverizer": "Pulverizer",
-  "ten4.pulverizer.desc": "Pulverizes ores and metals into dusts, packed ice into snow, etc.",
-  "ten4.heat_generator": "Heat Generator",
-  "ten4.heat_generator.desc": "Generates energy by burning fuels.",
+  "ten4.pulverizer.desc": "Pulverizes ores and metals into dusts, ices into snows, cobbles stones, etc.",
+  "ten4.smelter": "Smelter",
+  "ten4.smelter.desc": "Uses energy to smelt items. Functionally equivalent to vanilla furnace.",
   "ten4.water_pump": "Water Pump",
   "ten4.water_pump.desc": "Pumps liquid from the world to its tanks.",
+  "ten4.heat_generator": "Heat Generator",
+  "ten4.heat_generator.desc": "Generates energy by burning fuels.",
 
   "block.ten4.pulverizer": "Pulverizer",
-  "block.ten4.heat_generator": "Heat Generator",
+  "block.ten4.smelter": "Smelter",
   "block.ten4.water_pump": "Water Pump",
+  "block.ten4.heat_generator": "Heat Generator",
   "block.ten4.copper_energy_duct": "Copper Energy Duct",
   "block.ten4.copper_item_duct": "Copper Item Duct",
   "block.ten4.copper_fluid_duct": "Copper Fluid Duct",

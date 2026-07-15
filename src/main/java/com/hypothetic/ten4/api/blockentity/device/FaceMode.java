@@ -1,9 +1,9 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.ITranslatable;
+import com.hypothetic.ten4.api.IEnumTranslatable;
 
-public enum FaceMode implements ITranslatable {
+public enum FaceMode implements IEnumTranslatable {
   OFF,
   ACTIVE_INPUT,
   ACTIVE_OUTPUT,

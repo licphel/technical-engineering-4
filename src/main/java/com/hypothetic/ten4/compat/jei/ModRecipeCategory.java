@@ -5,7 +5,6 @@ import com.hypothetic.ten4.api.client.builtin.BuiltinComponents;
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.api.client.gui.TextureRegion;
 import com.hypothetic.ten4.api.recipe.Complex;
-import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -104,8 +103,8 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
       final ModTickTimer timer = new ModTickTimer(1000, 100, !increasing);
       final int width = 8;
       final int height = 50;
-      final int innerW = 1;
-      final int innerH = 1;
+      final int innerW = 6;
+      final int innerH = 48;
 
       @Override
       public int getWidth() {
@@ -170,11 +169,11 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
     });
   }
 
-  protected void addProgressGauge(IRecipeExtrasBuilder builder, IComplexRecipe recipe, int x, int y) {
+  protected void addProgressGauge(IRecipeExtrasBuilder builder, int time, int x, int y) {
     builder.addDrawable(new IDrawable() {
       final int width = 22;
       final int height = 16;
-      final ModTickTimer timer = new ModTickTimer(recipe.time(), 100, false);
+      final ModTickTimer timer = new ModTickTimer(time, 100, false);
 
       @Override
       public int getWidth() {

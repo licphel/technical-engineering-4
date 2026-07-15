@@ -1,10 +1,10 @@
 package com.hypothetic.ten4.api.transmission;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.ITranslatable;
+import com.hypothetic.ten4.api.IEnumTranslatable;
 import net.minecraft.util.StringRepresentable;
 
-public enum ConnectionType implements StringRepresentable, ITranslatable {
+public enum ConnectionType implements StringRepresentable, IEnumTranslatable {
   NONE,
   NORMAL,
   PUSH,

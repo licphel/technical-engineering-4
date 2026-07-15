@@ -6,6 +6,7 @@ public final class ModBlockEntityBridges {
   public static void createMapBeforeRegistry() {
     // Devices
     BlockEntityBridges.register(ModBlocks.PULVERIZER, ModBlockEntities.PULVERIZER);
+    BlockEntityBridges.register(ModBlocks.SMELTER, ModBlockEntities.SMELTER);
     BlockEntityBridges.register(ModBlocks.WATER_PUMP, ModBlockEntities.WATER_PUMP);
 
     // Generators

@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:netherracks"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:soul_sand"
+    }
+  ],
+  "time": 200
+}
