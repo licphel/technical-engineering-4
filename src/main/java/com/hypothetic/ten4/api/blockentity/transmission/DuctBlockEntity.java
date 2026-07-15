@@ -18,13 +18,10 @@ public abstract class DuctBlockEntity<T extends Transmitter<?, ?, ?>> extends Re
   protected final DuctInfo info;
   public T transmitter;
 
-  public DuctBlockEntity(BlockPos pos, BlockState blockState) {
+  public DuctBlockEntity(BlockPos pos, BlockState blockState, DuctInfo info) {
     super(pos, blockState);
-
-    info = makeDuctInfo();
+    this.info = info;
   }
-
-  protected abstract DuctInfo makeDuctInfo();
 
   @Override
   public boolean isInvalid() {

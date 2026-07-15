@@ -3,6 +3,7 @@ package com.hypothetic.ten4.core.block.duct;
 import com.google.common.collect.Maps;
 import com.hypothetic.ten4.api.block.BridgedEntityBlock;
 import com.hypothetic.ten4.core.block.BuiltinBlockStates;
+import com.hypothetic.ten4.core.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -124,7 +125,7 @@ public abstract class DuctBlock extends BridgedEntityBlock implements SimpleWate
       return DuctInteractions.dye(dye.getDyeColor(), level, pos);
     }
 
-    if (stack.isEmpty() && hand == InteractionHand.MAIN_HAND) { // TODO: Add spanner
+    if (stack.is(ModItems.WRENCH) && hand == InteractionHand.MAIN_HAND) {
       return DuctInteractions.changeConnection(level, state, pos, hit.getDirection(), player);
     }
 

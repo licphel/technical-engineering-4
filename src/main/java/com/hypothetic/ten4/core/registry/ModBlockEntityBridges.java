@@ -14,10 +14,13 @@ public final class ModBlockEntityBridges {
 
     // Ducts
     BlockEntityBridges.register(ModBlocks.COPPER_ENERGY_DUCT, ModBlockEntities.COPPER_ENERGY_DUCT);
+    BlockEntityBridges.register(ModBlocks.OPAQUE_COPPER_ENERGY_DUCT, ModBlockEntities.OPAQUE_COPPER_ENERGY_DUCT);
     BlockEntityBridges.register(ModBlocks.COPPER_CONTROLLER_ENERGY_DUCT, ModBlockEntities.COPPER_CONTROLLER_ENERGY_DUCT);
     BlockEntityBridges.register(ModBlocks.COPPER_ITEM_DUCT, ModBlockEntities.COPPER_ITEM_DUCT);
+    BlockEntityBridges.register(ModBlocks.OPAQUE_COPPER_ITEM_DUCT, ModBlockEntities.OPAQUE_COPPER_ITEM_DUCT);
     BlockEntityBridges.register(ModBlocks.COPPER_CONTROLLER_ITEM_DUCT, ModBlockEntities.COPPER_CONTROLLER_ITEM_DUCT);
     BlockEntityBridges.register(ModBlocks.COPPER_FLUID_DUCT, ModBlockEntities.COPPER_FLUID_DUCT);
+    BlockEntityBridges.register(ModBlocks.OPAQUE_COPPER_FLUID_DUCT, ModBlockEntities.OPAQUE_COPPER_FLUID_DUCT);
     BlockEntityBridges.register(ModBlocks.COPPER_CONTROLLER_FLUID_DUCT, ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT);
   }
 }

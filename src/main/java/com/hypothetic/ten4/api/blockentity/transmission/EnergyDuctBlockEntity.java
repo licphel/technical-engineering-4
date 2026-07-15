@@ -16,12 +16,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> implements ITickable {
+public class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> implements ITickable {
   private final IEnergyStorage energyStorage;
   private int tickCount;
 
-  public EnergyDuctBlockEntity(BlockPos pos, BlockState state) {
-    super(pos, state);
+  public EnergyDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
+    super(pos, state, info);
     this.transmitter = new EnergyTransmitter(this, info.bufferCapacity, info.throughput);
     this.energyStorage = new TransmitterEnergyStorage(transmitter);
   }

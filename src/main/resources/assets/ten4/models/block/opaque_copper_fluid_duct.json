@@ -1,0 +1,6 @@
+{
+  "parent": "ten4:block/connectable/connectable_core",
+  "textures": {
+    "texture": "ten4:block/duct/opaque_copper_fluid_duct"
+  }
+}

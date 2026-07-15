@@ -32,6 +32,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
   protected final DuctModelBaker baker;
   private TextureAtlasSprite sprite;
   private final TextureAtlasSprite[] loadedTextures;
+  private boolean drawInside = true;
 
   protected RenderTransmitterBlock(BlockEntityRendererProvider.Context ctx,
                                    ResourceLocation core,
@@ -41,6 +42,11 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
                                    ResourceLocation... textures) {
     this.baker = new DuctModelBaker(core, part, pull, push);
     this.loadedTextures = Arrays.stream(textures).map(ClientUtil::getBlockSprite).toArray(TextureAtlasSprite[]::new);
+  }
+
+  public RenderTransmitterBlock<BE> setOpaque() {
+    drawInside = false;
+    return this;
   }
 
   private static int applyDirectionalLight(int packed, Direction face) {
@@ -87,7 +93,9 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
     TextureAtlasSprite cs = getSprite(be);
 
     renderBody(be, pose, buffers, cs, 1.0F, 1.0F, 1.0F, 1.0F, light, overlay);
-    renderContents(be, pt, pose, buffers, cs, light, overlay);
+    if (drawInside) {
+      renderContents(be, pt, pose, buffers, cs, light, overlay);
+    }
 
     // Colored overlay when dyed
     DyeColor dye = getDyeColor(be);

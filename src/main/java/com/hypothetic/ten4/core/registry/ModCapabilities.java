@@ -28,10 +28,14 @@ public class ModCapabilities {
 
     // Ducts
     event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
+    event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.OPAQUE_COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
     event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ModBlockEntities.COPPER_CONTROLLER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
-    event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.COPPER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
-    event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
     event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.COPPER_ITEM_DUCT.get(), ItemDuctBlockEntity::getItemHandler);
+    event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.OPAQUE_COPPER_ITEM_DUCT.get(), ItemDuctBlockEntity::getItemHandler);
     event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.COPPER_CONTROLLER_ITEM_DUCT.get(), ItemDuctBlockEntity::getItemHandler);
+    event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.COPPER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
+    event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.OPAQUE_COPPER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
+    event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
+
   }
 }

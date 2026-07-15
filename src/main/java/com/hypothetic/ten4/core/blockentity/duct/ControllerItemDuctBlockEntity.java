@@ -8,11 +8,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class CopperControllerItemDuctBlockEntity extends ItemDuctBlockEntity {
+public class ControllerItemDuctBlockEntity extends ItemDuctBlockEntity {
   private boolean lastPowered;
 
-  public CopperControllerItemDuctBlockEntity(BlockPos pos, BlockState state) {
-    super(pos, state);
+  public ControllerItemDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
+    super(pos, state, info);
 
     for (Direction side : Direction.values()) {
       transmitter.setBlocker(side, d -> isRedstonePowered());
@@ -22,11 +22,6 @@ public class CopperControllerItemDuctBlockEntity extends ItemDuctBlockEntity {
   @Override
   public boolean canConnectRedstone(@Nullable Direction side) {
     return true;
-  }
-
-  @Override
-  protected DuctInfo makeDuctInfo() {
-    return DuctTiers.COPPER_ITEM;
   }
 
   @Override

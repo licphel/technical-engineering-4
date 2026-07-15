@@ -58,11 +58,12 @@ final class RouteFinder {
           continue;
         }
 
-        if (!visited.add(next)) {
+        ItemTransmitter dst = network.findTransmitter(next);
+        if (dst == null || !dst.getConnectionTypeRaw(d.getOpposite()).canAccept()
+            || !curr.isColorCompatible(dst)) {
           continue;
         }
-        ItemTransmitter dst = network.findTransmitter(next);
-        if (dst == null || !dst.getConnectionTypeRaw(d.getOpposite()).canAccept()) {
+        if (!visited.add(next)) {
           continue;
         }
         queue.add(new Node(next, d, node));

@@ -17,12 +17,12 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmitter> implements ITickable {
+public class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmitter> implements ITickable {
   private final IFluidHandler fluidHandler;
   private int tickCount;
 
-  public FluidDuctBlockEntity(BlockPos pos, BlockState state) {
-    super(pos, state);
+  public FluidDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
+    super(pos, state, info);
     this.transmitter = new FluidTransmitter(this, info.bufferCapacity, info.throughput);
     this.fluidHandler = new TransmitterFluidHandler(transmitter);
   }

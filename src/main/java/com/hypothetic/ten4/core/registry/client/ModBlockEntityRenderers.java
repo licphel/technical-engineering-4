@@ -15,10 +15,13 @@ public class ModBlockEntityRenderers {
   @SubscribeEvent
   public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
     event.registerBlockEntityRenderer(ModBlockEntities.COPPER_ENERGY_DUCT.get(), ctx -> new RenderEnergyDuct(ctx, Ten4.id("block/duct/copper_energy_duct")));
-    event.registerBlockEntityRenderer(ModBlockEntities.COPPER_ITEM_DUCT.get(), ctx -> new RenderItemDuct(ctx, Ten4.id("block/duct/copper_item_duct")));
-    event.registerBlockEntityRenderer(ModBlockEntities.COPPER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_fluid_duct")));
+    event.registerBlockEntityRenderer(ModBlockEntities.OPAQUE_COPPER_ENERGY_DUCT.get(), ctx -> new RenderEnergyDuct(ctx, Ten4.id("block/duct/opaque_copper_energy_duct")).setOpaque());
     event.registerBlockEntityRenderer(ModBlockEntities.COPPER_CONTROLLER_ENERGY_DUCT.get(), ctx -> new RenderEnergyDuct(ctx, Ten4.id("block/duct/copper_controller_energy_duct")));
+    event.registerBlockEntityRenderer(ModBlockEntities.COPPER_ITEM_DUCT.get(), ctx -> new RenderItemDuct(ctx, Ten4.id("block/duct/copper_item_duct")));
+    event.registerBlockEntityRenderer(ModBlockEntities.OPAQUE_COPPER_ITEM_DUCT.get(), ctx -> new RenderItemDuct(ctx, Ten4.id("block/duct/opaque_copper_item_duct")).setOpaque());
     event.registerBlockEntityRenderer(ModBlockEntities.COPPER_CONTROLLER_ITEM_DUCT.get(), ctx -> new RenderItemDuct(ctx, Ten4.id("block/duct/copper_controller_item_duct")));
+    event.registerBlockEntityRenderer(ModBlockEntities.COPPER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_fluid_duct")));
+    event.registerBlockEntityRenderer(ModBlockEntities.OPAQUE_COPPER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/opaque_copper_fluid_duct")).setOpaque());
     event.registerBlockEntityRenderer(ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_controller_fluid_duct")));
   }
 }

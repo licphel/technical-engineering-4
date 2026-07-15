@@ -18,11 +18,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 
-public abstract class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitter> implements ILootProvider, ITickable {
+public class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitter> implements ILootProvider, ITickable {
   private final EnumMap<Direction, TransmitterItemHandler> itemHandlers = new EnumMap<>(Direction.class);
 
-  public ItemDuctBlockEntity(BlockPos pos, BlockState state) {
-    super(pos, state);
+  public ItemDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
+    super(pos, state, info);
     this.transmitter = new ItemTransmitter(this, info.throughput, info.bufferCapacity);
     for (Direction dir : Direction.values()) {
       itemHandlers.put(dir, new TransmitterItemHandler(transmitter, dir));

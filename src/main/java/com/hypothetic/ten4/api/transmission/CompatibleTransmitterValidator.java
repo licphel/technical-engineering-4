@@ -2,15 +2,19 @@ package com.hypothetic.ten4.api.transmission;
 
 import com.hypothetic.ten4.api.transmission.fluid.FluidNetwork;
 import com.hypothetic.ten4.api.transmission.fluid.FluidTransmitter;
+import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
 public class CompatibleTransmitterValidator<AC, NET extends Network<AC, NET, T>, T extends Transmitter<AC, NET, T>> {
   private FluidStack fluidContent = FluidStack.EMPTY;
+  private @Nullable DyeColor color;
 
   public CompatibleTransmitterValidator(T start) {
     if (start instanceof FluidTransmitter ft) {
       this.fluidContent = ft.getBuffer().isEmpty() ? FluidStack.EMPTY : ft.getBuffer().copy();
     }
+    this.color = start.getColor();
   }
 
   public boolean isTransmitterCompatible(Transmitter<?, ?, ?> transmitter) {
@@ -23,7 +27,6 @@ public class CompatibleTransmitterValidator<AC, NET extends Network<AC, NET, T>,
   @SuppressWarnings("rawtypes")
   public boolean isNetworkCompatible(NET network) {
     if (network instanceof FluidNetwork fn) {
-      // Check network's stored validator first
       BufferedNetwork bn = (BufferedNetwork) network;
       if (bn.getValidator() instanceof CompatibleTransmitterValidator other) {
         return compareFluids(other.fluidContent);
@@ -31,6 +34,15 @@ public class CompatibleTransmitterValidator<AC, NET extends Network<AC, NET, T>,
       return compareFluids(fn.getFluid());
     }
     return true;
+  }
+
+  public boolean isColorCompatible(Transmitter<?, ?, ?> t) {
+    DyeColor tc = t.getColor();
+    if (color == null) {
+      color = tc;
+      return true;
+    }
+    return tc == null || color == tc;
   }
 
   private boolean compareFluids(FluidStack other) {

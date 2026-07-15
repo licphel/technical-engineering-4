@@ -27,10 +27,13 @@ public final class ModItems {
 
   // Ducts
   public static final DeferredHolder<Item, BlockItem> COPPER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.COPPER_ENERGY_DUCT);
+  public static final DeferredHolder<Item, BlockItem> OPAQUE_COPPER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.OPAQUE_COPPER_ENERGY_DUCT);
   public static final DeferredHolder<Item, BlockItem> COPPER_CONTROLLER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.COPPER_CONTROLLER_ENERGY_DUCT);
   public static final DeferredHolder<Item, BlockItem> COPPER_ITEM_DUCT = bridgeBlockItem(ModBlocks.COPPER_ITEM_DUCT);
+  public static final DeferredHolder<Item, BlockItem> OPAQUE_COPPER_ITEM_DUCT = bridgeBlockItem(ModBlocks.OPAQUE_COPPER_ITEM_DUCT);
   public static final DeferredHolder<Item, BlockItem> COPPER_CONTROLLER_ITEM_DUCT = bridgeBlockItem(ModBlocks.COPPER_CONTROLLER_ITEM_DUCT);
   public static final DeferredHolder<Item, BlockItem> COPPER_FLUID_DUCT = bridgeBlockItem(ModBlocks.COPPER_FLUID_DUCT);
+  public static final DeferredHolder<Item, BlockItem> OPAQUE_COPPER_FLUID_DUCT = bridgeBlockItem(ModBlocks.OPAQUE_COPPER_FLUID_DUCT);
   public static final DeferredHolder<Item, BlockItem> COPPER_CONTROLLER_FLUID_DUCT = bridgeBlockItem(ModBlocks.COPPER_CONTROLLER_FLUID_DUCT);
 
   // Augments

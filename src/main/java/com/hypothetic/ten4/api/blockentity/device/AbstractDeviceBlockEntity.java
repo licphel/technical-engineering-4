@@ -331,14 +331,17 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     if (this.getEnergyCapacity() > 0) {
       EnergyQueue.push(level, worldPosition, this);
       EnergyQueue.pull(level, worldPosition, this);
+      setChanged();
     }
     if (inventory.getSlots() > 0) {
       ItemQueue.push(level, worldPosition, this);
       ItemQueue.pull(level, worldPosition, this);
+      setChanged();
     }
     if (fluidInventory.getTanks() > 0) {
       FluidQueue.push(level, worldPosition, this);
       FluidQueue.pull(level, worldPosition, this);
+      setChanged();
     }
   }
 

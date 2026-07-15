@@ -6,6 +6,7 @@ public final class DuctTiers {
   public static final DuctInfo COPPER_ENERGY = new DuctInfo().setBufferCapacity(100).setThroughput(100);
   public static final DuctInfo COPPER_FLUID = new DuctInfo().setBufferCapacity(100).setThroughput(100);
   public static final DuctInfo COPPER_ITEM = new DuctInfo().setBufferCapacity(1).setThroughput(20);
+
   private DuctTiers() {
   }
 }

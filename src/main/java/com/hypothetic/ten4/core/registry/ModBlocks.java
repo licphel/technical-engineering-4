@@ -25,9 +25,12 @@ public final class ModBlocks {
 
   // Ducts
   public static final DeferredHolder<Block, Block> COPPER_ENERGY_DUCT = BLOCKS.register("copper_energy_duct", () -> new EnergyDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());
+  public static final DeferredHolder<Block, Block> OPAQUE_COPPER_ENERGY_DUCT = BLOCKS.register("opaque_copper_energy_duct", () -> new EnergyDuctBlock(BlockProperties.COPPER_DUCT));
   public static final DeferredHolder<Block, Block> COPPER_CONTROLLER_ENERGY_DUCT = BLOCKS.register("copper_controller_energy_duct", () -> new EnergyDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());
   public static final DeferredHolder<Block, Block> COPPER_ITEM_DUCT = BLOCKS.register("copper_item_duct", () -> new ItemDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());
+  public static final DeferredHolder<Block, Block> OPAQUE_COPPER_ITEM_DUCT = BLOCKS.register("opaque_copper_item_duct", () -> new ItemDuctBlock(BlockProperties.COPPER_DUCT));
   public static final DeferredHolder<Block, Block> COPPER_CONTROLLER_ITEM_DUCT = BLOCKS.register("copper_controller_item_duct", () -> new ItemDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());
   public static final DeferredHolder<Block, Block> COPPER_FLUID_DUCT = BLOCKS.register("copper_fluid_duct", () -> new FluidDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());
+  public static final DeferredHolder<Block, Block> OPAQUE_COPPER_FLUID_DUCT = BLOCKS.register("opaque_copper_fluid_duct", () -> new FluidDuctBlock(BlockProperties.COPPER_DUCT));
   public static final DeferredHolder<Block, Block> COPPER_CONTROLLER_FLUID_DUCT = BLOCKS.register("copper_controller_fluid_duct", () -> new FluidDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());
 }

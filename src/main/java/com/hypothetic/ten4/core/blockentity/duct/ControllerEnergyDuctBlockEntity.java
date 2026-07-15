@@ -1,18 +1,18 @@
 package com.hypothetic.ten4.core.blockentity.duct;
 
 import com.hypothetic.ten4.api.blockentity.transmission.DuctInfo;
-import com.hypothetic.ten4.api.blockentity.transmission.FluidDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.transmission.EnergyDuctBlockEntity;
 import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class CopperControllerFluidDuctBlockEntity extends FluidDuctBlockEntity {
+public class ControllerEnergyDuctBlockEntity extends EnergyDuctBlockEntity {
   private boolean lastPowered;
 
-  public CopperControllerFluidDuctBlockEntity(BlockPos pos, BlockState state) {
-    super(pos, state);
+  public ControllerEnergyDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
+    super(pos, state, info);
 
     for (Direction side : Direction.values()) {
       transmitter.setBlocker(side, d -> isRedstonePowered());
@@ -22,11 +22,6 @@ public class CopperControllerFluidDuctBlockEntity extends FluidDuctBlockEntity {
   @Override
   public boolean canConnectRedstone(@Nullable Direction side) {
     return true;
-  }
-
-  @Override
-  protected DuctInfo makeDuctInfo() {
-    return DuctTiers.COPPER_FLUID;
   }
 
   @Override

@@ -72,13 +72,16 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
       return;
     }
 
+    if (isSignalEnabled()) {
+      queuedPushPull();
+    }
+
     boolean shouldRun = fluidInventory.getTank(0).getSpace() >= FluidType.BUCKET_VOLUME
         && isEnergySufficient()
         && isSignalEnabled();
     setActive(shouldRun);
 
     if (shouldRun) {
-      queuedPushPull();
       setChanged();
       setEnergy(getEnergy() - getActualPower());
 
@@ -116,10 +119,5 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
     syncer.set(BuiltinSyncedFields.MAX_ENERGY, getEnergyCapacity());
     synchronizeBasicData();
     TANK_0.sync(syncer, fluidInventory.getTank(0));
-  }
-
-  @Override
-  public String createTranslationKey() {
-    return Ten4.lang("water_pump.desc");
   }
 }
