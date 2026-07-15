@@ -7,18 +7,23 @@ import com.hypothetic.ten4.util.ClientUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.lighting.FlatQuadLighter;
+import net.neoforged.neoforge.client.model.lighting.QuadLighter;
+import net.neoforged.neoforge.client.model.lighting.SmoothQuadLighter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -28,8 +33,11 @@ import java.util.List;
 public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements BlockEntityRenderer<BE> {
   public static final int LOD_DISTANCE = 32;
 
+  private static final BlockColors BLOCK_COLORS = Minecraft.getInstance().getBlockColors();
   private static final TextureAtlasSprite OVERLAY = ClientUtil.getBlockSprite(ResourceLocation.withDefaultNamespace("block/white_concrete"));
   protected final DuctModelBaker baker;
+  private final SmoothQuadLighter aoLighter = new SmoothQuadLighter(BLOCK_COLORS);
+  private final FlatQuadLighter flatLighter = new FlatQuadLighter(BLOCK_COLORS);
   private TextureAtlasSprite sprite;
   private final TextureAtlasSprite[] loadedTextures;
   private boolean drawInside = true;
@@ -47,19 +55,6 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
   public RenderTransmitterBlock<BE> setOpaque() {
     drawInside = false;
     return this;
-  }
-
-  private static int applyDirectionalLight(int packed, Direction face) {
-    int block = (packed >> 4) & 0xF;
-    int sky = (packed >> 20) & 0xF;
-    float factor = switch (face) {
-      case UP -> 1.0F;
-      case DOWN -> 0.31F;
-      default -> 0.58F;
-    };
-    int adjSky = (int) (sky * factor);
-    int adjBlock = (int) (block * factor);
-    return (adjBlock << 4) | (adjSky << 20);
   }
 
   protected ConnectionType getCT(BE be, Direction side) {
@@ -90,9 +85,18 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
 
   @Override
   public void render(BE be, float pt, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
+    if (be.getLevel() == null) {
+      return;
+    }
+
     TextureAtlasSprite cs = getSprite(be);
 
-    renderBody(be, pose, buffers, cs, 1.0F, 1.0F, 1.0F, 1.0F, light, overlay);
+    // Setup per-vertex AO lighting once per frame for this block entity
+    QuadLighter lighter = prepareLighter(be);
+    BlockPos pos = be.getBlockPos();
+    lighter.setup(be.getLevel(), pos, be.getBlockState());
+
+    renderBody(lighter, be, pose, buffers, cs, 1.0F, 1.0F, 1.0F, 1.0F, overlay);
     if (drawInside) {
       renderContents(be, pt, pose, buffers, cs, light, overlay);
     }
@@ -108,9 +112,13 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
       pose.pushPose();
       pose.translate(off, off, off);
       pose.scale(s, s, s);
-      renderBody(be, pose, buffers, OVERLAY, cr, cg, cb, 0.45F, light, overlay);
+      renderBody(lighter, be, pose, buffers, OVERLAY, cr, cg, cb, 0.45F, overlay);
       pose.popPose();
     }
+  }
+
+  private QuadLighter prepareLighter(BE be) {
+    return Minecraft.useAmbientOcclusion() ? aoLighter : flatLighter;
   }
 
   protected int bodyColor(BE be) {
@@ -127,8 +135,8 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
     return null;
   }
 
-  protected void renderBody(BE be, PoseStack pose, MultiBufferSource buffers, TextureAtlasSprite cs,
-                            float r, float g, float b, float a, int light, int overlay) {
+  protected void renderBody(QuadLighter lighter, BE be, PoseStack pose, MultiBufferSource buffers, TextureAtlasSprite cs,
+                            float r, float g, float b, float a, int overlay) {
     VertexConsumer vc = buffers.getBuffer(a == 1 ? RenderType.cutout() : RenderType.translucent());
     PoseStack.Pose entry = pose.last();
     List<String> names = new ArrayList<>(6);
@@ -136,8 +144,9 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
     // Core: skip faces where connections exist (avoid overlap with parts)
     for (BakedQuad q : baker.getPart("core", cs)) {
       if (getCT(be, q.getDirection()) == ConnectionType.NONE) {
-        int faceLight = applyDirectionalLight(light, q.getDirection());
-        vc.putBulkData(entry, q, r, g, b, a, faceLight, overlay, false);
+        lighter.computeLightingForQuad(q);
+        vc.putBulkData(entry, q, lighter.getComputedBrightness(), r, g, b, a,
+            lighter.getComputedLightmap(), overlay, false);
       }
     }
 
@@ -148,7 +157,7 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
       }
       names.clear();
       names.add(d.getSerializedName() + "_" + getPartName(be, d));
-      drawParts(entry, vc, cs, names, r, g, b, a, light, overlay);
+      drawParts(lighter, entry, vc, cs, names, r, g, b, a, overlay);
     }
   }
 
@@ -156,13 +165,13 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
                                 TextureAtlasSprite cs, int light, int overlay) {
   }
 
-  protected void drawParts(PoseStack.Pose entry, VertexConsumer vc, TextureAtlasSprite sprite,
-                           List<String> partNames, float r, float g, float b, float a,
-                           int light, int overlay) {
+  private void drawParts(QuadLighter lighter, PoseStack.Pose entry, VertexConsumer vc, TextureAtlasSprite sprite,
+                         List<String> partNames, float r, float g, float b, float a, int overlay) {
     for (String name : partNames) {
       for (BakedQuad q : baker.getPart(name, sprite)) {
-        int faceLight = applyDirectionalLight(light, q.getDirection());
-        vc.putBulkData(entry, q, r, g, b, a, faceLight, overlay, false);
+        lighter.computeLightingForQuad(q);
+        vc.putBulkData(entry, q, lighter.getComputedBrightness(), r, g, b, a,
+            lighter.getComputedLightmap(), overlay, false);
       }
     }
   }

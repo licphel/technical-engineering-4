@@ -2,7 +2,7 @@ package com.hypothetic.ten4.core.client.screen;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
-import com.hypothetic.ten4.api.client.builtin.BuiltinComponents;
+import com.hypothetic.ten4.core.client.builtin.BuiltinComponents;
 import com.hypothetic.ten4.api.container.ContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

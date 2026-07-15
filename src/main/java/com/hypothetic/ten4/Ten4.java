@@ -1,6 +1,7 @@
 package com.hypothetic.ten4;
 
 import com.hypothetic.ten4.core.registry.*;
+import com.hypothetic.ten4.datagen.Ten4Datagen;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -11,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 public class Ten4 {
   public static final Logger LOGGER = LogManager.getLogger();
   public static final String ID = "ten4";
-  public static final String VERSION = "26.1.1";
+  public static final String VERSION = "26.1.2";
 
   public Ten4(IEventBus modBus) {
     ModBlockEntityBridges.createMapBeforeRegistry();
@@ -23,6 +24,9 @@ public class Ten4 {
     ModRecipes.SERIALIZERS.register(modBus);
     ModRecipes.TYPES.register(modBus);
     ModMenus.MENUS.register(modBus);
+    ModSoundEvents.SES.register(modBus);
+
+    modBus.addListener(Ten4Datagen::gatherData);
   }
 
   public static ResourceLocation id(String path) {

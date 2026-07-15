@@ -8,6 +8,7 @@ import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
 import com.hypothetic.ten4.api.container.ContainerMenuLayout;
 import com.hypothetic.ten4.core.registry.ModMenus;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -38,6 +39,11 @@ public class SmelterBlockEntity extends AbstractRecipeDeviceBlockEntity<SingleRe
     }
 
     return preexist.isEmpty();
+  }
+
+  @Override
+  public void onSoundPlay() {
+    playSound(1.0F, SoundEvents.FURNACE_FIRE_CRACKLE);
   }
 
   @Override

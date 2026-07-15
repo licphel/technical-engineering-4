@@ -79,6 +79,8 @@
 
   "ten4.pulverizer": "Pulverizer",
   "ten4.pulverizer.desc": "Pulverizes ores and metals into dusts, ices into snows, cobbles stones, etc.",
+  "ten4.press": "Press",
+  "ten4.press.desc": "Rolls metals using moulds. Able to produce plates, depack or pack storage blocks.",
   "ten4.smelter": "Smelter",
   "ten4.smelter.desc": "Uses energy to smelt items. Functionally equivalent to vanilla furnace.",
   "ten4.water_pump": "Water Pump",
@@ -86,7 +88,9 @@
   "ten4.heat_generator": "Heat Generator",
   "ten4.heat_generator.desc": "Generates energy by burning fuels.",
 
+  "block.ten4.device_casing": "Device Casing",
   "block.ten4.pulverizer": "Pulverizer",
+  "block.ten4.press": "Press",
   "block.ten4.smelter": "Smelter",
   "block.ten4.water_pump": "Water Pump",
   "block.ten4.heat_generator": "Heat Generator",
@@ -102,10 +106,21 @@
 
   "item.ten4.wrench": "Wrench",
   "item.ten4.overclocking_augment": "Overclocking Augment",
+  "item.ten4.overclocking_augment.desc": "Power: x1.5",
+  "item.ten4.coil_augment": "Coil Augment",
+  "item.ten4.coil_augment.desc": "Energy Throughput: x1.5\nEnergy Capacity: x1.5",
+  "item.ten4.piston_augment": "Piston Augment",
+  "item.ten4.piston_augment.desc": "Item Throughput: x1.5",
+  "item.ten4.vacuum_augment": "Vacuum Augment",
+  "item.ten4.vacuum_augment.desc": "Fluid Throughput: x1.5",
+  "item.ten4.circuit": "Circuit",
   "item.ten4.iron_dust": "Iron Dust",
   "item.ten4.iron_plate": "Iron Plate",
   "item.ten4.copper_dust": "Copper Dust",
   "item.ten4.copper_plate": "Copper Plate",
   "item.ten4.gold_dust": "Gold Dust",
-  "item.ten4.gold_plate": "Gold Plate"
+  "item.ten4.gold_plate": "Gold Plate",
+
+  "ten4.sound.beep": "Beep",
+  "ten4.sound.device_noise": "Device Noise"
 }

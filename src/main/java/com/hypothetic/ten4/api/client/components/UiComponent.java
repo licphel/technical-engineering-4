@@ -1,8 +1,12 @@
 package com.hypothetic.ten4.api.client.components;
 
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +21,7 @@ public class UiComponent {
   protected int height;
   protected boolean visible = true;
   protected List<UiComponent> children = new ArrayList<>();
+  protected @Nullable SoundEvent soundOnClicked;
 
   public UiComponent(int x, int y, int w, int h) {
     this.x = semanticX = x;
@@ -33,6 +38,12 @@ public class UiComponent {
   public UiComponent removeChild(UiComponent child) {
     children.remove(child);
     return this;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends UiComponent> T withClickSound(@Nullable SoundEvent soundOnClicked) {
+    this.soundOnClicked = soundOnClicked;
+    return (T) this;
   }
 
   public void onRescaled(int i, int j) {
@@ -71,6 +82,11 @@ public class UiComponent {
       if (child.isVisible() && child.hovering) {
         child.onMouseClicked(mouseX, mouseY, button);
       }
+    }
+
+    if (soundOnClicked != null) {
+      Minecraft mc = Minecraft.getInstance();
+      mc.getSoundManager().play(SimpleSoundInstance.forUI(soundOnClicked, 1.0F));
     }
   }
 

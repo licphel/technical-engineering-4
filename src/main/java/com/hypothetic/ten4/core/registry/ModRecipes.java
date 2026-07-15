@@ -14,10 +14,9 @@ public class ModRecipes {
   public static final DeferredRegister<RecipeType<?>> TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, Ten4.ID);
 
   public static final DeferredHolder<RecipeType<?>, RecipeType<IComplexRecipe>> PULVERIZING = simpleType("pulverizing");
-
-  static {
-    SERIALIZERS.register("pulverizing", () -> new ComplexRecipeSerializer(PULVERIZING));
-  }
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<IComplexRecipe>> PULVERIZING_SER = SERIALIZERS.register("pulverizing", () -> new ComplexRecipeSerializer(PULVERIZING));
+  public static final DeferredHolder<RecipeType<?>, RecipeType<IComplexRecipe>> PRESSING = simpleType("pressing");
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<IComplexRecipe>> PRESSING_SER = SERIALIZERS.register("pressing", () -> new ComplexRecipeSerializer(PRESSING));
 
   public static DeferredHolder<RecipeType<?>, RecipeType<IComplexRecipe>> simpleType(String id) {
     return TYPES.register(id, () -> RecipeType.simple(Ten4.id(id)));

@@ -48,10 +48,14 @@ public class Button extends UiComponent {
         g.draw(idleTex, x, y, width, height);
       }
     }
+
+    super.onRender(g, pt);
   }
 
   @Override
   public void onMouseClicked(int mouseX, int mouseY, int button) {
+    super.onMouseClicked(mouseX, mouseY, button);
+
     if (action != null) {
       action.run();
     }

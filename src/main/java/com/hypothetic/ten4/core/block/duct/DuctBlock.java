@@ -6,11 +6,15 @@ import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import com.hypothetic.ten4.core.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -125,7 +129,8 @@ public abstract class DuctBlock extends BridgedEntityBlock implements SimpleWate
       return DuctInteractions.dye(dye.getDyeColor(), level, pos);
     }
 
-    if (stack.is(ModItems.WRENCH) && hand == InteractionHand.MAIN_HAND) {
+    final TagKey<Item> WRENCH = TagKey.create(Registries.ITEM, ResourceLocation.parse("c:tools/wrench"));
+    if (stack.is(WRENCH) && hand == InteractionHand.MAIN_HAND) {
       return DuctInteractions.changeConnection(level, state, pos, hit.getDirection(), player);
     }
 

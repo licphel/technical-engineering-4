@@ -4,7 +4,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
 
-public class JsonUtil {
+public final class JsonUtil {
+  private JsonUtil() {
+  }
+
   public static @Nullable JsonObject getJsonObject(JsonObject json, String key) {
     if (json.has(key)) {
       return json.getAsJsonObject(key);

@@ -4,6 +4,7 @@ import com.hypothetic.ten4.api.capability.item.ItemInventory;
 import com.hypothetic.ten4.api.capability.item.ItemSlot;
 import com.hypothetic.ten4.api.capability.item.SlotOption;
 import com.hypothetic.ten4.api.item.IAugment;
+import com.hypothetic.ten4.api.item.MuteAugment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -82,7 +83,7 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
 
   @Override
   public int getActualPower() {
-    return applyAugments(IAugment.AugmentableField.EFFICIENCY, super.getActualPower());
+    return applyAugments(IAugment.AugmentableField.POWER, super.getActualPower());
   }
 
   @Override
@@ -108,6 +109,12 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
         continue;
       }
       loot.add(augments.getStackInSlot(i));
+    }
+  }
+
+  public void triggerSound() {
+    if (countAugment(MuteAugment.class) == 0) {
+      onSoundPlay();
     }
   }
 }

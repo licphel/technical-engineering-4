@@ -12,6 +12,7 @@ import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;
 import com.hypothetic.ten4.api.container.sync.Syncer;
 import com.hypothetic.ten4.core.registry.ModMenus;
+import com.hypothetic.ten4.core.registry.ModSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Inventory;
@@ -62,6 +63,11 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
   }
 
   @Override
+  public void onSoundPlay() {
+    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_2.get());
+  }
+
+  @Override
   public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
     return new ContainerMenu(ModMenus.WATER_PUMP.get(), containerId, playerInventory, this, new ContainerMenuLayout());
   }
@@ -82,6 +88,7 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
     setActive(shouldRun);
 
     if (shouldRun) {
+      triggerSound();
       setChanged();
       setEnergy(getEnergy() - getActualPower());
 

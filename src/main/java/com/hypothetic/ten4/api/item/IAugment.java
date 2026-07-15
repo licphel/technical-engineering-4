@@ -15,7 +15,7 @@ public interface IAugment<T extends AugmentableDeviceBlockEntity> {
   }
 
   enum AugmentableField {
-    EFFICIENCY,
+    POWER,
     ENERGY_THROUGHPUT,
     ENERGY_CAPACITY,
     ITEM_THROUGHPUT,

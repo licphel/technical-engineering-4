@@ -100,6 +100,8 @@ public abstract class AbstractRecipeDeviceBlockEntity<I extends RecipeInput, T e
       if (consumed <= 0) {
         setActive(false);
         return;
+      } else {
+        triggerSound();
       }
 
       progress += consumed;

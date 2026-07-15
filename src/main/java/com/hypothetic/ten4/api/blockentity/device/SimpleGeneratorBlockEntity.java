@@ -36,6 +36,7 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
       setEnergy(getEnergy() + getActualPower());
       fuel = Math.max(fuel - getActualPower(), 0);
       setChanged();
+      triggerSound();
     }
 
     if (isSignalEnabled()) {

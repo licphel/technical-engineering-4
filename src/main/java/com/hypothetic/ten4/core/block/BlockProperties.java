@@ -11,7 +11,8 @@ public final class BlockProperties {
       .strength(3.5F)
       .requiresCorrectToolForDrops()
       .sound(SoundType.METAL)
-      .lightLevel(state -> state.getValue(BuiltinBlockStates.ACTIVE) ? 8 : 0)
+      .lightLevel(state -> state.hasProperty(BuiltinBlockStates.ACTIVE)
+          && state.getValue(BuiltinBlockStates.ACTIVE) ? 8 : 0)
       .explosionResistance(2.5F);
   public static final BlockBehaviour.Properties COPPER_DUCT = Block.Properties.of()
       .mapColor(MapColor.TERRACOTTA_ORANGE)

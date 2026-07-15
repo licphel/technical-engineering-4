@@ -9,6 +9,7 @@ import com.hypothetic.ten4.api.container.ContainerMenuLayout;
 import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import com.hypothetic.ten4.core.registry.ModMenus;
 import com.hypothetic.ten4.core.registry.ModRecipes;
+import com.hypothetic.ten4.core.registry.ModSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -36,6 +37,11 @@ public class PulverizerBlockEntity extends ComplexRecipeDeviceBlockEntity {
         .setEnergyCapacity(10_000)
         .setEnergyThroughput(100)
         .setItemThroughput(1);
+  }
+
+  @Override
+  public void onSoundPlay() {
+    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_0.get());
   }
 
   @Override

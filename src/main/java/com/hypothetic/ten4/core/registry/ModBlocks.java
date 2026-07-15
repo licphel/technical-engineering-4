@@ -16,7 +16,9 @@ public final class ModBlocks {
   public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, Ten4.ID);
 
   // Devices
+  public static final DeferredHolder<Block, Block> DEVICE_CASING = BLOCKS.register("device_casing", () -> new Block(BlockProperties.METAL_DEVICE));
   public static final DeferredHolder<Block, Block> PULVERIZER = BLOCKS.register("pulverizer", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
+  public static final DeferredHolder<Block, Block> PRESS = BLOCKS.register("press", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
   public static final DeferredHolder<Block, Block> SMELTER = BLOCKS.register("smelter", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
   public static final DeferredHolder<Block, Block> WATER_PUMP = BLOCKS.register("water_pump", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
 

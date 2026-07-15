@@ -83,12 +83,19 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
     shrinkInputs();
   }
 
+  protected boolean isCatalyst(int slot) {
+    return false;
+  }
+
   protected void shrinkInputs() {
     assert recipe != null;
 
     for (Complex in : recipe.itemInputs()) {
       int n = in.count();
       for (Integer i : inputSlots) {
+        if (isCatalyst(i)) {
+          continue;
+        }
         ItemStack s = inventory.getStackInSlot(i);
         if (!s.isEmpty() && in.containsItem(s.getItem())) {
           int t = Math.min(n, s.getCount());

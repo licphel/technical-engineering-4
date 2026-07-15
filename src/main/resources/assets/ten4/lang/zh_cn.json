@@ -79,6 +79,8 @@
 
   "ten4.pulverizer": "磨粉机",
   "ten4.pulverizer.desc": "把矿物和金属磨成粉末、浮冰打碎成雪，打碎岩石，等等。",
+  "ten4.press": "冲压机",
+  "ten4.press.desc": "将金属冲压到模具里。可以生产板材、打包和解包储存方块。",
   "ten4.smelter": "熔炼机",
   "ten4.smelter.desc": "使用能量熔炼物品，功能等同于原版的熔炉。",
   "ten4.water_pump": "水泵",
@@ -86,7 +88,9 @@
   "ten4.heat_generator": "热力发电机",
   "ten4.heat_generator.desc": "通过燃烧燃料发电。",
 
+  "block.ten4.device_casing": "设备外壳",
   "block.ten4.pulverizer": "磨粉机",
+  "block.ten4.press": "冲压机",
   "block.ten4.smelter": "熔炼机",
   "block.ten4.water_pump": "水泵",
   "block.ten4.heat_generator": "热力发电机",
@@ -102,10 +106,21 @@
 
   "item.ten4.wrench": "扳手",
   "item.ten4.overclocking_augment": "超频增强",
+  "item.ten4.overclocking_augment.desc": "功率：x1.5",
+  "item.ten4.coil_augment": "线圈增强",
+  "item.ten4.coil_augment.desc": "能量吞吐：x1.5\n能量容量：x1.5",
+  "item.ten4.piston_augment": "活塞增强",
+  "item.ten4.piston_augment.desc": "物品吞吐：x1.5",
+  "item.ten4.vacuum_augment": "真空增强",
+  "item.ten4.vacuum_augment.desc": "流体吞吐：x1.5",
+  "item.ten4.circuit": "电路板",
   "item.ten4.iron_dust": "铁粉",
   "item.ten4.iron_plate": "铁板",
   "item.ten4.copper_dust": "铜粉",
   "item.ten4.copper_plate": "铜板",
   "item.ten4.gold_dust": "金粉",
-  "item.ten4.gold_plate": "金板"
+  "item.ten4.gold_plate": "金板",
+
+  "ten4.sound.beep": "滴滴",
+  "ten4.sound.device_noise": "设备噪音"
 }

@@ -1,0 +1,38 @@
+{
+  "beep": {
+    "subtitle": "ten4.sound.beep",
+    "sounds": [
+      {
+        "name": "ten4:beep",
+        "stream": true
+      }
+    ]
+  },
+  "device_noise_0": {
+    "subtitle": "ten4.sound.device_noise",
+    "sounds": [
+      {
+        "name": "ten4:device_noise_0",
+        "stream": true
+      }
+    ]
+  },
+  "device_noise_1": {
+    "subtitle": "ten4.sound.device_noise",
+    "sounds": [
+      {
+        "name": "ten4:device_noise_1",
+        "stream": true
+      }
+    ]
+  },
+  "device_noise_2": {
+    "subtitle": "ten4.sound.device_noise",
+    "sounds": [
+      {
+        "name": "ten4:device_noise_2",
+        "stream": true
+      }
+    ]
+  }
+}

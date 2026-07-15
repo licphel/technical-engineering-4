@@ -7,8 +7,10 @@ import com.hypothetic.ten4.api.capability.item.SlotOption;
 import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
 import com.hypothetic.ten4.api.container.ContainerMenuLayout;
 import com.hypothetic.ten4.core.registry.ModMenus;
+import com.hypothetic.ten4.core.registry.ModSoundEvents;
 import com.hypothetic.ten4.util.ItemStackUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -32,6 +34,11 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
         .setEnergyCapacity(10_000)
         .setEnergyThroughput(100)
         .setItemThroughput(1);
+  }
+
+  @Override
+  public void onSoundPlay() {
+    playSound(1.0F, SoundEvents.FURNACE_FIRE_CRACKLE);
   }
 
   @Override

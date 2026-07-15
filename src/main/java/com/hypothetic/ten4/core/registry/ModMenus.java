@@ -25,6 +25,7 @@ public class ModMenus {
 
   // Devices
   public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> PULVERIZER = MENUS.register("pulverizer", DEVICE_MENU_GENERATOR);
+  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> PRESS = MENUS.register("press", DEVICE_MENU_GENERATOR);
   public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> SMELTER = MENUS.register("smelter", DEVICE_MENU_GENERATOR);
   public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> WATER_PUMP = MENUS.register("water_pump", DEVICE_MENU_GENERATOR);
 
