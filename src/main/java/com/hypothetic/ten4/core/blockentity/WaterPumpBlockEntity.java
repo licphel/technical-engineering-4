@@ -11,7 +11,7 @@ import com.hypothetic.ten4.api.container.ContainerMenuLayout;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;
 import com.hypothetic.ten4.api.container.sync.Syncer;
-import com.hypothetic.ten4.registry.ModMenus;
+import com.hypothetic.ten4.core.registry.ModMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Inventory;

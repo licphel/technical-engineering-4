@@ -1,7 +1,6 @@
 package com.hypothetic.ten4.api.client.builtin;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.IEnumTranslatable;
 import com.hypothetic.ten4.api.ITranslatable;
 import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
 import com.hypothetic.ten4.api.client.components.*;
@@ -136,7 +135,7 @@ public final class BuiltinComponents {
     }.expandLeft();
   }
 
-  public static Panel sigModePanel(ComponentedContainerScreen<ContainerMenu> screen) {
+  public static Panel configPanel(ComponentedContainerScreen<ContainerMenu> screen) {
     SyncedFieldReader reader = screen.getMenu().fieldsReader();
     BlockPos pos = screen.getMenu().getBlockEntity().getBlockPos();
     return new Panel(BuiltinComponents.panelBacking(15, 15, 241, 0, 15, 15), 91, 48, -15) {
@@ -150,7 +149,7 @@ public final class BuiltinComponents {
       @Override
       protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
         g.draw(TextureRegion.of(PANELS, 165, 17, 91, 48), bx, by);
-        g.drawString(Component.translatable(Ten4.lang("misc.sigmode_label")),
+        g.drawString(Component.translatable(Ten4.lang("misc.config_label")),
             bx + 15, by + 4, 0xDCFFFFFF, false);
       }
     }.expandLeft();
@@ -218,7 +217,7 @@ public final class BuiltinComponents {
     PanelLayout leftPanels = BuiltinComponents.leftPanels();
     PanelLayout rightPanels = BuiltinComponents.rightPanels(screen.getGuiSize()[0]);
     leftPanels.addPanel(BuiltinComponents.infoPanel(screen));
-    leftPanels.addPanel(BuiltinComponents.sigModePanel(screen));
+    leftPanels.addPanel(BuiltinComponents.configPanel(screen));
     rightPanels.addPanel(BuiltinComponents.ioPanel(screen));
     rightPanels.addPanel(BuiltinComponents.augmentPanel(screen));
     return new UiComponent[] {leftPanels, rightPanels};

@@ -1,10 +1,10 @@
-package com.hypothetic.ten4.registry.client;
+package com.hypothetic.ten4.core.registry.client;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.client.renderer.RenderEnergyDuct;
 import com.hypothetic.ten4.api.client.renderer.RenderFluidDuct;
 import com.hypothetic.ten4.api.client.renderer.RenderItemDuct;
-import com.hypothetic.ten4.registry.ModBlockEntities;
+import com.hypothetic.ten4.core.registry.ModBlockEntities;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

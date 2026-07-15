@@ -6,7 +6,7 @@ import com.hypothetic.ten4.api.capability.item.ItemSlot;
 import com.hypothetic.ten4.api.capability.item.SlotOption;
 import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
 import com.hypothetic.ten4.api.container.ContainerMenuLayout;
-import com.hypothetic.ten4.registry.ModMenus;
+import com.hypothetic.ten4.core.registry.ModMenus;
 import com.hypothetic.ten4.util.ItemStackUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;

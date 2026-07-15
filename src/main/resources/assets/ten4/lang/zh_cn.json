@@ -2,9 +2,9 @@
   "ten4.creative_mode_tab.default": "科能工程 4",
 
   "ten4.misc.info_label": "关于",
-  "ten4.misc.sigmode_label": "配置",
+  "ten4.misc.config_label": "配置",
   "ten4.misc.io_label": "输入/输出",
-  "ten4.misc.augment_label": "升级",
+  "ten4.misc.augment_label": "增强",
 
   "ten4.misc.strict_input": "严格输入：",
   "ten4.misc.strict_input.desc": "代表是否只允许输入有配方的物品。",
@@ -82,7 +82,7 @@
   "ten4.smelter": "熔炼机",
   "ten4.smelter.desc": "使用能量熔炼物品，功能等同于原版的熔炉。",
   "ten4.water_pump": "水泵",
-  "ten4.water_pump.desc": "从世界中的液体泵取到其水槽中。",
+  "ten4.water_pump.desc": "将世界中的液体泵取到其水槽中。",
   "ten4.heat_generator": "热力发电机",
   "ten4.heat_generator.desc": "通过燃烧燃料发电。",
 
@@ -97,6 +97,8 @@
   "block.ten4.copper_controller_item_duct": "铜制控制器物品管道",
   "block.ten4.copper_controller_fluid_duct": "铜制控制器流体管道",
 
+  "item.ten4.wrench": "扳手",
+  "item.ten4.overclocking_augment": "超频增强",
   "item.ten4.iron_dust": "铁粉",
   "item.ten4.iron_plate": "铁板",
   "item.ten4.copper_dust": "铜粉",

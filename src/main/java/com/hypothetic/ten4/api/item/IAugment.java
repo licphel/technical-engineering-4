@@ -4,7 +4,7 @@ import com.hypothetic.ten4.api.blockentity.device.AugmentableDeviceBlockEntity;
 
 public interface IAugment<T extends AugmentableDeviceBlockEntity> {
   default boolean isValidFor(T entity) {
-    return true;
+    return entity instanceof AugmentableDeviceBlockEntity;
   }
 
   default void apply(T entity) {

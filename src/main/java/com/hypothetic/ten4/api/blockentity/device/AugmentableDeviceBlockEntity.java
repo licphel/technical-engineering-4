@@ -48,7 +48,9 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
       ItemStack stack = augments.getItem(i);
 
       if (stack.getItem() instanceof IAugment<?> augment) {
-        value = augment.modifier(entry, value);
+        for (int j = 0; j < stack.getCount(); j++) {
+          value = augment.modifier(entry, value);
+        }
       }
     }
     return value;

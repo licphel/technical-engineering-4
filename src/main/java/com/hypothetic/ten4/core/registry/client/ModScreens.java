@@ -1,11 +1,11 @@
-package com.hypothetic.ten4.registry.client;
+package com.hypothetic.ten4.core.registry.client;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.core.client.screen.HeatGeneratorScreen;
 import com.hypothetic.ten4.core.client.screen.PulverizerScreen;
 import com.hypothetic.ten4.core.client.screen.SmelterScreen;
 import com.hypothetic.ten4.core.client.screen.WaterPumpScreen;
-import com.hypothetic.ten4.registry.ModMenus;
+import com.hypothetic.ten4.core.registry.ModMenus;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

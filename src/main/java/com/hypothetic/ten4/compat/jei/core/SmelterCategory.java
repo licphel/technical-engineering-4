@@ -1,9 +1,7 @@
 package com.hypothetic.ten4.compat.jei.core;
 
-import com.hypothetic.ten4.api.recipe.Complex;
-import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import com.hypothetic.ten4.compat.jei.ModRecipeCategory;
-import com.hypothetic.ten4.registry.ModBlocks;
+import com.hypothetic.ten4.core.registry.ModBlocks;
 import com.hypothetic.ten4.util.RecipeUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
@@ -11,12 +9,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class SmelterCategory extends ModRecipeCategory<SmeltingRecipe> {
   public SmelterCategory(IGuiHelper helper, RecipeType<SmeltingRecipe> type) {

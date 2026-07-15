@@ -1,6 +1,8 @@
-package com.hypothetic.ten4.registry;
+package com.hypothetic.ten4.core.registry;
 
 import com.hypothetic.ten4.Ten4;
+import com.hypothetic.ten4.core.item.ItemProperties;
+import com.hypothetic.ten4.core.item.PowerModifierAugmentItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
@@ -12,6 +14,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 @SuppressWarnings("unused")
 public final class ModItems {
   public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, Ten4.ID);
+
+  public static final DeferredHolder<Item, Item> WRENCH = ITEMS.register("wrench", () -> new Item(ItemProperties.WRENCH));
 
   // Devices
   public static final DeferredHolder<Item, BlockItem> PULVERIZER = bridgeBlockItem(ModBlocks.PULVERIZER);
@@ -29,19 +33,23 @@ public final class ModItems {
   public static final DeferredHolder<Item, BlockItem> COPPER_FLUID_DUCT = bridgeBlockItem(ModBlocks.COPPER_FLUID_DUCT);
   public static final DeferredHolder<Item, BlockItem> COPPER_CONTROLLER_FLUID_DUCT = bridgeBlockItem(ModBlocks.COPPER_CONTROLLER_FLUID_DUCT);
 
+  // Augments
+  public static final DeferredHolder<Item, Item> OVERCLOCKING_AUGMENT = ITEMS.register("overclocking_augment", () -> 
+      new PowerModifierAugmentItem(ItemProperties.AUGMENT, v -> (int) (v * 1.2F)));
+
   // Materials
-  public static final DeferredHolder<Item, Item> IRON_DUST = ITEMS.register("iron_dust", () -> new Item(new Item.Properties()));
-  public static final DeferredHolder<Item, Item> IRON_PLATE = ITEMS.register("iron_plate", () -> new Item(new Item.Properties()));
-  public static final DeferredHolder<Item, Item> COPPER_DUST = ITEMS.register("copper_dust", () -> new Item(new Item.Properties()));
-  public static final DeferredHolder<Item, Item> COPPER_PLATE = ITEMS.register("copper_plate", () -> new Item(new Item.Properties()));
-  public static final DeferredHolder<Item, Item> GOLD_DUST = ITEMS.register("gold_dust", () -> new Item(new Item.Properties()));
-  public static final DeferredHolder<Item, Item> GOLDEN_PLATE = ITEMS.register("gold_plate", () -> new Item(new Item.Properties()));
+  public static final DeferredHolder<Item, Item> IRON_DUST = ITEMS.register("iron_dust", () -> new Item(ItemProperties.NONSPECIAL));
+  public static final DeferredHolder<Item, Item> IRON_PLATE = ITEMS.register("iron_plate", () -> new Item(ItemProperties.NONSPECIAL));
+  public static final DeferredHolder<Item, Item> COPPER_DUST = ITEMS.register("copper_dust", () -> new Item(ItemProperties.NONSPECIAL));
+  public static final DeferredHolder<Item, Item> COPPER_PLATE = ITEMS.register("copper_plate", () -> new Item(ItemProperties.NONSPECIAL));
+  public static final DeferredHolder<Item, Item> GOLD_DUST = ITEMS.register("gold_dust", () -> new Item(ItemProperties.NONSPECIAL));
+  public static final DeferredHolder<Item, Item> GOLDEN_PLATE = ITEMS.register("gold_plate", () -> new Item(ItemProperties.NONSPECIAL));
 
   private ModItems() {
   }
 
   private static DeferredHolder<Item, BlockItem> bridgeBlockItem(DeferredHolder<Block, ? extends Block> blockHolder) {
-    return ITEMS.register(blockHolder.getId().getPath(), () -> new BlockItem(BuiltInRegistries.BLOCK.get(blockHolder.getId()), new Item.Properties()));
+    return ITEMS.register(blockHolder.getId().getPath(), () -> new BlockItem(BuiltInRegistries.BLOCK.get(blockHolder.getId()), ItemProperties.NONSPECIAL));
   }
 
   public static void trigger() {

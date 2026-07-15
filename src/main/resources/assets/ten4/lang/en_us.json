@@ -2,7 +2,7 @@
   "ten4.creative_mode_tab.default": "Technical Engineering 4",
 
   "ten4.misc.info_label": "Information",
-  "ten4.misc.sigmode_label": "Configs",
+  "ten4.misc.config_label": "Configs",
   "ten4.misc.io_label": "Input/Output",
   "ten4.misc.augment_label": "Augments",
 
@@ -97,6 +97,8 @@
   "block.ten4.copper_controller_item_duct": "Copper Controller Item Duct",
   "block.ten4.copper_controller_fluid_duct": "Copper Controller Fluid Duct",
 
+  "item.ten4.wrench": "Wrench",
+  "item.ten4.overclocking_augment": "Overclocking Augment",
   "item.ten4.iron_dust": "Iron Dust",
   "item.ten4.iron_plate": "Iron Plate",
   "item.ten4.copper_dust": "Copper Dust",

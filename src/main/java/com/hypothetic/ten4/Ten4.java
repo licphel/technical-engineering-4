@@ -1,6 +1,6 @@
 package com.hypothetic.ten4;
 
-import com.hypothetic.ten4.registry.*;
+import com.hypothetic.ten4.core.registry.*;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;

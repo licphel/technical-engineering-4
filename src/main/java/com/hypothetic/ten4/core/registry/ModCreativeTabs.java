@@ -1,4 +1,4 @@
-package com.hypothetic.ten4.registry;
+package com.hypothetic.ten4.core.registry;
 
 import com.hypothetic.ten4.Ten4;
 import net.minecraft.core.registries.BuiltInRegistries;
