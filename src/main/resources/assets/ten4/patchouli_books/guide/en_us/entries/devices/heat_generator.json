@@ -1,0 +1,11 @@
+{
+  "name": "ten4.entry.heat_generator",
+  "category": "ten4:devices",
+  "icon": "ten4:heat_generator",
+  "pages": [
+    {
+      "type": "text",
+      "text": "ten4.page.heat_generator0"
+    }
+  ]
+}

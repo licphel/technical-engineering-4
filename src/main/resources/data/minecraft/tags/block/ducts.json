@@ -1,0 +1,13 @@
+{
+  "values": [
+    "ten4:copper_energy_duct",
+    "ten4:opaque_copper_energy_duct",
+    "ten4:copper_controller_energy_duct",
+    "ten4:copper_item_duct",
+    "ten4:opaque_copper_item_duct",
+    "ten4:copper_controller_item_duct",
+    "ten4:copper_fluid_duct",
+    "ten4:opaque_copper_fluid_duct",
+    "ten4:copper_controller_fluid_duct"
+  ]
+}

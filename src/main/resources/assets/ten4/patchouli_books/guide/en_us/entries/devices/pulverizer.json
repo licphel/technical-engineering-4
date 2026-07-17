@@ -1,0 +1,19 @@
+{
+  "name": "ten4.entry.pulverizer",
+  "category": "ten4:devices",
+  "icon": "ten4:pulverizer",
+  "pages": [
+    {
+      "type": "text",
+      "text": "ten4.page.pulverizer0"
+    },
+    {
+      "type": "crafting",
+      "recipe": "ten4:crafting/pulverizer"
+    },
+    {
+      "type": "text",
+      "text": "ten4.page.pulverizer1"
+    }
+  ]
+}

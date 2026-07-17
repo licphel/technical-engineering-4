@@ -1,0 +1,31 @@
+{
+  "name": "ten4.entry.augments",
+  "category": "ten4:items",
+  "icon": "ten4:overclocking_augment",
+  "pages": [
+    {
+      "type": "text",
+      "text": "ten4.page.augments0"
+    },
+    {
+      "type": "spotlight",
+      "item": "ten4:overclocking_augment",
+      "text": "ten4.page.augments1"
+    },
+    {
+      "type": "spotlight",
+      "item": "ten4:energy_coil_augment",
+      "text": "ten4.page.augments2"
+    },
+    {
+      "type": "spotlight",
+      "item": "ten4:piston_augment",
+      "text": "ten4.page.augments3"
+    },
+    {
+      "type": "spotlight",
+      "item": "ten4:vacuum_augment",
+      "text": "ten4.page.augments4"
+    }
+  ]
+}
