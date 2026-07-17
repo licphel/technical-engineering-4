@@ -23,12 +23,12 @@ public final class FaceModePacker {
 
   public static FaceMode get(int packed, Direction d) {
     return FaceMode.of((packed >> shift(d)) & MASK);
-  }  private static final int BITS = 3, MASK = (1 << BITS) - 1;
+  }
 
   public static int set(int packed, Direction d, FaceMode mode) {
     int s = shift(d);
     return (packed & ~(MASK << s)) | (mode.ordinal() << s);
-  }
+  }  private static final int BITS = 2, MASK = (1 << BITS) - 1;
 
   public static int cycle(int packed, Direction d) {
     FaceMode cur = get(packed, d);
@@ -39,7 +39,7 @@ public final class FaceModePacker {
   static int packFaces(Map<Direction, FaceMode> config) {
     int packed = 0;
     for (Direction d : Direction.values()) {
-      packed = set(packed, d, config.getOrDefault(d, FaceMode.PASSIVE_BIPASS));
+      packed = set(packed, d, config.getOrDefault(d, FaceMode.BIPASS));
     }
     return packed;
   }

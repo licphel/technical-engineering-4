@@ -27,7 +27,7 @@ public class TransmitterItemHandler implements IItemHandler {
   @Override
   public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
     if (stack.isEmpty() || transmitter.getNetwork() == null) {
-      return ItemStack.EMPTY;
+      return stack; // no network → reject
     }
     ItemTransmitter.TransitEntry e = transmitter.transitEntry;
     // Clean up stale empty entry
@@ -44,6 +44,11 @@ public class TransmitterItemHandler implements IItemHandler {
         return stack;
       }
     }
+    // Check route before accepting
+    byte[] route = e == null ? RouteFinder.findRoute(transmitter.getNetwork(), transmitter.getBlockPos(), stack) : e.route;
+    if (route.length == 0) {
+      return stack; // no valid destination → reject
+    }
     int limit = Math.min(stack.getCount(), space);
     if (!simulate) {
       if (e == null) {
@@ -51,10 +56,10 @@ public class TransmitterItemHandler implements IItemHandler {
         e.id = transmitter.allocateId();
         e.stack = stack.copyWithCount(limit);
         e.entrySide = (byte) side.ordinal();
-        e.route = RouteFinder.findRoute(transmitter.getNetwork(), transmitter.getBlockPos(), e.stack);
+        e.route = route;
         e.index = 0;
         e.progress = 0;
-        e.exitSide = e.route.length > 0 ? e.route[0] : 0;
+        e.exitSide = route[0];
         transmitter.transitEntry = e;
       } else {
         e.stack.grow(limit);

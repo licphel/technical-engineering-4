@@ -10,17 +10,11 @@ public final class DisplayUtil {
   }
 
   public static String compactInt(int value) {
-    return compactInt(value, "%.2f");
+    return compactInt(value, "%,d");
   }
 
   public static String compactInt(int value, String fmt) {
-    if (value > 1_000_000) {
-      return String.format(fmt, value / 1_000_000.0) + " M";
-    }
-    if (value >= 1_000) {
-      return String.format(fmt, value / 1_000.0) + " k";
-    }
-    return String.valueOf(value);
+    return String.format(fmt, value);
   }
 
   public static Component forgeEnergy(int v, int mv) {

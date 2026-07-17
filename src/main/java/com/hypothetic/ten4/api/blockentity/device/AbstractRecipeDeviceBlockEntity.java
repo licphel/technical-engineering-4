@@ -108,7 +108,6 @@ public abstract class AbstractRecipeDeviceBlockEntity<I extends RecipeInput, T e
       setEnergy(getEnergy() - consumed);
 
       if (progress >= maxProgress) {
-        delayPushFor(2); // For comparator output: a pulse
         finish();
         progress = 0;
         recipe = null;

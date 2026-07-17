@@ -3,7 +3,6 @@ package com.hypothetic.ten4.core.block.duct;
 import com.google.common.collect.Maps;
 import com.hypothetic.ten4.api.block.BridgedEntityBlock;
 import com.hypothetic.ten4.core.block.BuiltinBlockStates;
-import com.hypothetic.ten4.core.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;

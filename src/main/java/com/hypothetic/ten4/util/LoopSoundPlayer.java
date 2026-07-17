@@ -6,8 +6,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 
 public abstract class LoopSoundPlayer {
-  private float playBeginStamp;
   private final float length;
+  private float playBeginStamp;
   private SoundEvent current;
 
   protected LoopSoundPlayer(float length) {

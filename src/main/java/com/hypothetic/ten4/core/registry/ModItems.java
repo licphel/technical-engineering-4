@@ -54,6 +54,10 @@ public final class ModItems {
           IAugment.AugmentableField.FLUID_THROUGHPUT));
 
   // Materials
+  public static final DeferredHolder<Item, Item> SHEET_DIE = ITEMS.register("sheet_die", () -> new Item(ItemProperties.SINGLE_STACKED));
+  public static final DeferredHolder<Item, Item> PACKING_DIE = ITEMS.register("packing_die", () -> new Item(ItemProperties.SINGLE_STACKED));
+  public static final DeferredHolder<Item, Item> DEPACKING_DIE = ITEMS.register("depacking_die", () -> new Item(ItemProperties.SINGLE_STACKED));
+
   public static final DeferredHolder<Item, Item> CIRCUIT = ITEMS.register("circuit", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> IRON_DUST = ITEMS.register("iron_dust", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> IRON_PLATE = ITEMS.register("iron_plate", () -> new Item(ItemProperties.NONSPECIAL));

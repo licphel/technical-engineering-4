@@ -38,8 +38,8 @@ public abstract class RenderTransmitterBlock<BE extends BlockEntity> implements 
   protected final DuctModelBaker baker;
   private final SmoothQuadLighter aoLighter = new SmoothQuadLighter(BLOCK_COLORS);
   private final FlatQuadLighter flatLighter = new FlatQuadLighter(BLOCK_COLORS);
-  private TextureAtlasSprite sprite;
   private final TextureAtlasSprite[] loadedTextures;
+  private TextureAtlasSprite sprite;
   private boolean drawInside = true;
 
   protected RenderTransmitterBlock(BlockEntityRendererProvider.Context ctx,

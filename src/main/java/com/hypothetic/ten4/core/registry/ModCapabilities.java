@@ -43,7 +43,6 @@ public class ModCapabilities {
     register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.COPPER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
     register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.OPAQUE_COPPER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
     register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
-
   }
 
   @SuppressWarnings("unchecked")

@@ -2,8 +2,8 @@ package com.hypothetic.ten4.core.client.screen;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
-import com.hypothetic.ten4.core.client.builtin.BuiltinComponents;
 import com.hypothetic.ten4.api.container.ContainerMenu;
+import com.hypothetic.ten4.core.client.builtin.BuiltinComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,7 +20,6 @@ public class HeatGeneratorScreen extends ComponentedContainerScreen<ContainerMen
 
   @Override
   protected void buildElements() {
-    add(BuiltinComponents.showMiscs(this));
     add(BuiltinComponents.defaultPanels(this));
     add(BuiltinComponents.energyGauge(120, 18, menu.fieldsReader()));
     add(BuiltinComponents.fuelGauge(80, 36, menu.fieldsReader()));

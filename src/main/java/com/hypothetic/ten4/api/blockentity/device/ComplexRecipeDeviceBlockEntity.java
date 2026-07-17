@@ -16,17 +16,33 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
   }
 
   @Override
-  protected int getRecipeTime(IComplexRecipe r) {
-    return r.time();
-  }
-
-  @Override
   public boolean isValidInput(ItemStack stack) {
     if (level == null || level.isClientSide()) {
       return false;
     }
 
-    if (!strictInput) {
+    if (!isItemStrictInput()) {
+      return true;
+    }
+
+    return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
+        .anyMatch(h -> {
+          for (Complex in : h.value().itemInputs()) {
+            if (in.test(stack)) {
+              return true;
+            }
+          }
+          return false;
+        });
+  }
+
+  @Override
+  public boolean isValidInput(FluidStack stack) {
+    if (level == null || level.isClientSide()) {
+      return false;
+    }
+
+    if (!isItemStrictInput()) {
       return true;
     }
 
@@ -68,7 +84,6 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
 
   protected void finish() {
     assert recipe != null;
-    delayPushFor(2); // For comparator signal propagation
 
     for (ItemStack s : recipe.generateItems()) {
       if (!s.isEmpty()) {
@@ -81,6 +96,39 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
       }
     }
     shrinkInputs();
+  }
+
+  protected boolean doesRecipeMatch(IComplexRecipe r) {
+    for (Complex in : r.itemInputs()) {
+      boolean f = false;
+      for (Integer i : inputSlots) {
+        if (in.test(inventory.getStackInSlot(i))) {
+          f = true;
+          break;
+        }
+      }
+      if (!f) {
+        return false;
+      }
+    }
+    for (Complex in : r.fluidInputs()) {
+      boolean f = false;
+      for (Integer i : inputTanks) {
+        if (in.test(fluidInventory.getFluidInTank(i))) {
+          f = true;
+          break;
+        }
+      }
+      if (!f) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  protected int getRecipeTime(IComplexRecipe r) {
+    return r.time();
   }
 
   protected boolean isCatalyst(int slot) {
@@ -115,33 +163,5 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
         }
       }
     }
-  }
-
-  protected boolean doesRecipeMatch(IComplexRecipe r) {
-    for (Complex in : r.itemInputs()) {
-      boolean f = false;
-      for (Integer i : inputSlots) {
-        if (in.test(inventory.getStackInSlot(i))) {
-          f = true;
-          break;
-        }
-      }
-      if (!f) {
-        return false;
-      }
-    }
-    for (Complex in : r.fluidInputs()) {
-      boolean f = false;
-      for (Integer i : inputTanks) {
-        if (in.test(fluidInventory.getFluidInTank(i))) {
-          f = true;
-          break;
-        }
-      }
-      if (!f) {
-        return false;
-      }
-    }
-    return true;
   }
 }

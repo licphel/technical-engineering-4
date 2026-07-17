@@ -103,10 +103,13 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
             continue;
           }
           byte[] route = RouteFinder.findRoute(network, myPos, sim);
+          if (route.length == 0) {
+            continue; // no valid destination → try next slot
+          }
           TransitEntry entry = new TransitEntry();
           entry.stack = inv.extractItem(slot, Math.min(slotCapacity, sim.getCount()), false);
           entry.entrySide = (byte) side.ordinal();
-          entry.exitSide = route.length > 0 ? route[0] : 0;
+          entry.exitSide = route[0];
           entry.route = route;
           entry.index = 0;
           entry.id = nextId++;
@@ -119,9 +122,13 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
     // Route initialization for externally inserted items (PUSH via insertItem)
     if (snapshot != null && (snapshot.route == null || snapshot.index >= snapshot.route.length)) {
       byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
+      if (newRoute.length == 0) {
+        transitEntry = null; // no valid route — drop the entry
+        return;
+      }
       snapshot.route = newRoute;
       snapshot.index = 0;
-      snapshot.exitSide = newRoute.length > 0 ? newRoute[0] : 0;
+      snapshot.exitSide = newRoute[0];
     }
 
     // Advance (only if in snapshot — prevents same-tick multi-hop)
@@ -153,9 +160,13 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
           }
         }
         byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
+        if (newRoute.length == 0) {
+          transitEntry = null;
+          return;
+        }
         snapshot.route = newRoute;
         snapshot.index = 0;
-        snapshot.exitSide = newRoute.length > 0 ? newRoute[0] : 0;
+        snapshot.exitSide = newRoute[0];
         return;
       }
 
@@ -183,9 +194,13 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
       }
 
       byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
+      if (newRoute.length == 0) {
+        transitEntry = null;
+        return;
+      }
       snapshot.route = newRoute;
       snapshot.index = 0;
-      snapshot.exitSide = newRoute.length > 0 ? newRoute[0] : 0;
+      snapshot.exitSide = newRoute[0];
     }
   }
 

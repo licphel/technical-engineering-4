@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
@@ -42,11 +43,6 @@ public class SmelterBlockEntity extends AbstractRecipeDeviceBlockEntity<SingleRe
   }
 
   @Override
-  public void onSoundPlay() {
-    playSound(1.0F, SoundEvents.FURNACE_FIRE_CRACKLE);
-  }
-
-  @Override
   protected void finish() {
     assert recipe != null && level != null;
     ItemStack output = recipe.assemble(new SingleRecipeInput(inventory.getItem(0)), level.registryAccess());
@@ -63,6 +59,22 @@ public class SmelterBlockEntity extends AbstractRecipeDeviceBlockEntity<SingleRe
   }
 
   @Override
+  protected RecipeType<SmeltingRecipe> getRecipeType() {
+    return RecipeType.SMELTING;
+  }
+
+  @Override
+  protected int getRecipeTime(SmeltingRecipe r) {
+    return r.getCookingTime();
+  }
+
+  @Override
+  protected void initializeRecipeAutomation() {
+    inputSlots.add(0);
+    outputSlots.add(1);
+  }
+
+  @Override
   protected DeviceInfo makeDeviceInfo() {
     return new DeviceInfo()
         .enableEnergy()
@@ -76,6 +88,27 @@ public class SmelterBlockEntity extends AbstractRecipeDeviceBlockEntity<SingleRe
   }
 
   @Override
+  public boolean isValidInput(ItemStack stack) {
+    if (level == null || level.isClientSide()) {
+      return false;
+    }
+
+    if (!isItemStrictInput()) {
+      return true;
+    }
+
+    return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
+        .anyMatch(h -> {
+          for (Ingredient ing : h.value().getIngredients()) {
+            if (ing.test(stack)) {
+              return true;
+            }
+          }
+          return false;
+        });
+  }
+
+  @Override
   public @Nullable AbstractContainerMenu createMenu(int cid, Inventory inv, Player p) {
     ContainerMenuLayout layout = new ContainerMenuLayout()
         .add(0, 44, 35)
@@ -84,18 +117,7 @@ public class SmelterBlockEntity extends AbstractRecipeDeviceBlockEntity<SingleRe
   }
 
   @Override
-  protected void initializeRecipeAutomation() {
-    inputSlots.add(0);
-    outputSlots.add(1);
-  }
-
-  @Override
-  protected RecipeType<SmeltingRecipe> getRecipeType() {
-    return RecipeType.SMELTING;
-  }
-
-  @Override
-  protected int getRecipeTime(SmeltingRecipe r) {
-    return r.getCookingTime();
+  public void onSoundPlay() {
+    playSound(1.0F, SoundEvents.FURNACE_FIRE_CRACKLE);
   }
 }

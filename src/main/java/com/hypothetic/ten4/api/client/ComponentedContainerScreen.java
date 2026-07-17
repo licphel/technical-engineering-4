@@ -20,6 +20,8 @@ public abstract class ComponentedContainerScreen<T extends AbstractContainerMenu
 
   public ComponentedContainerScreen(T menu, Inventory inv, Component title) {
     super(menu, inv, title);
+    this.imageWidth = getGuiSize()[0];
+    this.imageHeight = getGuiSize()[1];
   }
 
   protected abstract ResourceLocation getBackground();
@@ -97,7 +99,7 @@ public abstract class ComponentedContainerScreen<T extends AbstractContainerMenu
     boolean flag = super.hasClickedOutside(x, y, left, top, p_97761_);
 
     if (!flag) {
-      return true;
+      return false;
     }
 
     for (Rect2i r : getComponentAreas()) {

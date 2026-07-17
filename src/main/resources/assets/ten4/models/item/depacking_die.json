@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "ten4:item/paint/brown_paint"
+    "layer0": "ten4:item/depacking_die"
   }
 }

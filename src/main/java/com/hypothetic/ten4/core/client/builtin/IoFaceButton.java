@@ -40,37 +40,8 @@ class IoFaceButton extends Button {
   }
 
   private static void renderFaceModeIcon(EnhancedGuiGraphics g, int x, int y, FaceMode mode) {
-    int u, v;
-    switch (mode) {
-      case OFF -> {
-        u = 102;
-        v = 104;
-      }
-      case PASSIVE_INPUT -> {
-        u = 93;
-        v = 84;
-      }
-      case PASSIVE_OUTPUT -> {
-        u = 93;
-        v = 94;
-      }
-      case ACTIVE_INPUT -> {
-        u = 102;
-        v = 84;
-      }
-      case ACTIVE_OUTPUT -> {
-        u = 102;
-        v = 94;
-      }
-      case PASSIVE_BIPASS -> {
-        u = 93;
-        v = 104;
-      }
-      default -> {
-        return;
-      }
-    }
-    g.draw(TextureRegion.of(BuiltinComponents.PANELS, u, v, 7, 8), x, y);
+    int u = 52 + 9 * mode.ordinal();
+    g.draw(TextureRegion.of(BuiltinComponents.PANELS, u, 218, 7, 8), x, y);
   }
 
   @Override
@@ -96,5 +67,23 @@ class IoFaceButton extends Button {
     tooltips.add(mc);
     tooltips.add(Component.translatable(Ten4.lang("misc." + relSide)).withStyle(ChatFormatting.GRAY));
     tooltips.add(state.get(dir).createDescription().withStyle(ChatFormatting.GRAY));
+    // Show auto flag states in tooltip
+    if (state.isAutoEject()) {
+      tooltips.add(Component.translatable(Ten4.lang("misc.auto_eject")).append(Component.translatable(Ten4.lang("misc.enabled"))).withStyle(ChatFormatting.GRAY));
+    }
+    if (state.isAutoExtract()) {
+      tooltips.add(Component.translatable(Ten4.lang("misc.auto_extract")).append(Component.translatable(Ten4.lang("misc.enabled"))).withStyle(ChatFormatting.GRAY));
+    }
+    if (state.isStrictInput()) {
+      tooltips.add(Component.translatable(Ten4.lang("misc.strict_input")).append(Component.translatable(Ten4.lang("misc.enabled"))).withStyle(ChatFormatting.GRAY));
+    }
+  }
+
+  @Override
+  public void onMouseMotion(int mx, int my) {
+    super.onMouseMotion(mx, my);
+    if (hovering) {
+      state.activeDir = dir;
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "ten4:item/paint/gray_paint"
+    "layer0": "ten4:item/packing_die"
   }
 }

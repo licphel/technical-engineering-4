@@ -7,7 +7,6 @@ import com.hypothetic.ten4.api.capability.item.SlotOption;
 import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
 import com.hypothetic.ten4.api.container.ContainerMenuLayout;
 import com.hypothetic.ten4.core.registry.ModMenus;
-import com.hypothetic.ten4.core.registry.ModSoundEvents;
 import com.hypothetic.ten4.util.ItemStackUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -37,13 +36,8 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
   }
 
   @Override
-  public void onSoundPlay() {
-    playSound(1.0F, SoundEvents.FURNACE_FIRE_CRACKLE);
-  }
-
-  @Override
   public boolean isValidInput(ItemStack stack) {
-    return !strictInput || stack.getBurnTime(RecipeType.SMELTING) > 0;
+    return !isItemStrictInput() || stack.getBurnTime(RecipeType.SMELTING) > 0;
   }
 
   @Override
@@ -51,6 +45,11 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
     ContainerMenuLayout layout = new ContainerMenuLayout()
         .add(0, 44, 35);
     return new AugmentableContainerMenu(ModMenus.HEAT_GENERATOR.get(), cid, inv, this, layout);
+  }
+
+  @Override
+  public void onSoundPlay() {
+    playSound(1.0F, SoundEvents.FURNACE_FIRE_CRACKLE);
   }
 
   @Override

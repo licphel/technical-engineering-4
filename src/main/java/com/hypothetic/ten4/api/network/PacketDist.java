@@ -14,7 +14,7 @@ public final class PacketDist {
 
   public static void sendToNearbyPlayers(ServerLevel level, CustomPacketPayload payload,
                                          BlockPos pos, double distance) {
-    Packet<?> packet =new ClientboundCustomPayloadPacket(payload);
+    Packet<?> packet = new ClientboundCustomPayloadPacket(payload);
     for (ServerPlayer player : level.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false)) {
       if (player.blockPosition().closerThan(pos, distance)) {
         player.connection.send(packet);

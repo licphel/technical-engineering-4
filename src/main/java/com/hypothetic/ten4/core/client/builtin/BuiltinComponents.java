@@ -14,13 +14,13 @@ import com.hypothetic.ten4.api.container.sync.SyncedFieldReader;
 import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;
 import com.hypothetic.ten4.core.registry.ModSoundEvents;
 import com.hypothetic.ten4.util.DisplayUtil;
+import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -42,7 +42,6 @@ public final class BuiltinComponents {
   }
 
   public static GaugeFluid energyGauge(int x, int y, SyncedFieldReader reader) {
-    // Use a fluid gauge to simulate
     return new GaugeFluid(x, y, 8, 50, 6, 48,
         () -> new FluidStack(Fluids.WATER, reader.getInt(BuiltinSyncedFields.ENERGY)),
         () -> reader.getInt(BuiltinSyncedFields.MAX_ENERGY)
@@ -80,16 +79,6 @@ public final class BuiltinComponents {
     ).withTexture(FLUID_TANK, null);
   }
 
-  // 2-px padding rightward
-  public static Button buttonNonstate(int x, int y, int w, int h, int u, int v, int srcW, int srcH) {
-    return new Button(x, y, w, h)
-        .withTexture(
-            TextureRegion.of(TEXTURE, u, v, srcW, srcH),
-            TextureRegion.of(TEXTURE, u + srcW, v, srcW, srcH),
-            null
-        ).setEnablePressed(false);
-  }
-
   public static Button panelBacking(int w, int h, int u, int v, int srcW, int srcH) {
     return new Button(0, 0, w, h)
         .withTexture(
@@ -100,83 +89,116 @@ public final class BuiltinComponents {
   }
 
   public static PanelLayout leftPanels() {
-    return new PanelLayout(-15, 8).panelGap(2);
+    return new PanelLayout(-15, 6).panelGap(2);
   }
 
   public static PanelLayout rightPanels(int bgWidth) {
-    return new PanelLayout(bgWidth, 8).panelGap(2);
+    return new PanelLayout(bgWidth, 6).panelGap(2);
   }
 
   public static Panel infoPanel(ComponentedContainerScreen<ContainerMenu> screen) {
     SyncedFieldReader reader = screen.getMenu().fieldsReader();
     ITranslatable ip = screen.getMenu().getBlockEntity();
     Component rawText = ip.createDescription();
+    String power = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.POWER));
+    String eThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.ENERGY_THROUGHPUT));
+    String iThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.ITEM_THROUGHPUT));
+    String fThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.FLUID_THROUGHPUT));
 
-    return new Panel(BuiltinComponents.panelBacking(15, 15, 241, 67, 15, 15), 91, 72, -15) {
-      double scrollY;
-      int verticalH = -1;
-
-      @Override
-      public boolean onMouseScrolled(double mx, double my, double delta) {
-        scrollY = Math.max(0, Math.min(scrollY - delta * 10, verticalH - 48));
-        return true;
+    return new Panel(panelBacking(15, 15, 241, 60, 15, 15), 91, 40, -15) {
+      {
+        // H: description hover
+        addChild(new UiComponent(33, 21, 12, 12) {
+          @Override
+          public void onCollectingTooltips(List<Component> tooltips) {
+            super.onCollectingTooltips(tooltips);
+            tooltips.add(rawText);
+          }
+        });
+        // D: data hover
+        addChild(new UiComponent(48, 21, 12, 12) {
+          @Override
+          public void onCollectingTooltips(List<Component> tooltips) {
+            super.onCollectingTooltips(tooltips);
+            tooltips.add(Component.translatable(Ten4.lang("misc.power")).append(power + "FE/t"));
+            tooltips.add(Component.translatable(Ten4.lang("misc.throughput.energy")).append(eThru + "FE/t"));
+            tooltips.add(Component.translatable(Ten4.lang("misc.throughput.item")).append(iThru + "S/t"));
+            tooltips.add(Component.translatable(Ten4.lang("misc.throughput.fluid")).append(fThru + "mB/t"));
+          }
+        });
       }
 
       @Override
       protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
-        g.draw(TextureRegion.of(PANELS, 165, 84, 91, 72), bx, by);
+        g.draw(TextureRegion.of(PANELS, 165, 77, 91, 40), bx, by);
         g.drawString(Component.translatable(Ten4.lang("misc.info_label")),
             bx + 15, by + 4, 0xDCFFFFFF, false);
-
-        if (verticalH == -1) {
-          verticalH = g.font().split(rawText, 82).size() * 9;
-        }
-
-        g.inner().enableScissor(bx + 6, by + 18, bx + bw - 2, by + bh - 2);
-        g.drawBrokenString(rawText, bx + 6, by + 18 - (int) scrollY, 0xFF000000, 82, false);
-        g.inner().disableScissor();
       }
     }.expandLeft();
   }
 
-  public static Panel configPanel(ComponentedContainerScreen<ContainerMenu> screen) {
+
+  public static Panel redstonePanel(ComponentedContainerScreen<ContainerMenu> screen) {
     SyncedFieldReader reader = screen.getMenu().fieldsReader();
     BlockPos pos = screen.getMenu().getBlockEntity().getBlockPos();
-    return new Panel(BuiltinComponents.panelBacking(15, 15, 241, 0, 15, 15), 91, 48, -15) {
+    return new Panel(panelBacking(15, 15, 241, 0, 15, 15), 91, 40, -15) {
       {
-        addChild(new SigModeButton(18, 24, 12, 12, reader, pos).withClickSound(BEEP));
-        addChild(new StrictInputButton(33, 24, 12, 12, reader, pos).withClickSound(BEEP));
-        addChild(new ComparatorModeButton(48, 24, 12, 12, reader, pos).withClickSound(BEEP));
-        addChild(new ReqIntervalButton(63, 24, 12, 12, reader, pos).withClickSound(BEEP));
+        addChild(new SigModeButton(33, 21, 12, 12, reader, pos).withClickSound(BEEP));
+        addChild(new ComparatorModeButton(48, 21, 12, 12, reader, pos).withClickSound(BEEP));
       }
 
       @Override
       protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
-        g.draw(TextureRegion.of(PANELS, 165, 17, 91, 48), bx, by);
-        g.drawString(Component.translatable(Ten4.lang("misc.config_label")),
+        g.draw(TextureRegion.of(PANELS, 165, 17, 91, 40), bx, by);
+        g.drawString(Component.translatable(Ten4.lang("misc.redstone_label")),
             bx + 15, by + 4, 0xDCFFFFFF, false);
+      }
+    }.expandLeft();
+  }
+
+  public static Panel securityPanel(ComponentedContainerScreen<ContainerMenu> screen) {
+    SyncedFieldReader reader = screen.getMenu().fieldsReader();
+    BlockPos pos = screen.getMenu().getBlockEntity().getBlockPos();
+    return new Panel(panelBacking(15, 15, 241, 119, 15, 15), 91, 40, -15) {
+      {
+        addChild(new SecurityModeButton(40, 21, 12, 12, reader, pos).withClickSound(BEEP));
+      }
+
+      @Override
+      protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
+        g.draw(TextureRegion.of(PANELS, 165, 136, 91, 40), bx, by);
+        g.drawString(Component.translatable(Ten4.lang("misc.security_label")),
+            bx + 15, by + 4, 0xFFFFFFFF, false);
       }
     }.expandLeft();
   }
 
   public static Panel ioPanel(ComponentedContainerScreen<ContainerMenu> screen) {
     IoConfigState state = new IoConfigState(screen.getMenu().fieldsReader());
-    return new Panel(BuiltinComponents.panelBacking(15, 15, 0, 67, 15, 15), 91, 90, -15) {
+    BlockPos pos = screen.getMenu().getBlockEntity().getBlockPos();
+    return new Panel(panelBacking(15, 15, 0, 67, 15, 15), 91, 103, -15) {
       {
-        Direction facing = screen.getMenu().getBlockEntity().getBlockState()
-            .getValue(BlockStateProperties.HORIZONTAL_FACING);
-        addChild(new IoTypeButton(6, 21, 12, 12, state).withClickSound(BEEP));
-        addChild(new IoFaceButton(36, 24, Direction.UP, screen, state, "up").withClickSound(BEEP));
-        addChild(new IoFaceButton(18, 42, facing.getClockWise(), screen, state, "left").withClickSound(BEEP));
-        addChild(new IoFaceButton(36, 42, facing, screen, state, "front").withClickSound(BEEP));
-        addChild(new IoFaceButton(54, 42, facing.getCounterClockWise(), screen, state, "right").withClickSound(BEEP));
-        addChild(new IoFaceButton(36, 60, Direction.DOWN, screen, state, "down").withClickSound(BEEP));
-        addChild(new IoFaceButton(54, 60, facing.getOpposite(), screen, state, "back").withClickSound(BEEP));
+        Direction facing = screen.getMenu().getBlockEntity().getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+        addChild(new IoTypeButton(38, 21, 12, 12, state).withClickSound(BEEP));
+
+        addChild(new IoFaceButton(46, 40, Direction.UP, screen, state, "up").withClickSound(BEEP));
+        addChild(new IoFaceButton(28, 58, facing.getClockWise(), screen, state, "left").withClickSound(BEEP));
+        addChild(new IoFaceButton(46, 58, facing, screen, state, "front").withClickSound(BEEP));
+        addChild(new IoFaceButton(64, 58, facing.getCounterClockWise(), screen, state, "right").withClickSound(BEEP));
+        addChild(new IoFaceButton(46, 76, Direction.DOWN, screen, state, "down").withClickSound(BEEP));
+        addChild(new IoFaceButton(64, 76, facing.getOpposite(), screen, state, "back").withClickSound(BEEP));
+
+        addChild(new AutoFlagButton(10, 45, 26, 218, state, pos, 25,
+            () -> state.isAutoEject(), "auto_eject").withClickSound(BEEP));
+        addChild(new AutoFlagButton(10, 60, 0, 218, state, pos, 26,
+            () -> state.isAutoExtract(), "auto_extract").withClickSound(BEEP));
+        addChild(new AutoFlagButton(10, 75, 0, 204, state, pos, 24,
+            () -> state.isStrictInput(), "strict_input").withClickSound(BEEP));
       }
 
       @Override
       protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
-        g.draw(TextureRegion.of(PANELS, 0, 84, 91, 90), bx, by);
+        g.draw(TextureRegion.of(PANELS, 0, 84, 91, 103), bx, by);
         g.drawString(Component.translatable(Ten4.lang("misc.io_label")),
             bx + 15, by + 4, 0xDCFFFFFF, false);
       }
@@ -184,7 +206,7 @@ public final class BuiltinComponents {
   }
 
   public static Panel augmentPanel(ComponentedContainerScreen<ContainerMenu> screen) {
-    Panel panel = new Panel(BuiltinComponents.panelBacking(15, 15, 0, 0, 15, 15), 91, 48, -15) {
+    Panel panel = new Panel(panelBacking(15, 15, 0, 0, 15, 15), 91, 48, -15) {
       @Override
       public void onTick() {
         super.onTick();
@@ -221,32 +243,10 @@ public final class BuiltinComponents {
     PanelLayout leftPanels = BuiltinComponents.leftPanels();
     PanelLayout rightPanels = BuiltinComponents.rightPanels(screen.getGuiSize()[0]);
     leftPanels.addPanel(BuiltinComponents.infoPanel(screen));
-    leftPanels.addPanel(BuiltinComponents.configPanel(screen));
+    leftPanels.addPanel(BuiltinComponents.redstonePanel(screen));
+    leftPanels.addPanel(BuiltinComponents.securityPanel(screen));
     rightPanels.addPanel(BuiltinComponents.ioPanel(screen));
     rightPanels.addPanel(BuiltinComponents.augmentPanel(screen));
     return new UiComponent[] {leftPanels, rightPanels};
-  }
-
-  public static UiComponent showMiscs(ComponentedContainerScreen<ContainerMenu> screen) {
-    return new UiComponent(4, 4, 48, 8) {
-      @Override
-      public void onCollectingTooltips(List<Component> tooltips) {
-        super.onCollectingTooltips(tooltips);
-
-        SyncedFieldReader syncer = screen.getMenu().fieldsReader();
-        MutableComponent mc = Component.translatable(Ten4.lang("misc.power"));
-        mc.append(DisplayUtil.compactInt(syncer.get(BuiltinSyncedFields.POWER)) + "FE/t");
-        tooltips.add(mc);
-        mc = Component.translatable(Ten4.lang("misc.throughput.energy"));
-        mc.append(DisplayUtil.compactInt(syncer.get(BuiltinSyncedFields.ENERGY_THROUGHPUT)) + "FE/t");
-        tooltips.add(mc);
-        mc = Component.translatable(Ten4.lang("misc.throughput.item"));
-        mc.append(DisplayUtil.compactInt(syncer.get(BuiltinSyncedFields.ITEM_THROUGHPUT)) + "S/t");
-        tooltips.add(mc);
-        mc = Component.translatable(Ten4.lang("misc.throughput.fluid"));
-        mc.append(DisplayUtil.compactInt(syncer.get(BuiltinSyncedFields.FLUID_THROUGHPUT)) + "mB/t");
-        tooltips.add(mc);
-      }
-    };
   }
 }

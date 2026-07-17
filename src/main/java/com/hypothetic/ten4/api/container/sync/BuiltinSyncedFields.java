@@ -16,9 +16,12 @@ public final class BuiltinSyncedFields {
   public static final SyncedField<Integer> ENERGY_FACES = SyncedField.ofInt("energy_faces");
   public static final SyncedField<Integer> ITEM_FACES = SyncedField.ofInt("item_faces");
   public static final SyncedField<Integer> FLUID_FACES = SyncedField.ofInt("fluid_faces");
-  public static final SyncedField<Boolean> STRICT_INPUT = SyncedField.ofBool("strict_input");
   public static final SyncedField<Integer> COMPARATOR_MODE = SyncedField.ofInt("comparator_mode");
-  public static final SyncedField<Integer> REQUEST_INTERVAL = SyncedField.ofInt("request_interval");
+  public static final SyncedField<Integer> SECURITY_MODE = SyncedField.ofInt("security_mode");
+  // Per-type per-direction auto flags (packed ints)
+  public static final SyncedField<Integer> ENERGY_AUTO_FLAGS = SyncedField.ofInt("energy_auto_flags");
+  public static final SyncedField<Integer> ITEM_AUTO_FLAGS = SyncedField.ofInt("item_auto_flags");
+  public static final SyncedField<Integer> FLUID_AUTO_FLAGS = SyncedField.ofInt("fluid_auto_flags");
 
   private BuiltinSyncedFields() {
   }

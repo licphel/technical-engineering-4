@@ -1,6 +1,5 @@
 package com.hypothetic.ten4.core.blockentity;
 
-import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.api.blockentity.device.AugmentableDeviceBlockEntity;
 import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
@@ -63,13 +62,13 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
   }
 
   @Override
-  public void onSoundPlay() {
-    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_2.get());
+  public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+    return new ContainerMenu(ModMenus.WATER_PUMP.get(), containerId, playerInventory, this, new ContainerMenuLayout());
   }
 
   @Override
-  public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-    return new ContainerMenu(ModMenus.WATER_PUMP.get(), containerId, playerInventory, this, new ContainerMenuLayout());
+  public void onSoundPlay() {
+    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_2.get());
   }
 
   @Override

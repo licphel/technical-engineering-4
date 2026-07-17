@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class PressBlockEntity extends ComplexRecipeDeviceBlockEntity {
-  public static final TagKey<Item> MOULD_TAG = TagKey.create(Registries.ITEM, Ten4.id("moulds"));
+  public static final TagKey<Item> MOULD_TAG = TagKey.create(Registries.ITEM, Ten4.id("dies"));
 
   public PressBlockEntity(BlockPos pos, BlockState state) {
     super(pos, state);
@@ -34,18 +34,13 @@ public class PressBlockEntity extends ComplexRecipeDeviceBlockEntity {
     return new DeviceInfo()
         .enableEnergy()
         .enableItem()
-        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput))
+        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(s -> isValidInput(s) && !s.is(MOULD_TAG)))
         .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(s -> s.is(MOULD_TAG)))
         .addSlot(new ItemSlot(SlotOption.OUTPUT))
         .setPower(15)
         .setEnergyCapacity(10_000)
         .setEnergyThroughput(100)
         .setItemThroughput(1);
-  }
-
-  @Override
-  public void onSoundPlay() {
-    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_1.get());
   }
 
   @Override
@@ -58,10 +53,8 @@ public class PressBlockEntity extends ComplexRecipeDeviceBlockEntity {
   }
 
   @Override
-  protected void initializeRecipeAutomation() {
-    inputSlots.add(0);
-    inputSlots.add(1);
-    outputSlots.add(2);
+  public void onSoundPlay() {
+    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_1.get());
   }
 
   @Override
@@ -72,5 +65,12 @@ public class PressBlockEntity extends ComplexRecipeDeviceBlockEntity {
   @Override
   protected RecipeType<IComplexRecipe> getRecipeType() {
     return ModRecipes.PRESSING.get();
+  }
+
+  @Override
+  protected void initializeRecipeAutomation() {
+    inputSlots.add(0);
+    inputSlots.add(1);
+    outputSlots.add(2);
   }
 }

@@ -4,23 +4,21 @@ import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.IEnumTranslatable;
 
 public enum FaceMode implements IEnumTranslatable {
-  OFF,
-  ACTIVE_INPUT,
-  ACTIVE_OUTPUT,
-  PASSIVE_INPUT,
-  PASSIVE_OUTPUT,
-  PASSIVE_BIPASS;
+  NONE,
+  INPUT,
+  OUTPUT,
+  BIPASS;
 
   public static FaceMode of(int v) {
     return values()[v % values().length];
   }
 
   public boolean canExtract() {
-    return this == ACTIVE_OUTPUT || this == PASSIVE_BIPASS || this == PASSIVE_OUTPUT;
+    return this == OUTPUT || this == BIPASS;
   }
 
   public boolean canReceive() {
-    return this == ACTIVE_INPUT || this == PASSIVE_BIPASS || this == PASSIVE_INPUT;
+    return this == INPUT || this == BIPASS;
   }
 
   @Override

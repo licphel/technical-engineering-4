@@ -40,11 +40,6 @@ public class PulverizerBlockEntity extends ComplexRecipeDeviceBlockEntity {
   }
 
   @Override
-  public void onSoundPlay() {
-    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_0.get());
-  }
-
-  @Override
   public @Nullable AbstractContainerMenu createMenu(int cid, Inventory inv, Player p) {
     ContainerMenuLayout layout = new ContainerMenuLayout()
         .add(0, 44, 35)
@@ -56,16 +51,21 @@ public class PulverizerBlockEntity extends ComplexRecipeDeviceBlockEntity {
   }
 
   @Override
+  public void onSoundPlay() {
+    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_0.get());
+  }
+
+  @Override
+  protected RecipeType<IComplexRecipe> getRecipeType() {
+    return ModRecipes.PULVERIZING.get();
+  }
+
+  @Override
   protected void initializeRecipeAutomation() {
     inputSlots.add(0);
     outputSlots.add(1);
     outputSlots.add(2);
     outputSlots.add(3);
     outputSlots.add(4);
-  }
-
-  @Override
-  protected RecipeType<IComplexRecipe> getRecipeType() {
-    return ModRecipes.PULVERIZING.get();
   }
 }

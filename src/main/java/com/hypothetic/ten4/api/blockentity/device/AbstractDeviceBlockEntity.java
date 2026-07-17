@@ -50,7 +50,7 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IEnergyStorage> ENERGY = AbstractDeviceBlockEntity::getEnergyStorage;
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IItemHandler> ITEM = AbstractDeviceBlockEntity::getItemHandler;
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IFluidHandler> FLUID = AbstractDeviceBlockEntity::getFluidHandler;
-
+  private static final int STRICT_INPUT_BIT = 1 << 24; // global strict-input flag in itemAutoFlags
   protected final Map<Direction, DirectionalEnergyStorage> energyHandlers = new HashMap<>();
   protected final Map<Direction, FaceMode> energyFaceConfig = new HashMap<>();
   protected final Queue<Direction> energyPushingQueue = new LinkedList<>();
@@ -70,10 +70,11 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   protected int energy = 0;
   protected boolean active;
   protected SignalMode sigMode = SignalMode.IGNORE;
-  protected boolean strictInput = false;
   protected ComparatorMode comparatorMode = ComparatorMode.ENERGY;
-  protected int requestInterval = 1;
-  protected int delayPushBuffer;
+  protected SecurityMode securityMode = SecurityMode.DISABLED;
+  protected int energyAutoFlags, itemAutoFlags, fluidAutoFlags;
+  private long lastPlay;
+  private @Nullable UUID owner;
 
   public AbstractDeviceBlockEntity(BlockPos pos, BlockState state) {
     super(pos, state);
@@ -85,9 +86,11 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     syncer.register(BuiltinSyncedFields.FLUID_FACES);
     syncer.register(BuiltinSyncedFields.ACTIVE);
     syncer.register(BuiltinSyncedFields.SIG_MODE);
-    syncer.register(BuiltinSyncedFields.STRICT_INPUT);
     syncer.register(BuiltinSyncedFields.COMPARATOR_MODE);
-    syncer.register(BuiltinSyncedFields.REQUEST_INTERVAL);
+    syncer.register(BuiltinSyncedFields.SECURITY_MODE);
+    syncer.register(BuiltinSyncedFields.ENERGY_AUTO_FLAGS);
+    syncer.register(BuiltinSyncedFields.ITEM_AUTO_FLAGS);
+    syncer.register(BuiltinSyncedFields.FLUID_AUTO_FLAGS);
     syncer.register(BuiltinSyncedFields.POWER);
     syncer.register(BuiltinSyncedFields.ENERGY_THROUGHPUT);
     syncer.register(BuiltinSyncedFields.ITEM_THROUGHPUT);
@@ -110,25 +113,36 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     initializeCapabilities();
   }
 
-  public @Nullable IEnergyStorage getEnergyStorage(@Nullable Direction side) {
-    if (!info.hasEnergy) {
-      return null;
+  private static final int AUTO_EJECT_BIT = 1 << 25;
+  private static final int AUTO_EXTRACT_BIT = 1 << 26;
+
+  public boolean isAutoEject(int type) {
+    return switch (type) { case 0 -> (energyAutoFlags & AUTO_EJECT_BIT) != 0; case 1 -> (itemAutoFlags & AUTO_EJECT_BIT) != 0; default -> (fluidAutoFlags & AUTO_EJECT_BIT) != 0; };
+  }
+  public boolean isAutoExtract(int type) {
+    return switch (type) { case 0 -> (energyAutoFlags & AUTO_EXTRACT_BIT) != 0; case 1 -> (itemAutoFlags & AUTO_EXTRACT_BIT) != 0; default -> (fluidAutoFlags & AUTO_EXTRACT_BIT) != 0; };
+  }
+  public void setAutoEject(int type, boolean v) { setGlobalFlag(type, AUTO_EJECT_BIT, v); }
+  public void setAutoExtract(int type, boolean v) { setGlobalFlag(type, AUTO_EXTRACT_BIT, v); }
+
+  private void setGlobalFlag(int type, int bit, boolean v) {
+    switch (type) {
+      case 0 -> energyAutoFlags = v ? (energyAutoFlags | bit) : (energyAutoFlags & ~bit);
+      case 1 -> itemAutoFlags = v ? (itemAutoFlags | bit) : (itemAutoFlags & ~bit);
+      default -> fluidAutoFlags = v ? (fluidAutoFlags | bit) : (fluidAutoFlags & ~bit);
     }
-    return energyHandlers.get(side);
+  }
+
+  public @Nullable IEnergyStorage getEnergyStorage(@Nullable Direction side) {
+    return !info.hasEnergy ? null : energyHandlers.get(side);
   }
 
   public @Nullable IItemHandler getItemHandler(@Nullable Direction side) {
-    if (!info.hasItem) {
-      return null;
-    }
-    return itemHandlers.get(side);
+    return !info.hasItem ? null : itemHandlers.get(side);
   }
 
   public @Nullable IFluidHandler getFluidHandler(@Nullable Direction side) {
-    if (!info.hasFluid) {
-      return null;
-    }
-    return fluidHandlers.get(side);
+    return !info.hasFluid ? null : fluidHandlers.get(side);
   }
 
   protected void initializeCapabilities() {
@@ -136,16 +150,16 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
       energyHandlers.put(d, new DirectionalEnergyStorage(this, d));
       itemHandlers.put(d, new DirectionalItemHandler(this, d));
       fluidHandlers.put(d, new DirectionalFluidHandler(this, d));
-      energyFaceConfig.put(d, FaceMode.PASSIVE_BIPASS);
-      itemFaceConfig.put(d, FaceMode.PASSIVE_BIPASS);
-      fluidFaceConfig.put(d, FaceMode.PASSIVE_BIPASS);
+      energyFaceConfig.put(d, FaceMode.BIPASS);
+      itemFaceConfig.put(d, FaceMode.BIPASS);
+      fluidFaceConfig.put(d, FaceMode.BIPASS);
     }
     energyHandlers.put(null, new DirectionalEnergyStorage(this, null));
     itemHandlers.put(null, new DirectionalItemHandler(this, null));
     fluidHandlers.put(null, new DirectionalFluidHandler(this, null));
-    energyFaceConfig.put(null, FaceMode.PASSIVE_BIPASS);
-    itemFaceConfig.put(null, FaceMode.PASSIVE_BIPASS);
-    fluidFaceConfig.put(null, FaceMode.PASSIVE_BIPASS);
+    energyFaceConfig.put(null, FaceMode.BIPASS);
+    itemFaceConfig.put(null, FaceMode.BIPASS);
+    fluidFaceConfig.put(null, FaceMode.BIPASS);
   }
 
   protected abstract DeviceInfo makeDeviceInfo();
@@ -171,12 +185,19 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     }
   }
 
-  public boolean isStrictInput() {
-    return strictInput;
+  public SecurityMode getSecurityMode() {
+    return securityMode;
   }
 
-  public void setStrictInput(boolean v) {
-    strictInput = v;
+  public @Nullable UUID getOwner() {
+    return owner;
+  }
+
+  public void setSecurityMode(SecurityMode mode, @Nullable UUID playerId) {
+    if (mode == SecurityMode.PRIVATE && owner == null && playerId != null) {
+      owner = playerId;
+    }
+    this.securityMode = mode;
   }
 
   public ComparatorMode getComparatorMode() {
@@ -190,12 +211,19 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     }
   }
 
-  public int getRequestInterval() {
-    return requestInterval;
+  public void setRawEnergyAutoFlags(int v) {
+    energyAutoFlags = v;
+    rebuildEnergyQueues();
   }
 
-  public void setRequestInterval(int v) {
-    requestInterval = Math.max(1, v);
+  public void setRawItemAutoFlags(int v) {
+    itemAutoFlags = v;
+    rebuildItemQueues();
+  }
+
+  public void setRawFluidAutoFlags(int v) {
+    fluidAutoFlags = v;
+    rebuildFluidQueues();
   }
 
   @Override
@@ -314,19 +342,8 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     active = BuiltinBlockStates.toggleActive(this, active, a);
   }
 
-  protected void delayPushFor(int ticks) {
-    delayPushBuffer = ticks;
-  }
-
   protected void queuedPushPull() {
     if (level == null || level.isClientSide()) {
-      return;
-    }
-    if (delayPushBuffer > 0) {
-      delayPushBuffer--;
-      return;
-    }
-    if (level.getGameTime() % (requestInterval = Math.max(1, requestInterval)) != 0) {
       return;
     }
 
@@ -348,54 +365,48 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   }
 
   public void setEnergyFaceMode(Direction side, FaceMode mode) {
-    energyPushingQueue.remove(side);
-    energyPullingQueue.remove(side);
-
-    if (Objects.requireNonNull(mode) == FaceMode.ACTIVE_OUTPUT) {
-      if (!energyPushingQueue.contains(side)) {
-        energyPushingQueue.offer(side);
-      }
-    } else if (mode == FaceMode.ACTIVE_INPUT) {
-      if (!energyPullingQueue.contains(side)) {
-        energyPullingQueue.offer(side);
-      }
-    }
-
     energyFaceConfig.put(side, mode);
+    rebuildEnergyQueues();
   }
 
   public void setItemFaceMode(Direction side, FaceMode mode) {
-    itemPushingQueue.remove(side);
-    itemPullingQueue.remove(side);
-
-    if (Objects.requireNonNull(mode) == FaceMode.ACTIVE_OUTPUT) {
-      if (!itemPushingQueue.contains(side)) {
-        itemPushingQueue.offer(side);
-      }
-    } else if (mode == FaceMode.ACTIVE_INPUT) {
-      if (!itemPullingQueue.contains(side)) {
-        itemPullingQueue.offer(side);
-      }
-    }
-
     itemFaceConfig.put(side, mode);
+    rebuildItemQueues();
   }
 
   public void setFluidFaceMode(Direction side, FaceMode mode) {
-    fluidPushingQueue.remove(side);
-    fluidPullingQueue.remove(side);
-
-    if (Objects.requireNonNull(mode) == FaceMode.ACTIVE_OUTPUT) {
-      if (!fluidPushingQueue.contains(side)) {
-        fluidPushingQueue.offer(side);
-      }
-    } else if (mode == FaceMode.ACTIVE_INPUT) {
-      if (!fluidPullingQueue.contains(side)) {
-        fluidPullingQueue.offer(side);
-      }
-    }
-
     fluidFaceConfig.put(side, mode);
+    rebuildFluidQueues();
+  }
+
+  private void rebuildEnergyQueues() {
+    energyPushingQueue.clear();
+    energyPullingQueue.clear();
+    if (!isAutoEject(0) && !isAutoExtract(0)) return;
+    for (Direction d : Direction.values()) {
+      if (energyFaceConfig.get(d).canExtract() && isAutoEject(0)) energyPushingQueue.offer(d);
+      if (energyFaceConfig.get(d).canReceive() && isAutoExtract(0)) energyPullingQueue.offer(d);
+    }
+  }
+
+  private void rebuildItemQueues() {
+    itemPushingQueue.clear();
+    itemPullingQueue.clear();
+    if (!isAutoEject(1) && !isAutoExtract(1)) return;
+    for (Direction d : Direction.values()) {
+      if (itemFaceConfig.get(d).canExtract() && isAutoEject(1)) itemPushingQueue.offer(d);
+      if (itemFaceConfig.get(d).canReceive() && isAutoExtract(1)) itemPullingQueue.offer(d);
+    }
+  }
+
+  private void rebuildFluidQueues() {
+    fluidPushingQueue.clear();
+    fluidPullingQueue.clear();
+    if (!isAutoEject(2) && !isAutoExtract(2)) return;
+    for (Direction d : Direction.values()) {
+      if (fluidFaceConfig.get(d).canExtract() && isAutoEject(2)) fluidPushingQueue.offer(d);
+      if (fluidFaceConfig.get(d).canReceive() && isAutoExtract(2)) fluidPullingQueue.offer(d);
+    }
   }
 
   protected List<Integer> getComparatorSignalSlots() {
@@ -459,15 +470,21 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     return true;
   }
 
+  public boolean isValidInput(FluidStack stack) {
+    return true;
+  }
+
   protected void synchronizeBasicData() {
     syncer.set(BuiltinSyncedFields.ENERGY_FACES, FaceModePacker.packFaces(energyFaceConfig));
     syncer.set(BuiltinSyncedFields.ITEM_FACES, FaceModePacker.packFaces(itemFaceConfig));
     syncer.set(BuiltinSyncedFields.FLUID_FACES, FaceModePacker.packFaces(fluidFaceConfig));
     syncer.set(BuiltinSyncedFields.SIG_MODE, sigMode.ordinal());
     syncer.set(BuiltinSyncedFields.ACTIVE, active);
-    syncer.set(BuiltinSyncedFields.REQUEST_INTERVAL, requestInterval);
     syncer.set(BuiltinSyncedFields.COMPARATOR_MODE, comparatorMode.ordinal());
-    syncer.set(BuiltinSyncedFields.STRICT_INPUT, strictInput);
+    syncer.set(BuiltinSyncedFields.SECURITY_MODE, securityMode.ordinal());
+    syncer.set(BuiltinSyncedFields.ENERGY_AUTO_FLAGS, energyAutoFlags);
+    syncer.set(BuiltinSyncedFields.ITEM_AUTO_FLAGS, itemAutoFlags);
+    syncer.set(BuiltinSyncedFields.FLUID_AUTO_FLAGS, fluidAutoFlags);
     syncer.set(BuiltinSyncedFields.POWER, getActualPower());
     syncer.set(BuiltinSyncedFields.ENERGY_THROUGHPUT, getEnergyThroughput());
     syncer.set(BuiltinSyncedFields.ITEM_THROUGHPUT, getItemThroughput());
@@ -480,6 +497,14 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
 
   public ContainerData getContainerData() {
     return syncer.asContainerData();
+  }
+
+  public boolean isItemStrictInput() {
+    return (itemAutoFlags & STRICT_INPUT_BIT) != 0;
+  }
+
+  public boolean isFluidStrictInput() {
+    return (fluidAutoFlags & STRICT_INPUT_BIT) != 0;
   }
 
   protected boolean isEnergySufficient() {
@@ -506,11 +531,18 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     }
 
     sigMode = SignalMode.of(cfg.getInt("SigMode"));
-    requestInterval = cfg.getInt("RequestInterval");
-    strictInput = cfg.getBoolean("StrictInput");
-    comparatorMode = cfg.contains("ComparatorMode") ? ComparatorMode.of(cfg.getInt("ComparatorMode")) : ComparatorMode.ENERGY;
+    comparatorMode = ComparatorMode.of(cfg.getInt("ComparatorMode"));
+    securityMode = cfg.contains("SecurityMode") ? SecurityMode.of(cfg.getInt("SecurityMode")) : SecurityMode.DISABLED;
+    if (cfg.contains("Owner")) {
+      owner = cfg.getUUID("Owner");
+    }
+    energyAutoFlags = cfg.getInt("EnergyAutoFlags");
+    itemAutoFlags = cfg.getInt("ItemAutoFlags");
+    fluidAutoFlags = cfg.getInt("FluidAutoFlags");
 
-    delayPushBuffer = tag.getInt("DelayPushBuffer");
+    rebuildEnergyQueues();
+    rebuildItemQueues();
+    rebuildFluidQueues();
   }
 
   @Override
@@ -529,12 +561,15 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     }
 
     cfg.putInt("SigMode", sigMode.ordinal());
-    cfg.putInt("RequestInterval", requestInterval);
-    cfg.putBoolean("StrictInput", strictInput);
     cfg.putInt("ComparatorMode", comparatorMode.ordinal());
+    cfg.putInt("SecurityMode", securityMode.ordinal());
+    if (owner != null) {
+      cfg.putUUID("Owner", owner);
+    }
+    cfg.putInt("EnergyAutoFlags", energyAutoFlags);
+    cfg.putInt("ItemAutoFlags", itemAutoFlags);
+    cfg.putInt("FluidAutoFlags", fluidAutoFlags);
     tag.put("Configuration", cfg);
-
-    tag.putInt("DelayPushBuffer", delayPushBuffer);
   }
 
   @Override
@@ -564,8 +599,6 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
 
   @Override
   public abstract @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player);
-
-  private long lastPlay;
 
   public void playSound(float interval, SoundEvent event) {
     if (level != null && level.getGameTime() - lastPlay >= (double) 20 * interval - 5.0) {

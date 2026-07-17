@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "ten4:item/paint/black_paint"
+    "layer0": "ten4:item/sheet_die"
   }
 }

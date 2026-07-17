@@ -29,7 +29,7 @@ public class ComparatorModeButton extends Button {
     setAction(() -> {
       int cur = reader.getInt(BuiltinSyncedFields.COMPARATOR_MODE);
       int next = (cur + 1) % ComparatorMode.values().length;
-      PacketDistributor.sendToServer(new DeviceConfigPayload(pos, DeviceConfigPayload.COMPARATOR_MODE, next));
+      PacketDistributor.sendToServer(new DeviceConfigPayload(pos, DeviceConfigPayload.COMPARATOR_MODE, next, 0));
     });
     setEnablePressed(false);
   }
@@ -37,7 +37,7 @@ public class ComparatorModeButton extends Button {
   @Override
   public void onRender(EnhancedGuiGraphics g, float pt) {
     int mode = reader.getInt(BuiltinSyncedFields.COMPARATOR_MODE);
-    int u = mode * 12, v = 218;
+    int u = 38 + mode * 12, v = 190;
     g.draw(TextureRegion.of(PANELS, u, v, 12, 12), x, y, width, height);
   }
 
