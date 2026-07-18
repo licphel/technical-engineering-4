@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item_tag": "c:storage_blocks/iron"
+    },
+    {
+      "item": "ten4:depacking_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 9
+    }
+  ],
+  "time": 100
+}

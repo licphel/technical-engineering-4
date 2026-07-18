@@ -3,6 +3,7 @@ package com.hypothetic.ten4.core.block;
 import com.hypothetic.ten4.api.block.BridgedEntityBlock;
 import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
 import com.hypothetic.ten4.api.blockentity.device.ComparatorMode;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -20,11 +22,18 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class DeviceBlock extends BridgedEntityBlock {
+  public static final MapCodec<DeviceBlock> CODEC = simpleCodec(DeviceBlock::new);
+
   public DeviceBlock(Properties p) {
     super(p);
 
     BlockState state = defaultBlockState().setValue(BuiltinBlockStates.ACTIVE, false);
     registerDefaultState(state);
+  }
+
+  @Override
+  protected MapCodec<? extends BaseEntityBlock> codec() {
+    return CODEC;
   }
 
   @Override

@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.api.blockentity.transmission;
 
 import com.hypothetic.ten4.api.blockentity.ITickable;
-import com.hypothetic.ten4.api.client.renderer.RenderTransmitterBlock;
+import com.hypothetic.ten4.core.client.renderer.RenderTransmitterBlock;
 import com.hypothetic.ten4.api.network.PacketDist;
 import com.hypothetic.ten4.api.network.duct.DuctEnergyPayload;
 import com.hypothetic.ten4.api.transmission.energy.EnergyNetwork;
@@ -56,7 +56,8 @@ public class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> im
     if (level instanceof ServerLevel sl) {
       EnergyNetwork net = transmitter.getNetwork();
       float scale = net != null ? net.currentScale : (transmitter.getCapacity() > 0 ? (float) transmitter.getBuffer() / transmitter.getCapacity() : 0);
-      PacketDist.sendToNearbyPlayers(sl, new DuctEnergyPayload(worldPosition, scale), getBlockPos(), RenderTransmitterBlock.LOD_DISTANCE);
+      PacketDist.sendToNearbyPlayers(sl, new DuctEnergyPayload(worldPosition, scale), getBlockPos(),
+          RenderTransmitterBlock.LOD_DISTANCE.getAsInt());
     }
   }
 

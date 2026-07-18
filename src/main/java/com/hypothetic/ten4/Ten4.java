@@ -1,10 +1,12 @@
 package com.hypothetic.ten4;
 
+import com.hypothetic.ten4.core.registry.config.ModConfigs;
 import com.hypothetic.ten4.core.registry.*;
-import com.hypothetic.ten4.datagen.Ten4Datagen;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,9 +14,9 @@ import org.apache.logging.log4j.Logger;
 public class Ten4 {
   public static final Logger LOGGER = LogManager.getLogger();
   public static final String ID = "ten4";
-  public static final String VERSION = "26.1.2";
+  public static final String VERSION = "26.1.3";
 
-  public Ten4(IEventBus modBus) {
+  public Ten4(IEventBus modBus, ModContainer container) {
     ModBlockEntityBridges.createMapBeforeRegistry();
 
     ModBlocks.BLOCKS.register(modBus);
@@ -26,7 +28,9 @@ public class Ten4 {
     ModMenus.MENUS.register(modBus);
     ModSoundEvents.SES.register(modBus);
 
-    modBus.addListener(Ten4Datagen::gatherData);
+    container.registerConfig(ModConfig.Type.COMMON, ModConfigs.COMMON_SPEC);
+    container.registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT_SPEC);
+    container.registerConfig(ModConfig.Type.SERVER, ModConfigs.SERVER_SPEC);
   }
 
   public static ResourceLocation id(String path) {

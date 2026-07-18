@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class ModCapabilities {
   @SubscribeEvent
   public static void onRegisterCaps(RegisterCapabilitiesEvent event) {
-    // Devices
+    // DeviceTiers
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.PULVERIZER.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.PULVERIZER.get(), AbstractDeviceBlockEntity::getItemHandler);
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.PRESS.get(), AbstractDeviceBlockEntity::getEnergyStorage);
@@ -33,7 +33,7 @@ public class ModCapabilities {
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.HEAT_GENERATOR.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.HEAT_GENERATOR.get(), AbstractDeviceBlockEntity::getItemHandler);
 
-    // Ducts
+    // DuctTiers
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.OPAQUE_COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.COPPER_CONTROLLER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);

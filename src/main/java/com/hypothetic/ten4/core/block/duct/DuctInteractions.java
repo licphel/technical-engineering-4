@@ -69,7 +69,7 @@ public final class DuctInteractions {
     for (Direction facing : Direction.values()) {
       state = state.setValue(DuctBlock.CONNECTIONS.get(facing), ductBlock.hasConnection(level, facing, pos));
     }
-    level.setBlock(pos, state, 3);
+    level.setBlockAndUpdate(pos, state);
 
     BlockEntity be = level.getBlockEntity(pos);
     if (be instanceof ITransmitterProvider duct) {

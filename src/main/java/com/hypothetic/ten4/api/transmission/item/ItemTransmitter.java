@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.api.transmission.item;
 
-import com.hypothetic.ten4.api.client.renderer.RenderTransmitterBlock;
+import com.hypothetic.ten4.core.client.renderer.RenderTransmitterBlock;
 import com.hypothetic.ten4.api.network.PacketDist;
 import com.hypothetic.ten4.api.network.duct.DuctItemPayload;
 import com.hypothetic.ten4.api.transmission.ConnectionType;
@@ -12,6 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
@@ -79,7 +80,8 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
 
   public void syncToTracking() {
     if (getLevel() instanceof ServerLevel sl) {
-      PacketDist.sendToNearbyPlayers(sl, new DuctItemPayload(getBlockPos(), transitEntry), getBlockPos(), RenderTransmitterBlock.LOD_DISTANCE);
+      PacketDist.sendToNearbyPlayers(sl, new DuctItemPayload(getBlockPos(), transitEntry), getBlockPos(),
+          RenderTransmitterBlock.LOD_DISTANCE.getAsInt());
     }
   }
 
@@ -123,7 +125,8 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
     if (snapshot != null && (snapshot.route == null || snapshot.index >= snapshot.route.length)) {
       byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
       if (newRoute.length == 0) {
-        transitEntry = null; // no valid route — drop the entry
+        dropItem(level, snapshot.stack);
+        transitEntry = null;
         return;
       }
       snapshot.route = newRoute;
@@ -161,6 +164,7 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
         }
         byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
         if (newRoute.length == 0) {
+          dropItem(level, snapshot.stack);
           transitEntry = null;
           return;
         }
@@ -195,12 +199,19 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
 
       byte[] newRoute = RouteFinder.findRoute(network, myPos, snapshot.stack);
       if (newRoute.length == 0) {
+        dropItem(level, snapshot.stack);
         transitEntry = null;
         return;
       }
       snapshot.route = newRoute;
       snapshot.index = 0;
       snapshot.exitSide = newRoute[0];
+    }
+  }
+
+  private void dropItem(Level level, ItemStack stack) {
+    if (!stack.isEmpty()) {
+      Block.popResource(level, getBlockPos(), stack.copy());
     }
   }
 

@@ -4,7 +4,7 @@ import com.hypothetic.ten4.api.registry.BlockEntityBridges;
 
 public final class ModBlockEntityBridges {
   public static void createMapBeforeRegistry() {
-    // Devices
+    // DeviceTiers
     BlockEntityBridges.register(ModBlocks.PULVERIZER, ModBlockEntities.PULVERIZER);
     BlockEntityBridges.register(ModBlocks.PRESS, ModBlockEntities.PRESS);
     BlockEntityBridges.register(ModBlocks.SMELTER, ModBlockEntities.SMELTER);
@@ -13,7 +13,7 @@ public final class ModBlockEntityBridges {
     // Generators
     BlockEntityBridges.register(ModBlocks.HEAT_GENERATOR, ModBlockEntities.HEAT_GENERATOR);
 
-    // Ducts
+    // DuctTiers
     BlockEntityBridges.register(ModBlocks.COPPER_ENERGY_DUCT, ModBlockEntities.COPPER_ENERGY_DUCT);
     BlockEntityBridges.register(ModBlocks.OPAQUE_COPPER_ENERGY_DUCT, ModBlockEntities.OPAQUE_COPPER_ENERGY_DUCT);
     BlockEntityBridges.register(ModBlocks.COPPER_CONTROLLER_ENERGY_DUCT, ModBlockEntities.COPPER_CONTROLLER_ENERGY_DUCT);

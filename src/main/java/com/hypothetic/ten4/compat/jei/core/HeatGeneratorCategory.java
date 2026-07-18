@@ -1,6 +1,5 @@
 package com.hypothetic.ten4.compat.jei.core;
 
-import com.hypothetic.ten4.api.recipe.Complex;
 import com.hypothetic.ten4.compat.jei.ModRecipeCategory;
 import com.hypothetic.ten4.core.registry.ModBlocks;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -8,7 +7,6 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 
 public class HeatGeneratorCategory extends ModRecipeCategory<ItemStack> {
@@ -28,12 +26,9 @@ public class HeatGeneratorCategory extends ModRecipeCategory<ItemStack> {
 
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, ItemStack fuel, IFocusGroup focuses) {
-    addItemInput(builder, Complex.of(
-        Complex.Kind.ITEM,
-        BuiltInRegistries.ITEM.getKey(fuel.getItem()),
-        fuel.getCount(),
-        1.0
-    ), 15, 18);
+    builder.addInputSlot(15, 18)
+        .addItemStack(fuel)
+        .setStandardSlotBackground();
   }
 
   @Override

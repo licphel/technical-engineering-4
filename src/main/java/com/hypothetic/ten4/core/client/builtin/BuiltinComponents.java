@@ -14,11 +14,9 @@ import com.hypothetic.ten4.api.container.sync.SyncedFieldReader;
 import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;
 import com.hypothetic.ten4.core.registry.ModSoundEvents;
 import com.hypothetic.ten4.util.DisplayUtil;
-import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -100,10 +98,6 @@ public final class BuiltinComponents {
     SyncedFieldReader reader = screen.getMenu().fieldsReader();
     ITranslatable ip = screen.getMenu().getBlockEntity();
     Component rawText = ip.createDescription();
-    String power = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.POWER));
-    String eThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.ENERGY_THROUGHPUT));
-    String iThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.ITEM_THROUGHPUT));
-    String fThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.FLUID_THROUGHPUT));
 
     return new Panel(panelBacking(15, 15, 241, 60, 15, 15), 91, 40, -15) {
       {
@@ -120,6 +114,11 @@ public final class BuiltinComponents {
           @Override
           public void onCollectingTooltips(List<Component> tooltips) {
             super.onCollectingTooltips(tooltips);
+
+            String power = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.POWER));
+            String eThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.ENERGY_THROUGHPUT));
+            String iThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.ITEM_THROUGHPUT));
+            String fThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.FLUID_THROUGHPUT));
             tooltips.add(Component.translatable(Ten4.lang("misc.power")).append(power + "FE/t"));
             tooltips.add(Component.translatable(Ten4.lang("misc.throughput.energy")).append(eThru + "FE/t"));
             tooltips.add(Component.translatable(Ten4.lang("misc.throughput.item")).append(iThru + "S/t"));
@@ -189,11 +188,11 @@ public final class BuiltinComponents {
         addChild(new IoFaceButton(64, 76, facing.getOpposite(), screen, state, "back").withClickSound(BEEP));
 
         addChild(new AutoFlagButton(10, 45, 26, 218, state, pos, 25,
-            () -> state.isAutoEject(), "auto_eject").withClickSound(BEEP));
+            state::isAutoEject, "auto_eject").withClickSound(BEEP));
         addChild(new AutoFlagButton(10, 60, 0, 218, state, pos, 26,
-            () -> state.isAutoExtract(), "auto_extract").withClickSound(BEEP));
+            state::isAutoExtract, "auto_extract").withClickSound(BEEP));
         addChild(new AutoFlagButton(10, 75, 0, 204, state, pos, 24,
-            () -> state.isStrictInput(), "strict_input").withClickSound(BEEP));
+            state::isStrictInput, "strict_input").withClickSound(BEEP));
       }
 
       @Override

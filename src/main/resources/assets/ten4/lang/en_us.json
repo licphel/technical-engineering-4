@@ -128,5 +128,12 @@
   "item.ten4.gold_plate": "Gold Plate",
 
   "ten4.sound.beep": "Beep",
-  "ten4.sound.device_noise": "Device Noise"
+  "ten4.sound.device_noise_0": "Device: Rumbling",
+  "ten4.sound.device_noise_1": "Device: Creaking",
+  "ten4.sound.device_noise_2": "Device: Whirring",
+
+  "ten4.pulverizing": "Pulverizing",
+  "ten4.pressing": "Pressing",
+  "ten4.electrical_smelting": "Electrical Smelting",
+  "ten4.heat_generating": "Heat Generating"
 }

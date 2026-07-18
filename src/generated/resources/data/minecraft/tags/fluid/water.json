@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "ten4:liquid_xp",
+      "required": false
+    },
+    {
+      "id": "ten4:liquid_xp_flowing",
+      "required": false
+    },
+    {
+      "id": "ten4:liquid_bizarrerie",
+      "required": false
+    },
+    {
+      "id": "ten4:liquid_bizarrerie_flowing",
+      "required": false
+    }
+  ]
+}

@@ -1,6 +1,0 @@
-{
-  "parent": "ten4:block/pipe/pct",
-  "textures": {
-    "texture": "ten4:block/machine/pipe"
-  }
-}

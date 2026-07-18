@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BridgedEntityBlock extends BaseEntityBlock {
+public abstract class BridgedEntityBlock extends BaseEntityBlock {
   boolean serverTicker;
   boolean clientTicker;
 
@@ -39,11 +39,6 @@ public class BridgedEntityBlock extends BaseEntityBlock {
   public BridgedEntityBlock tickClient() {
     this.clientTicker = true;
     return this;
-  }
-
-  @Override
-  protected MapCodec<? extends BaseEntityBlock> codec() {
-    return simpleCodec(pp -> new BridgedEntityBlock(properties));
   }
 
   @Override

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ten4:copper_controller_item_duct"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ten4:blocks/copper_controller_item_duct"
+}

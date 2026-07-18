@@ -1,6 +1,0 @@
-{
-  "parent": "ten4:block/channel/channel",
-  "textures": {
-    "texture": "ten4:block/machine/channel/channel_item_active"
-  }
-}

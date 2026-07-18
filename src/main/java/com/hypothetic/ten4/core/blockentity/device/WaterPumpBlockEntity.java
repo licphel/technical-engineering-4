@@ -1,0 +1,124 @@
+package com.hypothetic.ten4.core.blockentity.device;
+
+import com.hypothetic.ten4.api.blockentity.ITickable;
+import com.hypothetic.ten4.api.blockentity.device.AugmentableDeviceBlockEntity;
+import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
+import com.hypothetic.ten4.api.capability.fluid.FluidTank;
+import com.hypothetic.ten4.api.capability.fluid.TankOption;
+import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
+import com.hypothetic.ten4.api.container.ContainerMenu;
+import com.hypothetic.ten4.api.container.ContainerMenuLayout;
+import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
+import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;
+import com.hypothetic.ten4.api.container.sync.Syncer;
+import com.hypothetic.ten4.core.registry.ModMenus;
+import com.hypothetic.ten4.core.registry.ModSoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.wrappers.BucketPickupHandlerWrapper;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implements ITickable {
+  public static final SyncedFluidStack TANK_0 = new SyncedFluidStack(0);
+
+  public WaterPumpBlockEntity(BlockPos pos, BlockState state) {
+    super(pos, state);
+  }
+
+  @Override
+  protected DeviceInfo makeDeviceInfo() {
+    return DeviceTiers.WATER_PUMP.get()
+        .addTank(new FluidTank(TankOption.OUTPUT, 20_000));
+  }
+
+  @Override
+  protected void registerAdditionalSyncFields(Syncer syncer) {
+    syncer.register(BuiltinSyncedFields.ENERGY);
+    syncer.register(BuiltinSyncedFields.MAX_ENERGY);
+    TANK_0.register(syncer);
+  }
+
+  @Override
+  protected List<Integer> getComparatorSignalTanks() {
+    return List.of(0);
+  }
+
+  @Override
+  public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+    return new AugmentableContainerMenu(ModMenus.WATER_PUMP.get(), containerId, playerInventory, this, new ContainerMenuLayout());
+  }
+
+  @Override
+  public void onSoundPlay() {
+    playSound(1.0F, ModSoundEvents.DEVICE_NOISE_2.get());
+  }
+
+  @Override
+  public void tick() {
+    if (level == null || level.isClientSide()) {
+      return;
+    }
+
+    if (isSignalEnabled()) {
+      queuedPushPull();
+    }
+
+    boolean shouldRun = fluidInventory.getTank(0).getSpace() >= FluidType.BUCKET_VOLUME
+        && isEnergySufficient()
+        && isSignalEnabled();
+    setActive(shouldRun);
+
+    if (shouldRun) {
+      triggerSound();
+      setChanged();
+      setEnergy(getEnergy() - getActualPower());
+
+      for (Direction side : Direction.values()) {
+        BlockPos pos1 = worldPosition.relative(side);
+        FluidState fluidState = level.getFluidState(pos1);
+
+        if (!fluidState.isEmpty() && fluidState.isSource()) {
+          BlockState state = level.getBlockState(pos1);
+          Block block = state.getBlock();
+          IFluidHandler targetFluidHandler = null;
+          if (block instanceof BucketPickup pickup) {
+            targetFluidHandler = new BucketPickupHandlerWrapper(null, pickup, level, pos1);
+          } else {
+            IFluidHandler fluidHandler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos1, side.getOpposite());
+            if (fluidHandler != null) {
+              targetFluidHandler = fluidHandler;
+            }
+          }
+
+          FluidStack old = fluidInventory.getFluidInTank(0);
+          int rem = fluidInventory.getTank(0).getSpace();
+          if (targetFluidHandler != null && rem >= FluidType.BUCKET_VOLUME) { // We only drain a full bucket
+            FluidStack stack = targetFluidHandler.drain(rem, IFluidHandler.FluidAction.SIMULATE);
+            if (old.isEmpty() || FluidStack.isSameFluidSameComponents(old, stack)) {
+              targetFluidHandler.drain(rem, IFluidHandler.FluidAction.EXECUTE);
+              fluidInventory.forceFill(stack, List.of(0), IFluidHandler.FluidAction.EXECUTE);
+            }
+          }
+        }
+      }
+    }
+
+    syncer.set(BuiltinSyncedFields.ENERGY, getEnergy());
+    syncer.set(BuiltinSyncedFields.MAX_ENERGY, getEnergyCapacity());
+    synchronizeBasicData();
+    TANK_0.sync(syncer, fluidInventory.getTank(0));
+  }
+}

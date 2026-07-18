@@ -9,7 +9,7 @@
     ]
   },
   "device_noise_0": {
-    "subtitle": "ten4.sound.device_noise",
+    "subtitle": "ten4.sound.device_noise_0",
     "sounds": [
       {
         "name": "ten4:device_noise_0",
@@ -18,7 +18,7 @@
     ]
   },
   "device_noise_1": {
-    "subtitle": "ten4.sound.device_noise",
+    "subtitle": "ten4.sound.device_noise_1",
     "sounds": [
       {
         "name": "ten4:device_noise_1",
@@ -27,7 +27,7 @@
     ]
   },
   "device_noise_2": {
-    "subtitle": "ten4.sound.device_noise",
+    "subtitle": "ten4.sound.device_noise_2",
     "sounds": [
       {
         "name": "ten4:device_noise_2",

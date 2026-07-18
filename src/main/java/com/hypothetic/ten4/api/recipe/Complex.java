@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Complex {
-  public static Complex EMPTY = of(Kind.ITEM, ResourceLocation.parse("minecraft:air"), 0, 0);
+  public static Complex EMPTY = of(Kind.ITEM, ResourceLocation.parse("minecraft:air"), 0, 0, true);
   public static final Codec<Complex> CODEC = new Codec<>() {
     @Override
     public <T> DataResult<Pair<Complex, T>> decode(DynamicOps<T> ops, T input) {
@@ -81,12 +81,14 @@ public final class Complex {
   private @Nullable TagKey<Item> itemTagKey;
   private List<Fluid> fluidTagContents = new ArrayList<>();
   private @Nullable TagKey<Fluid> fluidTagKey;
+  private final boolean isCatalyst;
 
-  private Complex(Kind kind, ResourceLocation id, int count, double chance) {
+  private Complex(Kind kind, ResourceLocation id, int count, double chance, boolean isCatalyst) {
     this.kind = kind;
     this.id = id;
     this.count = count;
     this.chance = chance;
+    this.isCatalyst = isCatalyst;
 
     switch (kind) {
       case ITEM -> {
@@ -106,44 +108,50 @@ public final class Complex {
     }
   }
 
-  public static Complex of(Kind kind, ResourceLocation id, int count, double chance) {
-    return new Complex(kind, id, count, chance);
+  public static Complex of(Kind kind, ResourceLocation id, int count, double chance, boolean reusable) {
+    return new Complex(kind, id, count, chance, reusable);
   }
 
   public static Complex fromJson(JsonObject json) {
+    int c = JsonUtil.getIntOr(json, "count", 1);
+    int amt = JsonUtil.getIntOr(json, "amount", 1);
+    double ch = JsonUtil.getFloatOr(json, "chance", 1.0F);
+    boolean cat = JsonUtil.getBooleanOr(json, "catalyst", false);
+
     if (json.has("item")) {
       ResourceLocation rl = ResourceLocation.parse(json.get("item").getAsString());
-      int c = JsonUtil.getIntOr(json, "count", 1);
-      double ch = JsonUtil.getFloatOr(json, "chance", 1.0F);
-      return of(Kind.ITEM, rl, c, ch);
+      return of(Kind.ITEM, rl, c, ch, cat);
     }
     if (json.has("item_tag")) {
       ResourceLocation rl = ResourceLocation.parse(json.get("item_tag").getAsString());
-      int c = JsonUtil.getIntOr(json, "count", 1);
-      double ch = JsonUtil.getFloatOr(json, "chance", 1.0F);
-      return of(Kind.ITEM_TAG, rl, c, ch);
+      return of(Kind.ITEM_TAG, rl, c, ch, cat);
     }
     if (json.has("fluid")) {
       ResourceLocation rl = ResourceLocation.parse(json.get("fluid").getAsString());
-      int amt = JsonUtil.getIntOr(json, "amount", 0);
-      double ch = JsonUtil.getFloatOr(json, "chance", 1.0F);
-      return of(Kind.FLUID, rl, amt, ch);
+      return of(Kind.FLUID, rl, amt, ch, cat);
     }
     if (json.has("fluid_tag")) {
       ResourceLocation rl = ResourceLocation.parse(json.get("fluid_tag").getAsString());
-      int amt = JsonUtil.getIntOr(json, "amount", 0);
-      double ch = JsonUtil.getFloatOr(json, "chance", 1.0F);
-      return of(Kind.FLUID_TAG, rl, amt, ch);
+      return of(Kind.FLUID_TAG, rl, amt, ch, cat);
     }
     return EMPTY;
   }
 
-  public static Complex decodeNetwork(RegistryFriendlyByteBuf buf) {
+  public static Complex streamingDecode(RegistryFriendlyByteBuf buf) {
     Kind kind = buf.readEnum(Kind.class);
     ResourceLocation id = buf.readResourceLocation();
     int count = buf.readInt();
     double chance = buf.readDouble();
-    return of(kind, id, count, chance);
+    boolean reusable = buf.readBoolean();
+    return of(kind, id, count, chance, reusable);
+  }
+
+  public void streamingEncode(RegistryFriendlyByteBuf buf) {
+    buf.writeEnum(kind);
+    buf.writeResourceLocation(id);
+    buf.writeInt(count);
+    buf.writeDouble(chance);
+    buf.writeBoolean(isCatalyst);
   }
 
   public Kind kind() {
@@ -254,11 +262,8 @@ public final class Complex {
     return fluidTagContents.stream().map(f -> new FluidStack(f, count)).toList();
   }
 
-  public void encode(RegistryFriendlyByteBuf buf) {
-    buf.writeEnum(kind);
-    buf.writeResourceLocation(id);
-    buf.writeInt(count);
-    buf.writeDouble(chance);
+  public boolean isCatalyst() {
+    return isCatalyst;
   }
 
   public enum Kind {

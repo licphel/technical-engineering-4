@@ -59,11 +59,11 @@ public class ComplexRecipeSerializer implements RecipeSerializer<IComplexRecipe>
   private void toNetwork(RegistryFriendlyByteBuf buf, IComplexRecipe recipe) {
     buf.writeVarInt(recipe.inputs().size());
     for (Complex ing : recipe.inputs()) {
-      ing.encode(buf);
+      ing.streamingEncode(buf);
     }
     buf.writeVarInt(recipe.outputs().size());
     for (Complex ing : recipe.outputs()) {
-      ing.encode(buf);
+      ing.streamingEncode(buf);
     }
     buf.writeVarInt(recipe.time());
   }
@@ -72,13 +72,13 @@ public class ComplexRecipeSerializer implements RecipeSerializer<IComplexRecipe>
     int inSize = buf.readVarInt();
     List<Complex> inputs = new ArrayList<>();
     for (int i = 0; i < inSize; i++) {
-      inputs.add(Complex.decodeNetwork(buf));
+      inputs.add(Complex.streamingDecode(buf));
     }
 
     int outSize = buf.readVarInt();
     List<Complex> outputs = new ArrayList<>();
     for (int i = 0; i < outSize; i++) {
-      outputs.add(Complex.decodeNetwork(buf));
+      outputs.add(Complex.streamingDecode(buf));
     }
 
     int time = buf.readVarInt();

@@ -1,9 +1,9 @@
 package com.hypothetic.ten4.core.registry.client;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.client.renderer.RenderEnergyDuct;
-import com.hypothetic.ten4.api.client.renderer.RenderFluidDuct;
-import com.hypothetic.ten4.api.client.renderer.RenderItemDuct;
+import com.hypothetic.ten4.core.client.renderer.RenderEnergyDuct;
+import com.hypothetic.ten4.core.client.renderer.RenderFluidDuct;
+import com.hypothetic.ten4.core.client.renderer.RenderItemDuct;
 import com.hypothetic.ten4.core.registry.ModBlockEntities;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;

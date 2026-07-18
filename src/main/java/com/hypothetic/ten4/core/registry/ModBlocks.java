@@ -15,7 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public final class ModBlocks {
   public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, Ten4.ID);
 
-  // Devices
+  // DeviceTiers
   public static final DeferredHolder<Block, Block> DEVICE_CASING = BLOCKS.register("device_casing", () -> new Block(BlockProperties.METAL_DEVICE));
   public static final DeferredHolder<Block, Block> PULVERIZER = BLOCKS.register("pulverizer", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
   public static final DeferredHolder<Block, Block> PRESS = BLOCKS.register("press", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
@@ -25,7 +25,7 @@ public final class ModBlocks {
   // Generators
   public static final DeferredHolder<Block, Block> HEAT_GENERATOR = BLOCKS.register("heat_generator", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
 
-  // Ducts
+  // DuctTiers
   public static final DeferredHolder<Block, Block> COPPER_ENERGY_DUCT = BLOCKS.register("copper_energy_duct", () -> new EnergyDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());
   public static final DeferredHolder<Block, Block> OPAQUE_COPPER_ENERGY_DUCT = BLOCKS.register("opaque_copper_energy_duct", () -> new EnergyDuctBlock(BlockProperties.COPPER_DUCT));
   public static final DeferredHolder<Block, Block> COPPER_CONTROLLER_ENERGY_DUCT = BLOCKS.register("copper_controller_energy_duct", () -> new EnergyDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());

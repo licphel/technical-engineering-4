@@ -6,6 +6,8 @@ import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
 import com.hypothetic.ten4.api.transmission.Transmitter;
 import com.hypothetic.ten4.api.transmission.TransmitterNetworkRegistry;
+import com.hypothetic.ten4.core.block.duct.DuctBlock;
+import com.hypothetic.ten4.core.block.duct.DuctInteractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -108,6 +110,16 @@ public abstract class DuctBlockEntity<T extends Transmitter<?, ?, ?>> extends Re
       transmitter.refreshConnections();
       TransmitterNetworkRegistry.join(transmitter);
       syncToClient();
+      // Update block state CONNECTIONS to match the transmitter's discovered connections
+      syncBlockStateConnections();
+    }
+  }
+
+  private void syncBlockStateConnections() {
+    if (level == null) return;
+    BlockState state = getBlockState();
+    if (state.getBlock() instanceof DuctBlock ductBlock) {
+      DuctInteractions.updateConnections(level, worldPosition, ductBlock);
     }
   }
 

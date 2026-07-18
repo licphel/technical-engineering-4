@@ -5,9 +5,11 @@ import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
 import com.hypothetic.ten4.api.recipe.ComplexRecipe;
 import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import com.hypothetic.ten4.compat.jei.core.HeatGeneratorCategory;
+import com.hypothetic.ten4.compat.jei.core.PressCategory;
 import com.hypothetic.ten4.compat.jei.core.PulverizerCategory;
 import com.hypothetic.ten4.compat.jei.core.SmelterCategory;
 import com.hypothetic.ten4.core.client.screen.HeatGeneratorScreen;
+import com.hypothetic.ten4.core.client.screen.PressScreen;
 import com.hypothetic.ten4.core.client.screen.PulverizerScreen;
 import com.hypothetic.ten4.core.client.screen.SmelterScreen;
 import com.hypothetic.ten4.core.registry.ModBlocks;
@@ -37,9 +39,10 @@ import java.util.List;
 
 @JeiPlugin
 public class ModJeiPlugin implements IModPlugin {
-  public static final RecipeType<IComplexRecipe> PULVERIZER = new RecipeType<>(Ten4.id("pulverizer"), ComplexRecipe.class);
-  public static final RecipeType<SmeltingRecipe> SMELTER = new RecipeType<>(Ten4.id("smelter"), SmeltingRecipe.class);
-  public static final RecipeType<ItemStack> HEAT_GENERATOR = new RecipeType<>(Ten4.id("heat_generator"), ItemStack.class);
+  public static final RecipeType<IComplexRecipe> PULVERIZING = new RecipeType<>(Ten4.id("pulverizing"), ComplexRecipe.class);
+  public static final RecipeType<IComplexRecipe> PRESSING = new RecipeType<>(Ten4.id("pressing"), ComplexRecipe.class);
+  public static final RecipeType<SmeltingRecipe> ELECTRICAL_SMELTING = new RecipeType<>(Ten4.id("electrical_smelting"), SmeltingRecipe.class);
+  public static final RecipeType<ItemStack> HEAT_GENERATING = new RecipeType<>(Ten4.id("heat_generating"), ItemStack.class);
 
   private static <I extends RecipeInput, R extends Recipe<I>,
       T extends net.minecraft.world.item.crafting.RecipeType<R>>
@@ -61,9 +64,10 @@ public class ModJeiPlugin implements IModPlugin {
   public void registerCategories(IRecipeCategoryRegistration registry) {
     IGuiHelper helper = registry.getJeiHelpers().getGuiHelper();
 
-    registry.addRecipeCategories(new PulverizerCategory(helper, PULVERIZER));
-    registry.addRecipeCategories(new SmelterCategory(helper, SMELTER));
-    registry.addRecipeCategories(new HeatGeneratorCategory(helper, HEAT_GENERATOR));
+    registry.addRecipeCategories(new PulverizerCategory(helper, PULVERIZING));
+    registry.addRecipeCategories(new PressCategory(helper, PRESSING));
+    registry.addRecipeCategories(new SmelterCategory(helper, ELECTRICAL_SMELTING));
+    registry.addRecipeCategories(new HeatGeneratorCategory(helper, HEAT_GENERATING));
   }
 
   @Override
@@ -74,8 +78,9 @@ public class ModJeiPlugin implements IModPlugin {
     }
 
     RecipeManager rm = level.getRecipeManager();
-    register(registry, rm, ModRecipes.PULVERIZING.get(), PULVERIZER);
-    register(registry, rm, net.minecraft.world.item.crafting.RecipeType.SMELTING, SMELTER);
+    register(registry, rm, ModRecipes.PULVERIZING.get(), PULVERIZING);
+    register(registry, rm, ModRecipes.PRESSING.get(), PRESSING);
+    register(registry, rm, net.minecraft.world.item.crafting.RecipeType.SMELTING, ELECTRICAL_SMELTING);
 
     // Heat generator: use vanilla smelting fuels
     List<ItemStack> fuels = new ArrayList<>();
@@ -84,21 +89,23 @@ public class ModJeiPlugin implements IModPlugin {
         fuels.add(new ItemStack(item));
       }
     }
-    registry.addRecipes(HEAT_GENERATOR, fuels);
+    registry.addRecipes(HEAT_GENERATING, fuels);
   }
 
   @Override
   public void registerRecipeCatalysts(IRecipeCatalystRegistration registry) {
-    registry.addRecipeCatalyst(new ItemStack(ModBlocks.PULVERIZER.get()), PULVERIZER);
-    registry.addRecipeCatalyst(new ItemStack(ModBlocks.HEAT_GENERATOR.get()), HEAT_GENERATOR);
-    registry.addRecipeCatalyst(new ItemStack(ModBlocks.SMELTER.get()), SMELTER);
+    registry.addRecipeCatalyst(new ItemStack(ModBlocks.PULVERIZER.get()), PULVERIZING);
+    registry.addRecipeCatalyst(new ItemStack(ModBlocks.PRESS.get()), PRESSING);
+    registry.addRecipeCatalyst(new ItemStack(ModBlocks.SMELTER.get()), ELECTRICAL_SMELTING);
+    registry.addRecipeCatalyst(new ItemStack(ModBlocks.HEAT_GENERATOR.get()), HEAT_GENERATING);
   }
 
   @Override
   public void registerGuiHandlers(IGuiHandlerRegistration registry) {
-    registry.addRecipeClickArea(PulverizerScreen.class, 68, 35, 22, 16, PULVERIZER);
-    registry.addRecipeClickArea(HeatGeneratorScreen.class, 80, 36, 14, 14, HEAT_GENERATOR);
-    registry.addRecipeClickArea(SmelterScreen.class, 75, 35, 22, 16, SMELTER);
+    registry.addRecipeClickArea(PulverizerScreen.class, 68, 35, 22, 16, PULVERIZING);
+    registry.addRecipeClickArea(PressScreen.class, 75, 35, 22, 16, PRESSING);
+    registry.addRecipeClickArea(SmelterScreen.class, 75, 35, 22, 16, ELECTRICAL_SMELTING);
+    registry.addRecipeClickArea(HeatGeneratorScreen.class, 80, 36, 14, 14, HEAT_GENERATING);
 
     // Excluded areas
     registry.addGenericGuiContainerHandler(ComponentedContainerScreen.class, new IGuiContainerHandler<>() {

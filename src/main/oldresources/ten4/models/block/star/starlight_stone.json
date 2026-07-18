@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "ten4:block/starlight/starlight_stone",
-    "particle": "ten4:block/starlight/starlight_stone"
-  }
-}

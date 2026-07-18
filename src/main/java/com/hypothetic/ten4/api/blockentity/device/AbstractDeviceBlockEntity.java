@@ -524,10 +524,14 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     fluidInventory.fromTag(tag.getCompound("FluidTank"), reg);
 
     CompoundTag cfg = tag.getCompound("Configuration");
+    int enf = cfg.getInt("EnergyFaceMasks");
+    int itf = cfg.getInt("ItemFaceMasks");
+    int flf = cfg.getInt("FluidFaceMasks");
+
     for (Direction d : Direction.values()) {
-      setEnergyFaceMode(d, FaceMode.of(cfg.getInt("Energy_" + d.ordinal())));
-      setItemFaceMode(d, FaceMode.of(cfg.getInt("Item_" + d.ordinal())));
-      setFluidFaceMode(d, FaceMode.of(cfg.getInt("Fluid_" + d.ordinal())));
+      setEnergyFaceMode(d, FaceModePacker.get(enf, d));
+      setItemFaceMode(d, FaceModePacker.get(itf, d));
+      setFluidFaceMode(d, FaceModePacker.get(flf, d));
     }
 
     sigMode = SignalMode.of(cfg.getInt("SigMode"));
@@ -554,12 +558,9 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     tag.put("FluidTank", fluidInventory.createTag(reg));
 
     CompoundTag cfg = new CompoundTag();
-    for (Direction d : Direction.values()) {
-      cfg.putInt("Energy_" + d.ordinal(), energyFaceConfig.get(d).ordinal());
-      cfg.putInt("Item_" + d.ordinal(), itemFaceConfig.get(d).ordinal());
-      cfg.putInt("Fluid_" + d.ordinal(), fluidFaceConfig.get(d).ordinal());
-    }
-
+    cfg.putInt("EnergyFaceMasks", FaceModePacker.packFaces(energyFaceConfig));
+    cfg.putInt("ItemFaceMasks", FaceModePacker.packFaces(itemFaceConfig));
+    cfg.putInt("FluidFaceMasks", FaceModePacker.packFaces(fluidFaceConfig));
     cfg.putInt("SigMode", sigMode.ordinal());
     cfg.putInt("ComparatorMode", comparatorMode.ordinal());
     cfg.putInt("SecurityMode", securityMode.ordinal());

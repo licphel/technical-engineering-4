@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item_tag": "c:gems/diamond",
+      "count": 9
+    },
+    {
+      "item": "ten4:packing_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:diamond_block"
+    }
+  ],
+  "time": 100
+}

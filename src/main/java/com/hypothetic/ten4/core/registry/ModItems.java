@@ -18,7 +18,7 @@ public final class ModItems {
 
   public static final DeferredHolder<Item, Item> WRENCH = ITEMS.register("wrench", () -> new Item(ItemProperties.WRENCH));
 
-  // Devices
+  // DeviceTiers
   public static final DeferredHolder<Item, BlockItem> DEVICE_CASING = bridgeBlockItem(ModBlocks.DEVICE_CASING);
   public static final DeferredHolder<Item, BlockItem> PULVERIZER = bridgeBlockItem(ModBlocks.PULVERIZER);
   public static final DeferredHolder<Item, BlockItem> PRESS = bridgeBlockItem(ModBlocks.PRESS);
@@ -28,7 +28,7 @@ public final class ModItems {
   // Generators
   public static final DeferredHolder<Item, BlockItem> HEAT_GENERATOR = bridgeBlockItem(ModBlocks.HEAT_GENERATOR);
 
-  // Ducts
+  // DuctTiers
   public static final DeferredHolder<Item, BlockItem> COPPER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.COPPER_ENERGY_DUCT);
   public static final DeferredHolder<Item, BlockItem> OPAQUE_COPPER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.OPAQUE_COPPER_ENERGY_DUCT);
   public static final DeferredHolder<Item, BlockItem> COPPER_CONTROLLER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.COPPER_CONTROLLER_ENERGY_DUCT);

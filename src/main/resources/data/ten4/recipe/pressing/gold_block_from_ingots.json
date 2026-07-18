@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/gold",
+      "count": 9
+    },
+    {
+      "item": "ten4:packing_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:gold_block"
+    }
+  ],
+  "time": 100
+}

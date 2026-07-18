@@ -127,6 +127,13 @@
   "item.ten4.gold_dust": "金粉",
   "item.ten4.gold_plate": "金板",
 
-  "ten4.sound.beep": "滴滴",
-  "ten4.sound.device_noise": "设备噪音"
+  "ten4.sound.beep": "滴",
+  "ten4.sound.device_noise_0": "设备：轰鸣",
+  "ten4.sound.device_noise_1": "设备：嘎吱",
+  "ten4.sound.device_noise_2": "设备：呼呼",
+
+  "ten4.pulverizing": "磨粉",
+  "ten4.pressing": "冲压",
+  "ten4.electrical_smelting": "电力熔炼",
+  "ten4.heat_generating": "热力发电"
 }
