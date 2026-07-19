@@ -23,6 +23,7 @@ public class ModBlockEntities {
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> PULVERIZER = register("pulverizer", PulverizerBlockEntity::new);
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> PRESS = register("press", PressBlockEntity::new);
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> SMELTER = register("smelter", SmelterBlockEntity::new);
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> REFINER = register("refiner", RefinerBlockEntity::new);
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> WATER_PUMP = register("water_pump", WaterPumpBlockEntity::new);
 
   // Generators

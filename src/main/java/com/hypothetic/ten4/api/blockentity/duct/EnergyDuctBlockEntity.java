@@ -16,13 +16,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> implements ITickable {
-  private final IEnergyStorage energyStorage;
+  private final Map<Direction, TransmitterEnergyStorage> energyStorages = new EnumMap<>(Direction.class);
 
   public EnergyDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
     super(pos, state, info);
     this.transmitter = new EnergyTransmitter(this, info.bufferCapacity, info.throughput);
-    this.energyStorage = new TransmitterEnergyStorage(transmitter);
+    for (Direction dir : Direction.values()) {
+      energyStorages.put(dir, new TransmitterEnergyStorage(transmitter, dir));
+    }
   }
 
   @Override
@@ -46,8 +51,13 @@ public class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> im
   @Override
   protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
     super.saveAdditional(tag, reg);
-
-    tag.putLong("Buffer", transmitter.getBuffer());
+    EnergyNetwork net = transmitter.getNetwork();
+    if (net != null) {
+      long total = net.getBuffer();
+      tag.putLong("Buffer", total > 0 ? Math.max(1, total / net.size()) : 0);
+    } else {
+      tag.putLong("Buffer", transmitter.getBuffer());
+    }
   }
 
   @Override
@@ -61,6 +71,6 @@ public class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> im
   }
 
   public @Nullable IEnergyStorage getEnergyStorage(@Nullable Direction side) {
-    return energyStorage;
+    return side != null ? energyStorages.get(side) : null;
   }
 }

@@ -23,11 +23,11 @@ public enum ConnectionType implements StringRepresentable, IEnumTranslatable {
     return ConnectionType.of(ordinal() + 1);
   }
 
-  public boolean canAccept() {
+  public boolean isPullOrNormal() {
     return this == NORMAL || this == PULL;
   }
 
-  public boolean canBorrow() {
+  public boolean isPushOrNormal() {
     return this == NORMAL || this == PUSH;
   }
 }

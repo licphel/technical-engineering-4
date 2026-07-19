@@ -94,7 +94,7 @@ public class EnergyNetwork extends BufferedNetwork<IEnergyStorage, EnergyNetwork
     Set<Edge> pullSeen = new HashSet<>();
     List<IEnergyStorage> producers = new ArrayList<>();
 
-    for (var e : positionedTransmitters.entrySet()) {
+    for (Map.Entry<BlockPos, EnergyTransmitter> e : positionedTransmitters.entrySet()) {
       BlockPos pos = e.getKey();
       EnergyTransmitter cable = e.getValue();
       if (level == null) {
@@ -135,7 +135,7 @@ public class EnergyNetwork extends BufferedNetwork<IEnergyStorage, EnergyNetwork
         if (share == 0) {
           share = toPull;
         }
-        var it = srcs.iterator();
+        Iterator<IEnergyStorage> it = srcs.iterator();
         while (it.hasNext()) {
           IEnergyStorage src = it.next();
           int pulled = src.extractEnergy((int) Math.min(share, Integer.MAX_VALUE), false);
@@ -156,7 +156,7 @@ public class EnergyNetwork extends BufferedNetwork<IEnergyStorage, EnergyNetwork
     Set<Edge> pushSeen = new HashSet<>();
     List<IEnergyStorage> acceptors = new ArrayList<>();
 
-    for (var e : positionedTransmitters.entrySet()) {
+    for (Map.Entry<BlockPos, EnergyTransmitter> e : positionedTransmitters.entrySet()) {
       BlockPos pos = e.getKey();
       EnergyTransmitter tr = e.getValue();
       if (level == null) {
@@ -173,7 +173,7 @@ public class EnergyNetwork extends BufferedNetwork<IEnergyStorage, EnergyNetwork
         if (level.getBlockEntity(t) instanceof ITransmitterProvider) {
           continue;
         }
-        if (!tr.getConnectionTypeRaw(d).canBorrow()) {
+        if (!tr.getConnectionTypeRaw(d).isPushOrNormal()) {
           continue;
         }
         Edge edge = new Edge(t, d.getOpposite());
@@ -195,7 +195,7 @@ public class EnergyNetwork extends BufferedNetwork<IEnergyStorage, EnergyNetwork
       if (share == 0) {
         share = toSend;
       }
-      var it = needy.iterator();
+      Iterator<IEnergyStorage> it = needy.iterator();
       while (it.hasNext()) {
         IEnergyStorage a = it.next();
         int sent = a.receiveEnergy((int) Math.min(share, Integer.MAX_VALUE), false);

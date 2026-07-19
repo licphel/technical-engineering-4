@@ -53,7 +53,7 @@ public class GaugeFluid extends UiComponent {
 
     int e = stack.getAmount(), me = capacity.getAsInt();
     float frac = me > 0 ? (float) e / me : 0;
-    int fill = Math.round(innerH * frac);
+    int fill = (int) Math.ceil(innerH * frac);
 
     g.draw(emptyTex, x, y, width, height);
 

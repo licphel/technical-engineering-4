@@ -3,6 +3,7 @@ package com.hypothetic.ten4.core.registry.config;
 import com.hypothetic.ten4.Ten4;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
@@ -20,19 +21,19 @@ public final class ModConfigs {
   private static final List<Runnable> HOOKS = new ArrayList<>();
 
   static {
-    var commonB = new ModConfigSpec.Builder();
+    ModConfigSpec.Builder commonB = new ModConfigSpec.Builder();
     commonB.push(Ten4.ID);
     COMMON = new CfgCommon(commonB);
     commonB.pop();
     COMMON_SPEC = commonB.build();
 
-    var clientB = new ModConfigSpec.Builder();
+    ModConfigSpec.Builder clientB = new ModConfigSpec.Builder();
     clientB.push(Ten4.ID);
     CLIENT = new CfgClient(clientB);
     clientB.pop();
     CLIENT_SPEC = clientB.build();
 
-    var serverB = new ModConfigSpec.Builder();
+    ModConfigSpec.Builder serverB = new ModConfigSpec.Builder();
     serverB.push(Ten4.ID);
     SERVER = new CfgServer(serverB);
     serverB.pop();
@@ -43,13 +44,13 @@ public final class ModConfigs {
 
   @SubscribeEvent
   static void onLoad(ModConfigEvent.Loading e) {
-    var spec = e.getConfig().getSpec();
+    IConfigSpec spec = e.getConfig().getSpec();
     if (spec == COMMON_SPEC || spec == CLIENT_SPEC || spec == SERVER_SPEC) HOOKS.forEach(Runnable::run);
   }
 
   @SubscribeEvent
   static void onReload(ModConfigEvent.Reloading e) {
-    var spec = e.getConfig().getSpec();
+    IConfigSpec spec = e.getConfig().getSpec();
     if (spec == COMMON_SPEC || spec == CLIENT_SPEC || spec == SERVER_SPEC) HOOKS.forEach(Runnable::run);
   }
 }

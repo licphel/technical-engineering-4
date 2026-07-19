@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:sugar_cane",
+      "count": 1
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar",
+      "chance": 0.25
+    }
+  ],
+  "time": 100
+}

@@ -54,16 +54,7 @@ public final class ClientUtil {
 
   public static int @Nullable [] getTextureSize(ResourceLocation rl) {
     Optional<Dimension> dim = TEXTURE_SIZE_CACHE.getUnchecked(rl);
-    return dim.map(d -> new int[] {d.width, d.height}).orElse(null);
-  }
-
-  public static @Nullable TextureAtlasSprite getFluidTexture(Fluid fluid, boolean flowing) {
-    if (fluid == Fluids.EMPTY) {
-      return null;
-    }
-    IClientFluidTypeExtensions fluidType = IClientFluidTypeExtensions.of(fluid);
-    ResourceLocation textureRl = flowing ? fluidType.getFlowingTexture() : fluidType.getStillTexture();
-    return getBlockSprite(textureRl);
+    return dim.map(Dimension::toIntArray).orElse(null);
   }
 
   public static TextureAtlasSprite getBlockSprite(ResourceLocation rl) {
@@ -84,14 +75,9 @@ public final class ClientUtil {
     return TextureRegion.ofSprite(model.getParticleIcon(ModelData.EMPTY));
   }
 
-  public static int guiOriginX(int width, int xSize) {
-    return (width - xSize) / 2;
-  }
-
-  public static int guiOriginY(int height, int ySize) {
-    return (height - ySize) / 2;
-  }
-
   private record Dimension(int width, int height) {
+    public int[] toIntArray() {
+      return new int[] {width, height};
+    }
   }
 }

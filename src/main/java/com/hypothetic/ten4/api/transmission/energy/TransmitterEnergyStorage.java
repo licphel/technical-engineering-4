@@ -1,13 +1,16 @@
 package com.hypothetic.ten4.api.transmission.energy;
 
+import net.minecraft.core.Direction;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
 public class TransmitterEnergyStorage implements IEnergyStorage {
   private final EnergyTransmitter transmitter;
+  private final @Nullable Direction side;
 
-  public TransmitterEnergyStorage(EnergyTransmitter transmitter) {
+  public TransmitterEnergyStorage(EnergyTransmitter transmitter, @Nullable Direction side) {
     this.transmitter = transmitter;
+    this.side = side;
   }
 
   private @Nullable EnergyNetwork net() {
@@ -26,6 +29,9 @@ public class TransmitterEnergyStorage implements IEnergyStorage {
 
   @Override
   public int receiveEnergy(int max, boolean sim) {
+    if (!transmitter.getConnectionTypeRaw(side).isPullOrNormal()) {
+      return 0;
+    }
     max = (int) Math.min(max, transmitter.getThroughput());
     long space = cap() - buf();
     int toAdd = (int) Math.min(Math.min(space, max), Integer.MAX_VALUE);
@@ -42,6 +48,9 @@ public class TransmitterEnergyStorage implements IEnergyStorage {
 
   @Override
   public int extractEnergy(int max, boolean sim) {
+    if (!transmitter.getConnectionTypeRaw(side).isPushOrNormal()) {
+      return 0;
+    }
     max = (int) Math.min(max, transmitter.getThroughput());
     long cur = buf();
     int toExtract = (int) Math.min(Math.min(cur, max), Integer.MAX_VALUE);
@@ -68,11 +77,11 @@ public class TransmitterEnergyStorage implements IEnergyStorage {
 
   @Override
   public boolean canExtract() {
-    return buf() > 0;
+    return transmitter.getConnectionTypeRaw(side).isPushOrNormal() && buf() > 0;
   }
 
   @Override
   public boolean canReceive() {
-    return buf() < cap();
+    return transmitter.getConnectionTypeRaw(side).isPullOrNormal() && buf() < cap();
   }
 }

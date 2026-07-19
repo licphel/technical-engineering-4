@@ -34,10 +34,6 @@ public record TextureRegion(Texture texture, int u, int v, int width, int height
     return new TextureRegion(atlas, (int) (u0 * atlas.width()), (int) (v0 * atlas.height()), (int) ((u1 - u0) * atlas.width()), (int) ((v1 - v0) * atlas.height()));
   }
 
-  public static @Nullable TextureRegion ofFluid(Fluid fluid, boolean flowing) {
-    return ofSprite(ClientUtil.getFluidTexture(fluid, flowing));
-  }
-
   public ResourceLocation resource() {
     return texture.resource();
   }

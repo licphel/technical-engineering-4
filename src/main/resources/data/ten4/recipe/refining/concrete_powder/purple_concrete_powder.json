@@ -1,0 +1,18 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item_tag": "c:concrete_powders"
+    },
+    {
+      "fluid": "ten4:purple_dye_solution",
+      "amount": 20
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:purple_concrete_powder"
+    }
+  ],
+  "time": 100
+}

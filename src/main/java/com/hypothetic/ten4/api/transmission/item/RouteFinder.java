@@ -40,7 +40,7 @@ final class RouteFinder {
       }
 
       for (Direction d : Direction.values()) {
-        if (!curr.getConnectionTypeRaw(d).canBorrow()) {
+        if (!curr.getConnectionTypeRaw(d).isPushOrNormal()) {
           continue;
         }
         BlockPos next = node.pos.relative(d);
@@ -59,7 +59,7 @@ final class RouteFinder {
         }
 
         ItemTransmitter dst = network.findTransmitter(next);
-        if (dst == null || !dst.getConnectionTypeRaw(d.getOpposite()).canAccept()
+        if (dst == null || !dst.getConnectionTypeRaw(d.getOpposite()).isPullOrNormal()
             || !curr.isColorCompatible(dst)) {
           continue;
         }

@@ -28,12 +28,12 @@ public class GaugeVertical extends UiComponent {
   public void onRender(EnhancedGuiGraphics g, float pt) {
     int e = partial.getAsInt(), me = full.getAsInt();
     float frac = me > 0 ? (float) e / me : 0;
-    int fill = Math.round(height * frac);
+    int fill = (int) Math.ceil(height * frac);
 
     g.draw(emptyTex, x, y, width, height);
 
     if (fill > 0 && fullTex != null) {
-      int fillUV = Math.round(fullTex.height() * frac);
+      int fillUV = (int) Math.ceil(fullTex.height() * frac);
       g.draw(fullTex, x, y + height - fill, width, fill, 0, fullTex.height() - fillUV, fullTex.width(), fillUV);
     }
   }

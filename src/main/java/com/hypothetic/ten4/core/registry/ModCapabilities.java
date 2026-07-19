@@ -22,10 +22,17 @@ public class ModCapabilities {
     // DeviceTiers
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.PULVERIZER.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.PULVERIZER.get(), AbstractDeviceBlockEntity::getItemHandler);
+
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.PRESS.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.PRESS.get(), AbstractDeviceBlockEntity::getItemHandler);
+
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.SMELTER.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.SMELTER.get(), AbstractDeviceBlockEntity::getItemHandler);
+
+    register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.REFINER.get(), AbstractDeviceBlockEntity::getEnergyStorage);
+    register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.REFINER.get(), AbstractDeviceBlockEntity::getItemHandler);
+    register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.REFINER.get(), AbstractDeviceBlockEntity::getFluidHandler);
+
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.WATER_PUMP.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.WATER_PUMP.get(), AbstractDeviceBlockEntity::getFluidHandler);
 
@@ -37,9 +44,11 @@ public class ModCapabilities {
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.OPAQUE_COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.COPPER_CONTROLLER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
+
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.COPPER_ITEM_DUCT.get(), ItemDuctBlockEntity::getItemHandler);
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.OPAQUE_COPPER_ITEM_DUCT.get(), ItemDuctBlockEntity::getItemHandler);
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.COPPER_CONTROLLER_ITEM_DUCT.get(), ItemDuctBlockEntity::getItemHandler);
+
     register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.COPPER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
     register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.OPAQUE_COPPER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);
     register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT.get(), FluidDuctBlockEntity::getFluidHandler);

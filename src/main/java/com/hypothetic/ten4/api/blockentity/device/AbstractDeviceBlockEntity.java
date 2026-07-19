@@ -51,6 +51,8 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IItemHandler> ITEM = AbstractDeviceBlockEntity::getItemHandler;
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IFluidHandler> FLUID = AbstractDeviceBlockEntity::getFluidHandler;
   private static final int STRICT_INPUT_BIT = 1 << 24; // global strict-input flag in itemAutoFlags
+  private static final int AUTO_EJECT_BIT = 1 << 25;
+  private static final int AUTO_EXTRACT_BIT = 1 << 26;
   protected final Map<Direction, DirectionalEnergyStorage> energyHandlers = new HashMap<>();
   protected final Map<Direction, FaceMode> energyFaceConfig = new HashMap<>();
   protected final Queue<Direction> energyPushingQueue = new LinkedList<>();
@@ -70,12 +72,13 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   protected int energy = 0;
   protected boolean active;
   protected SignalMode sigMode = SignalMode.IGNORE;
-  protected ComparatorMode comparatorMode = ComparatorMode.ENERGY;
+  protected ComparatorMode comparatorMode = ComparatorMode.OFF;
   protected SecurityMode securityMode = SecurityMode.DISABLED;
-  protected int energyAutoFlags, itemAutoFlags, fluidAutoFlags;
+  protected int energyAutoFlags;
+  protected int itemAutoFlags;
+  protected int fluidAutoFlags;
   private long lastPlay;
   private @Nullable UUID owner;
-
   public AbstractDeviceBlockEntity(BlockPos pos, BlockState state) {
     super(pos, state);
 
@@ -113,17 +116,29 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     initializeCapabilities();
   }
 
-  private static final int AUTO_EJECT_BIT = 1 << 25;
-  private static final int AUTO_EXTRACT_BIT = 1 << 26;
-
   public boolean isAutoEject(int type) {
-    return switch (type) { case 0 -> (energyAutoFlags & AUTO_EJECT_BIT) != 0; case 1 -> (itemAutoFlags & AUTO_EJECT_BIT) != 0; default -> (fluidAutoFlags & AUTO_EJECT_BIT) != 0; };
+    return switch (type) {
+      case 0 -> (energyAutoFlags & AUTO_EJECT_BIT) != 0;
+      case 1 -> (itemAutoFlags & AUTO_EJECT_BIT) != 0;
+      default -> (fluidAutoFlags & AUTO_EJECT_BIT) != 0;
+    };
   }
+
   public boolean isAutoExtract(int type) {
-    return switch (type) { case 0 -> (energyAutoFlags & AUTO_EXTRACT_BIT) != 0; case 1 -> (itemAutoFlags & AUTO_EXTRACT_BIT) != 0; default -> (fluidAutoFlags & AUTO_EXTRACT_BIT) != 0; };
+    return switch (type) {
+      case 0 -> (energyAutoFlags & AUTO_EXTRACT_BIT) != 0;
+      case 1 -> (itemAutoFlags & AUTO_EXTRACT_BIT) != 0;
+      default -> (fluidAutoFlags & AUTO_EXTRACT_BIT) != 0;
+    };
   }
-  public void setAutoEject(int type, boolean v) { setGlobalFlag(type, AUTO_EJECT_BIT, v); }
-  public void setAutoExtract(int type, boolean v) { setGlobalFlag(type, AUTO_EXTRACT_BIT, v); }
+
+  public void setAutoEject(int type, boolean v) {
+    setGlobalFlag(type, AUTO_EJECT_BIT, v);
+  }
+
+  public void setAutoExtract(int type, boolean v) {
+    setGlobalFlag(type, AUTO_EXTRACT_BIT, v);
+  }
 
   private void setGlobalFlag(int type, int bit, boolean v) {
     switch (type) {
@@ -382,30 +397,48 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   private void rebuildEnergyQueues() {
     energyPushingQueue.clear();
     energyPullingQueue.clear();
-    if (!isAutoEject(0) && !isAutoExtract(0)) return;
+    if (!isAutoEject(0) && !isAutoExtract(0)) {
+      return;
+    }
     for (Direction d : Direction.values()) {
-      if (energyFaceConfig.get(d).canExtract() && isAutoEject(0)) energyPushingQueue.offer(d);
-      if (energyFaceConfig.get(d).canReceive() && isAutoExtract(0)) energyPullingQueue.offer(d);
+      if (energyFaceConfig.get(d).canExtract() && isAutoEject(0)) {
+        energyPushingQueue.offer(d);
+      }
+      if (energyFaceConfig.get(d).canReceive() && isAutoExtract(0)) {
+        energyPullingQueue.offer(d);
+      }
     }
   }
 
   private void rebuildItemQueues() {
     itemPushingQueue.clear();
     itemPullingQueue.clear();
-    if (!isAutoEject(1) && !isAutoExtract(1)) return;
+    if (!isAutoEject(1) && !isAutoExtract(1)) {
+      return;
+    }
     for (Direction d : Direction.values()) {
-      if (itemFaceConfig.get(d).canExtract() && isAutoEject(1)) itemPushingQueue.offer(d);
-      if (itemFaceConfig.get(d).canReceive() && isAutoExtract(1)) itemPullingQueue.offer(d);
+      if (itemFaceConfig.get(d).canExtract() && isAutoEject(1)) {
+        itemPushingQueue.offer(d);
+      }
+      if (itemFaceConfig.get(d).canReceive() && isAutoExtract(1)) {
+        itemPullingQueue.offer(d);
+      }
     }
   }
 
   private void rebuildFluidQueues() {
     fluidPushingQueue.clear();
     fluidPullingQueue.clear();
-    if (!isAutoEject(2) && !isAutoExtract(2)) return;
+    if (!isAutoEject(2) && !isAutoExtract(2)) {
+      return;
+    }
     for (Direction d : Direction.values()) {
-      if (fluidFaceConfig.get(d).canExtract() && isAutoEject(2)) fluidPushingQueue.offer(d);
-      if (fluidFaceConfig.get(d).canReceive() && isAutoExtract(2)) fluidPullingQueue.offer(d);
+      if (fluidFaceConfig.get(d).canExtract() && isAutoEject(2)) {
+        fluidPushingQueue.offer(d);
+      }
+      if (fluidFaceConfig.get(d).canReceive() && isAutoExtract(2)) {
+        fluidPullingQueue.offer(d);
+      }
     }
   }
 

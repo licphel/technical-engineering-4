@@ -10,6 +10,7 @@ public final class DeviceTiers {
   public static Supplier<DeviceInfo> PULVERIZER;
   public static Supplier<DeviceInfo> PRESS;
   public static Supplier<DeviceInfo> SMELTER;
+  public static Supplier<DeviceInfo> REFINER;
   public static Supplier<DeviceInfo> WATER_PUMP;
   public static Supplier<DeviceInfo> HEAT_GENERATOR;
 
@@ -39,6 +40,15 @@ public final class DeviceTiers {
         .setEnergyCapacity(d.smelterEnergyCapacity.get())
         .setEnergyThroughput(d.smelterEnergyThroughput.get())
         .setItemThroughput(d.smelterItemThroughput.get());
+    REFINER = () -> new DeviceInfo()
+        .enableEnergy()
+        .enableItem()
+        .enableFluid()
+        .setPower(d.refinerPower.get())
+        .setEnergyCapacity(d.refinerEnergyCapacity.get())
+        .setEnergyThroughput(d.refinerEnergyThroughput.get())
+        .setItemThroughput(d.refinerItemThroughput.get())
+        .setFluidThroughput(d.refinerFluidThroughput.get());
     WATER_PUMP = () -> new DeviceInfo()
         .enableEnergy()
         .enableFluid()

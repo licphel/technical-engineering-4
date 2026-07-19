@@ -7,6 +7,7 @@ import com.hypothetic.ten4.api.recipe.Complex;
 import com.hypothetic.ten4.core.client.builtin.BuiltinComponents;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -19,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
   private static final IDrawable fluidTank = new IDrawable() {
@@ -89,17 +91,24 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
   }
 
   protected void addFluidInput(IRecipeLayoutBuilder builder, Complex input, int x, int y) {
-    builder.addInputSlot(x, y)
+    IRecipeSlotBuilder sb = builder.addInputSlot(x, y)
         .addIngredients(NeoForgeTypes.FLUID_STACK, input.fluidStacks())
-        .setFluidRenderer(input.count(), false, 16, 48)
-        .setBackground(fluidTank, x, y);
+        .setBackground(fluidTank, 0, 0);
+
+    if (input.count() > 0) {
+      sb.setFluidRenderer(input.count(), false, 16, 48);
+    }
   }
 
   protected void addFluidOutput(IRecipeLayoutBuilder builder, Complex output, int x, int y) {
-    builder.addInputSlot(x, y)
-        .addIngredient(NeoForgeTypes.FLUID_STACK, output.symbolFluid())
-        .setFluidRenderer(output.count(), false, 16, 48)
-        .setBackground(fluidTank, x, y);
+    FluidStack stack = output.symbolFluid();
+    IRecipeSlotBuilder sb = builder.addOutputSlot(x, y)
+        .addFluidStack(stack.getFluid(), stack.getAmount())
+        .setBackground(fluidTank, 0, 0);
+
+    if (output.count() > 0) {
+      sb.setFluidRenderer(output.count(), false, 16, 48);
+    }
   }
 
   protected void addEnergyGauge(IRecipeExtrasBuilder builder, int x, int y, boolean increasing) {

@@ -1,0 +1,18 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item_tag": "minecraft:candles"
+    },
+    {
+      "fluid": "ten4:white_dye_solution",
+      "amount": 20
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:white_candle"
+    }
+  ],
+  "time": 100
+}

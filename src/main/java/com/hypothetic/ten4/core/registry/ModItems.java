@@ -2,15 +2,22 @@ package com.hypothetic.ten4.core.registry;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.item.IAugment;
+import com.hypothetic.ten4.api.registry.FluidDeferredRegister;
 import com.hypothetic.ten4.core.item.GeneralAugmentItem;
 import com.hypothetic.ten4.core.item.ItemProperties;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public final class ModItems {
@@ -23,6 +30,7 @@ public final class ModItems {
   public static final DeferredHolder<Item, BlockItem> PULVERIZER = bridgeBlockItem(ModBlocks.PULVERIZER);
   public static final DeferredHolder<Item, BlockItem> PRESS = bridgeBlockItem(ModBlocks.PRESS);
   public static final DeferredHolder<Item, BlockItem> SMELTER = bridgeBlockItem(ModBlocks.SMELTER);
+  public static final DeferredHolder<Item, BlockItem> REFINER = bridgeBlockItem(ModBlocks.REFINER);
   public static final DeferredHolder<Item, BlockItem> WATER_PUMP = bridgeBlockItem(ModBlocks.WATER_PUMP);
 
   // Generators
@@ -53,11 +61,12 @@ public final class ModItems {
       new GeneralAugmentItem(ItemProperties.AUGMENT, v -> (int) (v * 1.5F),
           IAugment.AugmentableField.FLUID_THROUGHPUT));
 
-  // Materials
+  // Dies
   public static final DeferredHolder<Item, Item> SHEET_DIE = ITEMS.register("sheet_die", () -> new Item(ItemProperties.SINGLE_STACKED));
   public static final DeferredHolder<Item, Item> PACKING_DIE = ITEMS.register("packing_die", () -> new Item(ItemProperties.SINGLE_STACKED));
   public static final DeferredHolder<Item, Item> DEPACKING_DIE = ITEMS.register("depacking_die", () -> new Item(ItemProperties.SINGLE_STACKED));
 
+  // Materials
   public static final DeferredHolder<Item, Item> CIRCUIT = ITEMS.register("circuit", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> IRON_DUST = ITEMS.register("iron_dust", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> IRON_PLATE = ITEMS.register("iron_plate", () -> new Item(ItemProperties.NONSPECIAL));

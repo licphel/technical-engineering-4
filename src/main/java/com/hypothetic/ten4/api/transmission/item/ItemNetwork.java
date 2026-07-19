@@ -43,7 +43,7 @@ public class ItemNetwork extends Network<IItemHandler, ItemNetwork, ItemTransmit
     if (level == null) {
       return;
     }
-    for (var e : snapshots.entrySet()) {
+    for (Map.Entry<ItemTransmitter, ItemTransmitter.TransitEntry> e : snapshots.entrySet()) {
       e.getKey().onUpdateServer(this, level, e.getValue());
     }
   }
@@ -58,7 +58,7 @@ public class ItemNetwork extends Network<IItemHandler, ItemNetwork, ItemTransmit
       }
 
       for (Direction d : Direction.values()) {
-        if (!tr.getConnectionTypeRaw(d).canBorrow()) {
+        if (!tr.getConnectionTypeRaw(d).isPushOrNormal()) {
           continue;
         }
         BlockPos t = e.getKey().relative(d);

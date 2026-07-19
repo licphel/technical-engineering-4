@@ -1,0 +1,18 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item_tag": "c:glass_blocks"
+    },
+    {
+      "fluid": "ten4:gray_dye_solution",
+      "amount": 20
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:gray_stained_glass"
+    }
+  ],
+  "time": 100
+}

@@ -15,6 +15,7 @@ public class ModScreens {
     event.register(ModMenus.PULVERIZER.get(), PulverizerScreen::new);
     event.register(ModMenus.PRESS.get(), PressScreen::new);
     event.register(ModMenus.SMELTER.get(), SmelterScreen::new);
+    event.register(ModMenus.REFINER.get(), RefinerScreen::new);
     event.register(ModMenus.HEAT_GENERATOR.get(), HeatGeneratorScreen::new);
     event.register(ModMenus.WATER_PUMP.get(), WaterPumpScreen::new);
   }

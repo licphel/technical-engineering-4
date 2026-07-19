@@ -26,8 +26,9 @@ public class TransmitterItemHandler implements IItemHandler {
 
   @Override
   public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-    if (stack.isEmpty() || transmitter.getNetwork() == null) {
-      return stack; // no network → reject
+    if (stack.isEmpty() || transmitter.getNetwork() == null
+        || !transmitter.getConnectionTypeRaw(side).isPullOrNormal()) {
+      return stack;
     }
     ItemTransmitter.TransitEntry e = transmitter.transitEntry;
     // Clean up stale empty entry
@@ -72,6 +73,9 @@ public class TransmitterItemHandler implements IItemHandler {
 
   @Override
   public ItemStack extractItem(int slot, int amount, boolean simulate) {
+    if (!transmitter.getConnectionTypeRaw(side).isPushOrNormal()) {
+      return ItemStack.EMPTY;
+    }
     ItemTransmitter.TransitEntry e = transmitter.transitEntry;
     if (e == null) {
       return ItemStack.EMPTY;

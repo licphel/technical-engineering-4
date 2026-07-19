@@ -17,13 +17,18 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmitter> implements ITickable {
-  private final IFluidHandler fluidHandler;
+  private final Map<Direction, TransmitterFluidHandler> fluidHandlers = new EnumMap<>(Direction.class);
 
   public FluidDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
     super(pos, state, info);
     this.transmitter = new FluidTransmitter(this, info.bufferCapacity, info.throughput);
-    this.fluidHandler = new TransmitterFluidHandler(transmitter);
+    for (Direction dir : Direction.values()) {
+      fluidHandlers.put(dir, new TransmitterFluidHandler(transmitter, dir));
+    }
   }
 
   @Override
@@ -38,7 +43,7 @@ public class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmitter> impl
   }
 
   public @Nullable IFluidHandler getFluidHandler(@Nullable Direction side) {
-    return fluidHandler;
+    return side != null ? fluidHandlers.get(side) : null;
   }
 
   @Override
@@ -53,8 +58,14 @@ public class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmitter> impl
   @Override
   protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
     super.saveAdditional(tag, reg);
-
-    if (!transmitter.getBuffer().isEmpty()) {
+    FluidNetwork net = transmitter.getNetwork();
+    if (net != null) {
+      FluidStack buf = net.getFluid();
+      if (!buf.isEmpty()) {
+        int share = Math.max(1, buf.getAmount() / net.size());
+        tag.put("Buffer", buf.copyWithAmount(share).save(reg, new CompoundTag()));
+      }
+    } else if (!transmitter.getBuffer().isEmpty()) {
       tag.put("Buffer", transmitter.getBuffer().save(reg, new CompoundTag()));
     }
   }

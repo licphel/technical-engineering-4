@@ -1,0 +1,19 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "fluid_tag": "c:water",
+      "amount": 500
+    },
+    {
+      "item_tag": "c:dyes/light_gray"
+    }
+  ],
+  "outputs": [
+    {
+      "fluid": "ten4:light_gray_dye_solution",
+      "amount": 500
+    }
+  ],
+  "time": 100
+}

@@ -8,6 +8,7 @@ public final class ModBlockEntityBridges {
     BlockEntityBridges.register(ModBlocks.PULVERIZER, ModBlockEntities.PULVERIZER);
     BlockEntityBridges.register(ModBlocks.PRESS, ModBlockEntities.PRESS);
     BlockEntityBridges.register(ModBlocks.SMELTER, ModBlockEntities.SMELTER);
+    BlockEntityBridges.register(ModBlocks.REFINER, ModBlockEntities.REFINER);
     BlockEntityBridges.register(ModBlocks.WATER_PUMP, ModBlockEntities.WATER_PUMP);
 
     // Generators

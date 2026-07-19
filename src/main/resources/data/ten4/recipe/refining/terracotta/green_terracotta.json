@@ -1,0 +1,18 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item": "minecraft:terracotta"
+    },
+    {
+      "fluid": "ten4:green_dye_solution",
+      "amount": 20
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:green_terracotta"
+    }
+  ],
+  "time": 100
+}

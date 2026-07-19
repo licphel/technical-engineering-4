@@ -1,14 +1,17 @@
 package com.hypothetic.ten4.api.transmission.fluid;
 
+import net.minecraft.core.Direction;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class TransmitterFluidHandler implements IFluidHandler {
   private final FluidTransmitter transmitter;
+  private final @Nullable Direction side;
 
-  public TransmitterFluidHandler(FluidTransmitter transmitter) {
+  public TransmitterFluidHandler(FluidTransmitter transmitter, @Nullable Direction side) {
     this.transmitter = transmitter;
+    this.side = side;
   }
 
   private @Nullable FluidNetwork net() {
@@ -47,6 +50,9 @@ public class TransmitterFluidHandler implements IFluidHandler {
 
   @Override
   public int fill(FluidStack resource, FluidAction action) {
+    if (!transmitter.getConnectionTypeRaw(side).isPullOrNormal()) {
+      return 0;
+    }
     int max = (int) Math.min(resource.getAmount(), transmitter.getThroughput());
     if (max <= 0) {
       return 0;
@@ -73,6 +79,9 @@ public class TransmitterFluidHandler implements IFluidHandler {
 
   @Override
   public FluidStack drain(FluidStack resource, FluidAction action) {
+    if (!transmitter.getConnectionTypeRaw(side).isPushOrNormal()) {
+      return FluidStack.EMPTY;
+    }
     int max = (int) Math.min(resource.getAmount(), transmitter.getThroughput());
     if (max <= 0) {
       return FluidStack.EMPTY;
@@ -90,6 +99,9 @@ public class TransmitterFluidHandler implements IFluidHandler {
 
   @Override
   public FluidStack drain(int maxDrain, FluidAction action) {
+    if (!transmitter.getConnectionTypeRaw(side).isPushOrNormal()) {
+      return FluidStack.EMPTY;
+    }
     int max = (int) Math.min(maxDrain, transmitter.getThroughput());
     if (max <= 0) {
       return FluidStack.EMPTY;

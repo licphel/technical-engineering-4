@@ -68,15 +68,12 @@ public class FluidTransmitter extends BufferedTransmitter<IFluidHandler, FluidNe
     if (other instanceof FluidTransmitter ft) {
       FluidStack mine = getEffectiveFluid();
       FluidStack theirs = ft.getEffectiveFluid();
-      if (mine.isEmpty() || theirs.isEmpty()) return true;
+      if (mine.isEmpty() || theirs.isEmpty()) {
+        return true;
+      }
       return FluidStack.isSameFluidSameComponents(mine, theirs);
     }
     return true;
-  }
-
-  private FluidStack getEffectiveFluid() {
-    FluidNetwork net = getNetwork();
-    return net != null && !net.getFluid().isEmpty() ? net.getFluid() : buffer;
   }
 
   @Override
@@ -101,6 +98,11 @@ public class FluidTransmitter extends BufferedTransmitter<IFluidHandler, FluidNe
         }
       }
     }
+  }
+
+  private FluidStack getEffectiveFluid() {
+    FluidNetwork net = getNetwork();
+    return net != null && !net.getFluid().isEmpty() ? net.getFluid() : buffer;
   }
 
   public FluidStack getSyncedFluid() {

@@ -1,0 +1,18 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item_tag": "c:glass_panes"
+    },
+    {
+      "fluid": "ten4:black_dye_solution",
+      "amount": 20
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:black_stained_glass_pane"
+    }
+  ],
+  "time": 100
+}

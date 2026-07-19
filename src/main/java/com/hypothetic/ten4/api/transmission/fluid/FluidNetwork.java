@@ -99,7 +99,7 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
     }
     Set<Edge> pullSeen = new HashSet<>();
     List<IFluidHandler> producers = new ArrayList<>();
-    for (var e : positionedTransmitters.entrySet()) {
+    for (Map.Entry<BlockPos, FluidTransmitter> e : positionedTransmitters.entrySet()) {
       BlockPos pos = e.getKey();
       FluidTransmitter tr = e.getValue();
       if (level == null) {
@@ -140,7 +140,7 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
         if (share == 0) {
           share = (int) toPull;
         }
-        var it = srcs.iterator();
+        Iterator<IFluidHandler> it = srcs.iterator();
         while (it.hasNext()) {
           IFluidHandler src = it.next();
           FluidStack sim = src.drain(share, IFluidHandler.FluidAction.SIMULATE);
@@ -173,7 +173,7 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
     // 1. PUSH
     Set<Edge> pushSeen = new HashSet<>();
     List<IFluidHandler> acceptors = new ArrayList<>();
-    for (var e : positionedTransmitters.entrySet()) {
+    for (Map.Entry<BlockPos, FluidTransmitter> e : positionedTransmitters.entrySet()) {
       BlockPos pos = e.getKey();
       FluidTransmitter tr = e.getValue();
       if (level == null) {
@@ -190,7 +190,7 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
         if (level.getBlockEntity(t) instanceof ITransmitterProvider) {
           continue;
         }
-        if (!tr.getConnectionTypeRaw(d).canBorrow()) {
+        if (!tr.getConnectionTypeRaw(d).isPushOrNormal()) {
           continue;
         }
         Edge edge = new Edge(t, d.getOpposite());
@@ -212,7 +212,7 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
       if (share == 0) {
         share = toSend;
       }
-      var it = needy.iterator();
+      Iterator<IFluidHandler> it = needy.iterator();
       while (it.hasNext()) {
         IFluidHandler a = it.next();
         int filled = a.fill(buffer.copyWithAmount(share), IFluidHandler.FluidAction.EXECUTE);

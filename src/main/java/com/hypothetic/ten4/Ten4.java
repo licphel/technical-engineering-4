@@ -19,6 +19,7 @@ public class Ten4 {
   public Ten4(IEventBus modBus, ModContainer container) {
     ModBlockEntityBridges.createMapBeforeRegistry();
 
+    ModFluids.FLUIDS.register(modBus);
     ModBlocks.BLOCKS.register(modBus);
     ModItems.ITEMS.register(modBus);
     ModCreativeTabs.TABS.register(modBus);

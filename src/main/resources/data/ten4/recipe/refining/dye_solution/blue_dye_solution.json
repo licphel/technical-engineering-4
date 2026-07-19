@@ -1,0 +1,19 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "fluid_tag": "c:water",
+      "amount": 500
+    },
+    {
+      "item_tag": "c:dyes/blue"
+    }
+  ],
+  "outputs": [
+    {
+      "fluid": "ten4:blue_dye_solution",
+      "amount": 500
+    }
+  ],
+  "time": 100
+}

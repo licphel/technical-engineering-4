@@ -1,12 +1,12 @@
 package com.hypothetic.ten4.api.transmission.item;
 
-import com.hypothetic.ten4.core.client.renderer.RenderTransmitterBlock;
 import com.hypothetic.ten4.api.network.PacketDist;
 import com.hypothetic.ten4.api.network.duct.DuctItemPayload;
 import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
 import com.hypothetic.ten4.api.transmission.Transmitter;
 import com.hypothetic.ten4.api.transmission.TransmitterFilter;
+import com.hypothetic.ten4.core.client.renderer.RenderTransmitterBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -178,8 +178,8 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
       BlockPos nextPos = myPos.relative(nextDir);
       ItemTransmitter dst = network.findTransmitter(nextPos);
       if (dst != null && dst.transitEntry == null
-          && getConnectionTypeRaw(nextDir).canBorrow()
-          && dst.getConnectionTypeRaw(nextDir.getOpposite()).canAccept()) {
+          && getConnectionTypeRaw(nextDir).isPushOrNormal()
+          && dst.getConnectionTypeRaw(nextDir.getOpposite()).isPullOrNormal()) {
         // Filter gate: check if source side allows this item to pass
         TransmitterFilter<ItemStack> f = getFilter(nextDir);
         if (f != null) {

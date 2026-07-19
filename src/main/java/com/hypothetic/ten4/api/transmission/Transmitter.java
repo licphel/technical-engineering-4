@@ -137,8 +137,8 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
     return connectionTypes[i];
   }
 
-  public ConnectionType getConnectionTypeRaw(Direction side) {
-    return connectionTypes[side.ordinal()];
+  public ConnectionType getConnectionTypeRaw(@Nullable Direction side) {
+    return side == null ? ConnectionType.NONE : connectionTypes[side.ordinal()];
   }
 
   public void setConnectionTypeRaw(Direction side, ConnectionType type) {
@@ -193,7 +193,9 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
 
   public abstract boolean supportsTransmission(Transmitter<?, ?, ?> other);
 
-  /** Override to prevent incompatible contents (e.g. different fluids) from visually connecting. */
+  /**
+   * Override to prevent incompatible contents (e.g. different fluids) from visually connecting.
+   */
   protected boolean isContentsCompatible(Transmitter<?, ?, ?> other) {
     return true;
   }

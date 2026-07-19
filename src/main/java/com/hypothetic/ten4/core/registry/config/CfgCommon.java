@@ -27,6 +27,12 @@ public final class CfgCommon {
     public final ModConfigSpec.IntValue smelterEnergyThroughput;
     public final ModConfigSpec.IntValue smelterItemThroughput;
 
+    public final ModConfigSpec.IntValue refinerPower;
+    public final ModConfigSpec.IntValue refinerEnergyCapacity;
+    public final ModConfigSpec.IntValue refinerEnergyThroughput;
+    public final ModConfigSpec.IntValue refinerItemThroughput;
+    public final ModConfigSpec.IntValue refinerFluidThroughput;
+
     public final ModConfigSpec.IntValue waterPumpPower;
     public final ModConfigSpec.IntValue waterPumpEnergyCapacity;
     public final ModConfigSpec.IntValue waterPumpEnergyThroughput;
@@ -54,10 +60,16 @@ public final class CfgCommon {
       pressEnergyThroughput = b.defineInRange("pressEnergyThroughput", 100, 0, Integer.MAX_VALUE);
       pressItemThroughput = b.defineInRange("pressItemThroughput", 1, 0, Integer.MAX_VALUE);
 
-      smelterPower = b.defineInRange("smelterPower", 15, 0, Integer.MAX_VALUE);
+      smelterPower = b.defineInRange("smelterPower", 10, 0, Integer.MAX_VALUE);
       smelterEnergyCapacity = b.defineInRange("smelterEnergyCapacity", 10000, 0, Integer.MAX_VALUE);
       smelterEnergyThroughput = b.defineInRange("smelterEnergyThroughput", 100, 0, Integer.MAX_VALUE);
       smelterItemThroughput = b.defineInRange("smelterItemThroughput", 1, 0, Integer.MAX_VALUE);
+
+      refinerPower = b.defineInRange("refinerPower", 20, 0, Integer.MAX_VALUE);
+      refinerEnergyCapacity = b.defineInRange("refinerEnergyCapacity", 10000, 0, Integer.MAX_VALUE);
+      refinerEnergyThroughput = b.defineInRange("refinerEnergyThroughput", 100, 0, Integer.MAX_VALUE);
+      refinerItemThroughput = b.defineInRange("refinerItemThroughput", 1, 0, Integer.MAX_VALUE);
+      refinerFluidThroughput = b.defineInRange("refinerFluidThroughput", 100, 0, Integer.MAX_VALUE);
 
       waterPumpPower = b.defineInRange("waterPumpPower", 5, 0, Integer.MAX_VALUE);
       waterPumpEnergyCapacity = b.defineInRange("waterPumpEnergyCapacity", 10000, 0, Integer.MAX_VALUE);
