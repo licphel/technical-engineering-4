@@ -16,6 +16,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluids;
 
@@ -79,7 +80,9 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
         .addItemStack(output.symbolItem())
         .addRichTooltipCallback((recipeSlotView, tooltip) -> {
           if (output.chance() < 1) {
-            tooltip.add(Component.literal((int) (output.chance() * 100) + "%").withStyle(ChatFormatting.GRAY));
+            MutableComponent mc = Component.translatable(Ten4.lang("misc.chance")).withStyle(ChatFormatting.GOLD);
+            mc.append(Component.literal((int) (output.chance() * 100) + "%").withStyle(ChatFormatting.GRAY));
+            tooltip.add(mc);
           }
         })
         .setStandardSlotBackground();

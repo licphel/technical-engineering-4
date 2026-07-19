@@ -7,15 +7,12 @@
   ],
   "outputs": [
     {
-      "item": "ten4:iron_dust"
+      "item": "ten4:iron_dust",
+      "count": 2
     },
     {
       "item": "ten4:iron_dust",
       "chance": 0.8
-    },
-    {
-      "item": "ten4:iron_dust",
-      "chance": 0.2
     }
   ],
   "time": 180

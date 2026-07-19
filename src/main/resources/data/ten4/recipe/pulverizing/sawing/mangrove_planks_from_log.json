@@ -1,0 +1,15 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:mangrove_log"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:mangrove_planks",
+      "count": 6
+    }
+  ],
+  "time": 200
+}

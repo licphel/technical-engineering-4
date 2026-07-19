@@ -1,0 +1,23 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:birch_log"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:birch_planks",
+      "count": 6
+    },
+    {
+      "item": "minecraft:red_mushroom",
+      "chance": 0.1
+    },
+    {
+      "item": "minecraft:brown_mushroom",
+      "chance": 0.1
+    }
+  ],
+  "time": 200
+}

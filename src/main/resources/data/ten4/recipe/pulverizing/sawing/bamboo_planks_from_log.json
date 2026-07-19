@@ -1,0 +1,15 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:bamboo_block"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:bamboo_planks",
+      "count": 6
+    }
+  ],
+  "time": 200
+}

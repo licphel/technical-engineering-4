@@ -7,15 +7,12 @@
   ],
   "outputs": [
     {
-      "item": "ten4:gold_dust"
+      "item": "ten4:gold_dust",
+      "count": 2
     },
     {
       "item": "ten4:gold_dust",
       "chance": 0.8
-    },
-    {
-      "item": "ten4:gold_dust",
-      "chance": 0.4
     },
     {
       "item": "minecraft:quartz",

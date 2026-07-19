@@ -243,41 +243,19 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
   }
 
   byte getPossibleTransmitterConnections() {
-    Level level = getLevel();
-    if (level == null) {
-      return 0;
-    }
-
     byte b = 0;
-    BlockPos p = getBlockPos();
     for (Direction d : Direction.values()) {
-      BlockEntity be = level.getBlockEntity(p.relative(d));
-      if (be instanceof ITransmitterProvider tb) {
-        Transmitter<?, ?, ?> o = tb.getTransmitter();
-        if (supportsTransmission(o) && isColorCompatible(o) && isContentsCompatible(o)
-            && getConnectionTypeRaw(d) != ConnectionType.NONE
-            && o.getConnectionTypeRaw(d.getOpposite()) != ConnectionType.NONE) {
-          b |= (byte) (1 << d.ordinal());
-        }
+      if (getPossibleTransmitterConnection(d)) {
+        b |= (byte) (1 << d.ordinal());
       }
     }
     return b;
   }
 
   byte getPossibleAcceptorConnections() {
-    Level level = getLevel();
-    if (level == null) {
-      return 0;
-    }
-
     byte b = 0;
-    BlockPos p = getBlockPos();
     for (Direction d : Direction.values()) {
-      BlockPos t = p.relative(d);
-      if (level.getBlockEntity(t) instanceof ITransmitterProvider) {
-        continue;
-      }
-      if (isValidAcceptor(d)) {
+      if (getPossibleAcceptorConnection(d)) {
         b |= (byte) (1 << d.ordinal());
       }
     }

@@ -1,0 +1,15 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:spruce_log"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:spruce_planks",
+      "count": 6
+    }
+  ],
+  "time": 200
+}

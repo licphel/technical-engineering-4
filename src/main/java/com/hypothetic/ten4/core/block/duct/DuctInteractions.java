@@ -11,7 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public final class DuctInteractions {
@@ -33,19 +32,15 @@ public final class DuctInteractions {
     return ItemInteractionResult.FAIL;
   }
 
-  public static ItemInteractionResult changeConnection(Level level, BlockState state, BlockPos pos, Direction side, Player player) {
+  public static ItemInteractionResult changeConnection(Level level, BlockPos pos, Direction side, Player player) {
     BlockEntity be = level.getBlockEntity(pos);
     if (be == null) return ItemInteractionResult.FAIL;
     Transmitter<?, ?, ?> t = findTransmitter(be);
     if (t == null) return ItemInteractionResult.FAIL;
 
-    if (!state.getValue(DuctBlock.CONNECTIONS.get(side))) {
-      return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-    }
-
     BlockEntity neighborBe = level.getBlockEntity(pos.relative(side));
 
-    // Duct-to-duct
+    // Duct-to-duct: NONE ~ NORMAL, both sides together
     if (neighborBe instanceof ITransmitterProvider ntb) {
       Transmitter<?, ?, ?> nt = ntb.getTransmitter();
       ConnectionType neighborType = nt.getConnectionTypeRaw(side.getOpposite());
@@ -59,7 +54,6 @@ public final class DuctInteractions {
         t.setConnectionTypeRaw(side, ConnectionType.NONE);
         next = ConnectionType.NONE;
       }
-      // Both sides: refresh connections + rebuild network + sync to client
       t.onModeChange(side);
       t.refreshConnections();
       t.rebuild();
@@ -72,7 +66,7 @@ public final class DuctInteractions {
       return ItemInteractionResult.SUCCESS;
     }
 
-    // Duct-to-device
+    // Duct-to-device: 4-way cycle NONE ~ NORMAL ~ PUSH ~ PULL
     if (Transmitter.connectionBit(t.getAcceptorConnections(), side)) {
       ConnectionType current = t.getConnectionTypeRaw(side);
       ConnectionType next = current.next();
@@ -88,20 +82,6 @@ public final class DuctInteractions {
     }
 
     return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-  }
-
-  public static void updateConnections(Level level, BlockPos pos, DuctBlock ductBlock) {
-    BlockState state = level.getBlockState(pos);
-    for (Direction facing : Direction.values()) {
-      state = state.setValue(DuctBlock.CONNECTIONS.get(facing), ductBlock.hasConnection(level, facing, pos));
-    }
-    level.setBlockAndUpdate(pos, state);
-
-    BlockEntity be = level.getBlockEntity(pos);
-    if (be instanceof ITransmitterProvider duct) {
-      Transmitter<?, ?, ?> t = duct.getTransmitter();
-      t.refreshConnections();
-    }
   }
 
   private static @Nullable Transmitter<?, ?, ?> findTransmitter(BlockEntity be) {

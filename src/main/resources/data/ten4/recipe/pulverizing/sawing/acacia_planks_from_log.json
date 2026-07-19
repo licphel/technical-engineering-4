@@ -1,0 +1,15 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:acacia_log"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:acacia_planks",
+      "count": 6
+    }
+  ],
+  "time": 200
+}

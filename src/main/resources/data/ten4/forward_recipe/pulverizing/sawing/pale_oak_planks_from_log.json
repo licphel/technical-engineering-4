@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:pale_oak_log"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:pale_oak_planks",
+      "count": 6
+    },
+    {
+      "item": "minecraft:resin_clump",
+      "chance": 0.1
+    }
+  ],
+  "time": 200
+}

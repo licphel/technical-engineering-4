@@ -1,0 +1,18 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item": "ten4:depacking_die"
+    },
+    {
+      "item_tag": "c:ingots/copper"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:copper_nugget",
+      "count": 9
+    }
+  ],
+  "time": 100
+}

@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item": "minecraft:warped_stem"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:warped_planks",
+      "count": 6
+    },
+    {
+      "item": "minecraft:nether_wart",
+      "chance": 0.1
+    }
+  ],
+  "time": 200
+}
