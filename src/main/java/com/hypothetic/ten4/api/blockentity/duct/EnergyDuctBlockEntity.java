@@ -1,4 +1,4 @@
-package com.hypothetic.ten4.api.blockentity.transmission;
+package com.hypothetic.ten4.api.blockentity.duct;
 
 import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.core.client.renderer.RenderTransmitterBlock;
@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> implements ITickable {
   private final IEnergyStorage energyStorage;
-  private int tickCount;
 
   public EnergyDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
     super(pos, state, info);
@@ -32,7 +31,7 @@ public class EnergyDuctBlockEntity extends DuctBlockEntity<EnergyTransmitter> im
       return;
     }
 
-    if (tickCount++ % 5 == 0) {
+    if (level.getGameTime() % 5 == 0) {
       syncToClient();
     }
   }

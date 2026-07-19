@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.api.network.duct;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.ItemDuctBlockEntity;
 import com.hypothetic.ten4.api.transmission.item.ItemTransmitter.TransitEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -62,7 +62,7 @@ public record DuctItemPayload(BlockPos pos, @Nullable TransitEntry entry) implem
   public static void handle(DuctItemPayload pkt, IPayloadContext ctx) {
     Level level = ctx.player().level();
     if (level.getBlockEntity(pkt.pos) instanceof ItemDuctBlockEntity duct) {
-      duct.transmitter.setSyncedEntry(pkt.entry);
+      duct.transmitter.setSyncedEntry(pkt.entry, level.getGameTime());
     }
   }
 

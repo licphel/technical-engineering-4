@@ -91,16 +91,12 @@ public final class Complex {
     this.isCatalyst = isCatalyst;
 
     switch (kind) {
-      case ITEM -> {
-        itemTagContents = List.of(BuiltInRegistries.ITEM.get(id));
-      }
+      case ITEM -> itemTagContents = List.of(BuiltInRegistries.ITEM.get(id));
       case ITEM_TAG -> {
         itemTagKey = TagKey.create(Registries.ITEM, id);
         BuiltInRegistries.ITEM.getTagOrEmpty(itemTagKey).forEach(s -> itemTagContents.add(s.value()));
       }
-      case FLUID -> {
-        fluidTagContents = List.of(BuiltInRegistries.FLUID.get(id));
-      }
+      case FLUID -> fluidTagContents = List.of(BuiltInRegistries.FLUID.get(id));
       case FLUID_TAG -> {
         fluidTagKey = TagKey.create(Registries.FLUID, id);
         BuiltInRegistries.FLUID.getTagOrEmpty(fluidTagKey).forEach(s -> fluidTagContents.add(s.value()));
@@ -108,8 +104,16 @@ public final class Complex {
     }
   }
 
-  public static Complex of(Kind kind, ResourceLocation id, int count, double chance, boolean reusable) {
-    return new Complex(kind, id, count, chance, reusable);
+  public static Complex of(Kind kind, ResourceLocation id, int count, double chance, boolean catalyst) {
+    return new Complex(kind, id, count, chance, catalyst);
+  }
+
+  public static Complex of(Kind kind, ResourceLocation id, int count, double chance) {
+    return new Complex(kind, id, count, chance, false);
+  }
+
+  public static Complex of(Kind kind, ResourceLocation id, int count) {
+    return new Complex(kind, id, count, 1.0F, false);
   }
 
   public static Complex fromJson(JsonObject json) {

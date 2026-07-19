@@ -10,15 +10,15 @@ public final class ItemStackUtil {
   private ItemStackUtil() {
   }
 
-  public static ItemStack shrinkWithRemainder(ItemStack stack) {
+  public static ItemStack shrinkWithRemainder(ItemStack stack, int consumed) {
     if (stack.hasCraftingRemainingItem()) {
-      return stack.getCraftingRemainingItem().copyWithCount(1);
+      return stack.getCraftingRemainingItem().copy();
     } else if (!stack.isEmpty()) {
       Item item = stack.getItem();
-      stack.shrink(1);
+      stack.shrink(consumed);
 
       if (stack.isEmpty()) {
-        return stack.getCraftingRemainingItem().copyWithCount(1);
+        return stack.getCraftingRemainingItem().copy();
       }
     }
 

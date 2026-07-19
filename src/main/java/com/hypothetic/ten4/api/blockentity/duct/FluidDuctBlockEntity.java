@@ -1,4 +1,4 @@
-package com.hypothetic.ten4.api.blockentity.transmission;
+package com.hypothetic.ten4.api.blockentity.duct;
 
 import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.core.client.renderer.RenderTransmitterBlock;
@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmitter> implements ITickable {
   private final IFluidHandler fluidHandler;
-  private int tickCount;
 
   public FluidDuctBlockEntity(BlockPos pos, BlockState state, DuctInfo info) {
     super(pos, state, info);
@@ -32,7 +31,8 @@ public class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmitter> impl
     if (level == null || level.isClientSide()) {
       return;
     }
-    if (tickCount++ % 5 == 0) {
+
+    if (level.getGameTime() % 5 == 0) {
       syncToClient();
     }
   }

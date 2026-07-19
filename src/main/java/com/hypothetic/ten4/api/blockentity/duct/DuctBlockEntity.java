@@ -1,4 +1,4 @@
-package com.hypothetic.ten4.api.blockentity.transmission;
+package com.hypothetic.ten4.api.blockentity.duct;
 
 import com.hypothetic.ten4.api.blockentity.RedstoneAwareBlockEntity;
 import com.hypothetic.ten4.api.network.duct.DuctConnectionPayload;

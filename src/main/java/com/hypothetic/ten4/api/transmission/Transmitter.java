@@ -193,6 +193,11 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
 
   public abstract boolean supportsTransmission(Transmitter<?, ?, ?> other);
 
+  /** Override to prevent incompatible contents (e.g. different fluids) from visually connecting. */
+  protected boolean isContentsCompatible(Transmitter<?, ?, ?> other) {
+    return true;
+  }
+
   protected abstract boolean isValidAcceptor(Direction side);
 
   public void refreshConnections() {
@@ -249,7 +254,9 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
       BlockEntity be = level.getBlockEntity(p.relative(d));
       if (be instanceof ITransmitterProvider tb) {
         Transmitter<?, ?, ?> o = tb.getTransmitter();
-        if (supportsTransmission(o) && isColorCompatible(o)) {
+        if (supportsTransmission(o) && isColorCompatible(o) && isContentsCompatible(o)
+            && getConnectionTypeRaw(d) != ConnectionType.NONE
+            && o.getConnectionTypeRaw(d.getOpposite()) != ConnectionType.NONE) {
           b |= (byte) (1 << d.ordinal());
         }
       }
@@ -286,7 +293,9 @@ public abstract class Transmitter<AC, NET extends Network<AC, NET, T>, T extends
     BlockEntity be = level.getBlockEntity(getBlockPos().relative(side));
     if (be instanceof ITransmitterProvider tb) {
       Transmitter<?, ?, ?> o = tb.getTransmitter();
-      return supportsTransmission(o) && isColorCompatible(o);
+      return supportsTransmission(o) && isColorCompatible(o) && isContentsCompatible(o)
+          && getConnectionTypeRaw(side) != ConnectionType.NONE
+          && o.getConnectionTypeRaw(side.getOpposite()) != ConnectionType.NONE;
     }
     return false;
   }

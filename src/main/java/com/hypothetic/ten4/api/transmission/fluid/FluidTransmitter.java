@@ -64,6 +64,22 @@ public class FluidTransmitter extends BufferedTransmitter<IFluidHandler, FluidNe
   }
 
   @Override
+  protected boolean isContentsCompatible(Transmitter<?, ?, ?> other) {
+    if (other instanceof FluidTransmitter ft) {
+      FluidStack mine = getEffectiveFluid();
+      FluidStack theirs = ft.getEffectiveFluid();
+      if (mine.isEmpty() || theirs.isEmpty()) return true;
+      return FluidStack.isSameFluidSameComponents(mine, theirs);
+    }
+    return true;
+  }
+
+  private FluidStack getEffectiveFluid() {
+    FluidNetwork net = getNetwork();
+    return net != null && !net.getFluid().isEmpty() ? net.getFluid() : buffer;
+  }
+
+  @Override
   protected boolean isValidAcceptor(Direction side) {
     if (getLevel() == null) {
       return false;

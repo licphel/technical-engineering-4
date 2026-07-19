@@ -24,13 +24,8 @@ public class CompatibleTransmitterValidator<AC, NET extends Network<AC, NET, T>,
     return true;
   }
 
-  @SuppressWarnings("rawtypes")
   public boolean isNetworkCompatible(NET network) {
     if (network instanceof FluidNetwork fn) {
-      BufferedNetwork bn = (BufferedNetwork) network;
-      if (bn.getValidator() instanceof CompatibleTransmitterValidator other) {
-        return compareFluids(other.fluidContent);
-      }
       return compareFluids(fn.getFluid());
     }
     return true;
@@ -46,10 +41,13 @@ public class CompatibleTransmitterValidator<AC, NET extends Network<AC, NET, T>,
   }
 
   private boolean compareFluids(FluidStack other) {
+    if (other.isEmpty()) {
+      return true; // empty is compatible with anything; don't overwrite fluidContent
+    }
     if (fluidContent.isEmpty()) {
-      fluidContent = other;
+      fluidContent = other.copy();
       return true;
     }
-    return other.isEmpty() || FluidStack.isSameFluidSameComponents(fluidContent, other);
+    return FluidStack.isSameFluidSameComponents(fluidContent, other);
   }
 }

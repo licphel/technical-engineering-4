@@ -28,7 +28,8 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
   final int speed, slotCapacity;
   public @Nullable TransitEntry transitEntry;
   public @Nullable TransitEntry syncedEntry;
-  public int lastSyncedProgress = -1;
+  public int clientProgress;
+  public long lastSyncTick;
   private int nextId;
 
   public ItemTransmitter(ITransmitterProvider tile, int ticksPerBlock, int slotCapacity) {
@@ -60,12 +61,12 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
     return slotCapacity;
   }
 
-  public void setSyncedEntry(@Nullable TransitEntry e) {
-    if (syncedEntry != null && e != null
-        && ItemStack.isSameItemSameComponents(syncedEntry.stack, e.stack)) {
-      lastSyncedProgress = syncedEntry.progress;
+  public void setSyncedEntry(@Nullable TransitEntry e, long gameTime) {
+    if (e != null) {
+      clientProgress = e.progress;
+      lastSyncTick = gameTime;
     } else {
-      lastSyncedProgress = -1;
+      clientProgress = 0;
     }
     syncedEntry = e;
   }

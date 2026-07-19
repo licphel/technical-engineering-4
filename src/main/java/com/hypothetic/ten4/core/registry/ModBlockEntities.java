@@ -1,9 +1,9 @@
 package com.hypothetic.ten4.core.registry;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.transmission.EnergyDuctBlockEntity;
-import com.hypothetic.ten4.api.blockentity.transmission.FluidDuctBlockEntity;
-import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.EnergyDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.FluidDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.ItemDuctBlockEntity;
 import com.hypothetic.ten4.api.registry.BlockEntityBridges;
 import com.hypothetic.ten4.core.blockentity.device.*;
 import com.hypothetic.ten4.core.blockentity.duct.ControllerEnergyDuctBlockEntity;

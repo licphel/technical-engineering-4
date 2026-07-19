@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.core.client.renderer;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.transmission.FluidDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.FluidDuctBlockEntity;
 import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.util.ClientUtil;
 import com.mojang.blaze3d.vertex.PoseStack;

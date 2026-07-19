@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.api.network.duct;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.transmission.EnergyDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.EnergyDuctBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item": "minecraft:bone_meal",
+      "count": 9
+    },
+    {
+      "item": "ten4:packing_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:bone_block"
+    }
+  ],
+  "time": 100
+}

@@ -92,9 +92,10 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
         .setBackground(fluidTank, x, y);
   }
 
-  protected void addFluidOutput(IRecipeLayoutBuilder builder, ItemStack output, int x, int y) {
-    builder.addOutputSlot(x, y)
-        .addItemStack(output)
+  protected void addFluidOutput(IRecipeLayoutBuilder builder, Complex output, int x, int y) {
+    builder.addInputSlot(x, y)
+        .addIngredient(NeoForgeTypes.FLUID_STACK, output.symbolFluid())
+        .setFluidRenderer(output.count(), false, 16, 48)
         .setBackground(fluidTank, x, y);
   }
 

@@ -2,6 +2,7 @@ package com.hypothetic.ten4.datagen;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.datagen.loot.BlockLootData;
+import com.hypothetic.ten4.datagen.recipe.SawingRecipeData;
 import com.hypothetic.ten4.datagen.tag.BlockTagData;
 import com.hypothetic.ten4.datagen.tag.FluidTagData;
 import com.hypothetic.ten4.datagen.tag.ItemTagData;
@@ -34,6 +35,7 @@ public final class DataGenDispatcher {
     generator.addProvider(event.includeServer(), new BlockTagData(output, lookupProvider, existingFileHelper));
     generator.addProvider(event.includeServer(), new ItemTagData(output, lookupProvider, existingFileHelper));
     generator.addProvider(event.includeServer(), new FluidTagData(output, lookupProvider, existingFileHelper));
+    generator.addProvider(event.includeServer(), new SawingRecipeData(output, lookupProvider));
     generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(BlockLootData::new, LootContextParamSets.BLOCK)), lookupProvider));
   }
 }

@@ -2,10 +2,12 @@ package com.hypothetic.ten4.core.block.duct;
 
 import com.google.common.collect.Maps;
 import com.hypothetic.ten4.api.block.BridgedEntityBlock;
+import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
 import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -131,6 +133,12 @@ public abstract class DuctBlock extends BridgedEntityBlock implements SimpleWate
     final TagKey<Item> WRENCH = TagKey.create(Registries.ITEM, ResourceLocation.parse("c:tools/wrench"));
     if (stack.is(WRENCH) && hand == InteractionHand.MAIN_HAND) {
       return DuctInteractions.changeConnection(level, state, pos, hit.getDirection(), player);
+    }
+
+    if (stack.isDamageableItem()) {
+      ITransmitterProvider p = (ITransmitterProvider) level.getBlockEntity(pos);
+      player.sendSystemMessage(Component.literal(p.getTransmitter().getNetwork().getUUID().toString()));
+      return ItemInteractionResult.SUCCESS;
     }
 
     return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

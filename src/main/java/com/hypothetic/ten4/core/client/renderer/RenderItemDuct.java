@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.core.client.renderer;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.ItemDuctBlockEntity;
 import com.hypothetic.ten4.api.transmission.item.ItemTransmitter;
 import com.hypothetic.ten4.api.transmission.item.ItemTransmitter.TransitEntry;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -31,7 +31,7 @@ public class RenderItemDuct extends RenderTransmitterBlock<ItemDuctBlockEntity> 
   public void render(ItemDuctBlockEntity be, float pt, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
     super.render(be, pt, pose, buffers, light, overlay);
     TransitEntry e = be.transmitter.syncedEntry;
-    if (e == null) {
+    if (e == null || be.getLevel() == null) {
       return;
     }
     ItemStack stack = e.stack;
@@ -43,27 +43,23 @@ public class RenderItemDuct extends RenderTransmitterBlock<ItemDuctBlockEntity> 
       return;
     }
 
-    float spd = be.transmitter.getSpeed();
-    int halfLen = ItemTransmitter.DUCT_LENGTH / 2;
+    // Extrapolate from last sync using actual elapsed game ticks
+    float speed = be.transmitter.getSpeed();
+    float elapsed = be.getLevel().getGameTime() - be.transmitter.lastSyncTick + pt;
+    float displayProg = be.transmitter.clientProgress + speed * elapsed;
 
-    int prev = be.transmitter.lastSyncedProgress;
-    float displayProg;
-    if (prev >= 0) {
-      displayProg = prev + (e.progress - prev) * pt;
-    } else {
-      displayProg = e.progress + spd * pt;
-    }
-    displayProg = Math.clamp(displayProg, 0, ItemTransmitter.DUCT_LENGTH);
+    // Two-axis: entry axis (first half) + exit axis (second half).
+    // Each clamped independently so item stays in-pipe even if extrapolation overshoots.
+    float t = displayProg / ItemTransmitter.DUCT_LENGTH;
+    Direction entryDir = Direction.values()[e.entrySide];
+    Direction exitDir = Direction.values()[e.exitSide];
 
-    Direction side = displayProg < halfLen
-        ? Direction.values()[e.entrySide].getOpposite()
-        : Direction.values()[e.exitSide];
-    float t = displayProg / ItemTransmitter.DUCT_LENGTH - 0.5F;
-    // Clamp to pipe interior so items don't fly out
-    t = Math.clamp(t, -0.3F, 0.3F);
-    double x = 0.5 + side.getStepX() * t;
-    double y = 0.35 + side.getStepY() * t;
-    double z = 0.5 + side.getStepZ() * t;
+    float entryOff = Math.clamp(0.5F - t, 0, 0.5F);  // 0.5 at t=0, 0 at t>=0.5
+    float exitOff = Math.clamp(t - 0.5F, 0, 0.5F);   // 0 at t<=0.5, 0.5 at t=1
+
+    double x = 0.5 + entryDir.getStepX() * entryOff + exitDir.getStepX() * exitOff;
+    double y = 0.35 + entryDir.getStepY() * entryOff + exitDir.getStepY() * exitOff;
+    double z = 0.5 + entryDir.getStepZ() * entryOff + exitDir.getStepZ() * exitOff;
 
     pose.pushPose();
     pose.translate(x, y, z);

@@ -1,4 +1,4 @@
-package com.hypothetic.ten4.api.blockentity.transmission;
+package com.hypothetic.ten4.api.blockentity.duct;
 
 public final class DuctInfo {
   int bufferCapacity; // in item ducts, this is SlotCapacity

@@ -35,33 +35,59 @@ public final class DuctInteractions {
 
   public static ItemInteractionResult changeConnection(Level level, BlockState state, BlockPos pos, Direction side, Player player) {
     BlockEntity be = level.getBlockEntity(pos);
-    if (be != null) {
-      Transmitter<?, ?, ?> t = findTransmitter(be);
-      if (t != null) {
+    if (be == null) return ItemInteractionResult.FAIL;
+    Transmitter<?, ?, ?> t = findTransmitter(be);
+    if (t == null) return ItemInteractionResult.FAIL;
 
-        if (!state.getValue(DuctBlock.CONNECTIONS.get(side))) {
-          return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-
-        // Only allow switching mode on cable-to-device connections
-        if (!Transmitter.connectionBit(t.getAcceptorConnections(), side)) {
-          return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-
-        ConnectionType current = t.getConnectionTypeRaw(side);
-        ConnectionType next = current.next();
-        t.setConnectionTypeRaw(side, next);
-        t.onModeChange(side);
-        t.refreshConnections();
-        t.requestsUpdate();
-
-        MutableComponent mc = current.createGroup();
-        mc.append(next.createTranslation());
-        player.displayClientMessage(mc, true);
-        return ItemInteractionResult.SUCCESS;
-      }
+    if (!state.getValue(DuctBlock.CONNECTIONS.get(side))) {
+      return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
-    return ItemInteractionResult.FAIL;
+
+    BlockEntity neighborBe = level.getBlockEntity(pos.relative(side));
+
+    // Duct-to-duct
+    if (neighborBe instanceof ITransmitterProvider ntb) {
+      Transmitter<?, ?, ?> nt = ntb.getTransmitter();
+      ConnectionType neighborType = nt.getConnectionTypeRaw(side.getOpposite());
+      ConnectionType next;
+
+      if (t.getConnectionTypeRaw(side) == ConnectionType.NONE || neighborType == ConnectionType.NONE) {
+        t.setConnectionTypeRaw(side, ConnectionType.NORMAL);
+        nt.setConnectionTypeRaw(side.getOpposite(), ConnectionType.NORMAL);
+        next = ConnectionType.NORMAL;
+      } else {
+        t.setConnectionTypeRaw(side, ConnectionType.NONE);
+        next = ConnectionType.NONE;
+      }
+      // Both sides: refresh connections + rebuild network + sync to client
+      t.onModeChange(side);
+      t.refreshConnections();
+      t.rebuild();
+      t.requestsUpdate();
+      nt.onModeChange(side.getOpposite());
+      nt.refreshConnections();
+      nt.rebuild();
+      nt.requestsUpdate();
+      player.displayClientMessage(ConnectionType.NORMAL.createGroup().append(next.createTranslation()), true);
+      return ItemInteractionResult.SUCCESS;
+    }
+
+    // Duct-to-device
+    if (Transmitter.connectionBit(t.getAcceptorConnections(), side)) {
+      ConnectionType current = t.getConnectionTypeRaw(side);
+      ConnectionType next = current.next();
+      t.setConnectionTypeRaw(side, next);
+      t.onModeChange(side);
+      t.refreshConnections();
+      t.rebuild();
+      t.requestsUpdate();
+      MutableComponent mc = current.createGroup();
+      mc.append(next.createTranslation());
+      player.displayClientMessage(mc, true);
+      return ItemInteractionResult.SUCCESS;
+    }
+
+    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
   }
 
   public static void updateConnections(Level level, BlockPos pos, DuctBlock ductBlock) {

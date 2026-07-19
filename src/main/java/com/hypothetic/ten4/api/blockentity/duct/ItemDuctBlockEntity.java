@@ -1,4 +1,4 @@
-package com.hypothetic.ten4.api.blockentity.transmission;
+package com.hypothetic.ten4.api.blockentity.duct;
 
 import com.hypothetic.ten4.api.blockentity.ILootProvider;
 import com.hypothetic.ten4.api.blockentity.ITickable;
@@ -35,9 +35,11 @@ public class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitter> implem
 
   @Override
   public void tick() {
-    if (level != null && !level.isClientSide()) {
-      syncToClient();
+    if (level == null || level.isClientSide()) {
+      return;
     }
+
+    syncToClient();
   }
 
   @Override

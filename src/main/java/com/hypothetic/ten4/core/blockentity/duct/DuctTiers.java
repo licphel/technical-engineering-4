@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.core.blockentity.duct;
 
-import com.hypothetic.ten4.api.blockentity.transmission.DuctInfo;
+import com.hypothetic.ten4.api.blockentity.duct.DuctInfo;
 import com.hypothetic.ten4.core.registry.config.CfgCommon;
 import com.hypothetic.ten4.core.registry.config.ModConfigs;
 

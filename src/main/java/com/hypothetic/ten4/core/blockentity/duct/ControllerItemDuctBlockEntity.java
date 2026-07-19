@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.core.blockentity.duct;
 
-import com.hypothetic.ten4.api.blockentity.transmission.DuctInfo;
-import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.DuctInfo;
+import com.hypothetic.ten4.api.blockentity.duct.ItemDuctBlockEntity;
 import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

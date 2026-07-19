@@ -2,9 +2,9 @@ package com.hypothetic.ten4.core.registry;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
-import com.hypothetic.ten4.api.blockentity.transmission.EnergyDuctBlockEntity;
-import com.hypothetic.ten4.api.blockentity.transmission.FluidDuctBlockEntity;
-import com.hypothetic.ten4.api.blockentity.transmission.ItemDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.EnergyDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.FluidDuctBlockEntity;
+import com.hypothetic.ten4.api.blockentity.duct.ItemDuctBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.SubscribeEvent;

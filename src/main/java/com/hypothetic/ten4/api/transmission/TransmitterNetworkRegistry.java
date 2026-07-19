@@ -91,15 +91,12 @@ public final class TransmitterNetworkRegistry {
         if (net != null) {
           if (validator.isNetworkCompatible(net)) {
             foundNetworks.add(net);
-          } else {
-            destroyFluidConflict(world, pos);
           }
-          continue;
+          continue; // incompatible network → kept isolated, not merged
         }
 
         if (!validator.isTransmitterCompatible(t)) {
-          destroyFluidConflict(world, pos);
-          continue;
+          continue; // incompatible transmitter → skipped, kept isolated
         }
         connected.add(t);
 
@@ -137,6 +134,9 @@ public final class TransmitterNetworkRegistry {
 
       network.addNewTransmitters(connected, validator);
       network.commit();
+      for (Transmitter t : connected) {
+        t.refreshConnections();
+      }
     }
   }
 
@@ -159,26 +159,18 @@ public final class TransmitterNetworkRegistry {
 
       Network oldNet = removed.getNetwork();
       if (oldNet != null) {
+        // Detach EVERY transmitter in the old network and queue them all for re-join
         for (Object o : new ArrayList<>(oldNet.getTransmitters())) {
           Transmitter t = (Transmitter) o;
           t.takeShare();
           t.setNetwork(null, false);
+          if (t != removed && t.isValid()) {
+            pendingJoins.add(t);
+          }
         }
         oldNet.deregister();
       }
       removed.setNetwork(null, false);
-
-      // Queue neighbors for re-join
-      for (Direction d : Direction.values()) {
-        BlockPos neighborPos = removed.getBlockPos().relative(d);
-        BlockEntity be = world.getBlockEntity(neighborPos);
-        if (be instanceof ITransmitterProvider tb && removed.isValidTransmitterBasic(tb, d)) {
-          Transmitter t = tb.getTransmitter();
-          if (t.isValid()) {
-            pendingJoins.add(t);
-          }
-        }
-      }
     }
   }
 

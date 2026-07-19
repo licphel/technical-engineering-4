@@ -51,7 +51,7 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
     ItemStack stack = inventory.getItem(0);
     int burn = stack.getBurnTime(RecipeType.SMELTING);
     if (!sim && burn > 0) {
-      inventory.setItem(0, ItemStackUtil.shrinkWithRemainder(stack));
+      inventory.setItem(0, ItemStackUtil.shrinkWithRemainder(stack, 1));
     }
     return burn;
   }
