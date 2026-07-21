@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:raw_materials/tin"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "mekanism:dust_tin"
+    },
+    {
+      "item": "mekanism:dust_tin",
+      "chance": 0.4
+    }
+  ],
+  "time": 100
+}

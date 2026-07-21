@@ -1,0 +1,15 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:storage_blocks/borax"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:borax_dust",
+      "count": 4
+    }
+  ],
+  "time": 200
+}

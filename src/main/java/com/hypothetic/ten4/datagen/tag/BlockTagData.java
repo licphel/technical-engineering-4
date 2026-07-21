@@ -44,14 +44,41 @@ public class BlockTagData extends net.minecraft.data.tags.TagsProvider<Block> {
         .add(key(ModBlocks.WATER_PUMP))
         .add(key(ModBlocks.HEAT_GENERATOR));
 
+    tag(BlockTags.MINEABLE_WITH_SHOVEL)
+        .add(key(ModBlocks.OIL_SAND));
+
     tag(BlockTags.MINEABLE_WITH_PICKAXE)
+        .add(key(ModBlocks.TIN_ORE)).add(key(ModBlocks.DEEPSLATE_TIN_ORE))
+        .add(key(ModBlocks.TIN_BLOCK)).add(key(ModBlocks.RAW_TIN_BLOCK))
+        .add(key(ModBlocks.TITANIUM_ORE)).add(key(ModBlocks.DEEPSLATE_TITANIUM_ORE))
+        .add(key(ModBlocks.TITANIUM_BLOCK)).add(key(ModBlocks.RAW_TITANIUM_BLOCK))
+        .add(key(ModBlocks.MONAZITE_ORE)).add(key(ModBlocks.SULFUR_ORE)).add(key(ModBlocks.BORAX_BLOCK))
         .add(key(ModBlocks.DEVICE_CASING))
-        .addTag(DEVICES)
-        .addTag(DUCTS);
+        .addTag(DEVICES).addTag(DUCTS);
 
     tag(BlockTags.NEEDS_IRON_TOOL)
         .add(key(ModBlocks.DEVICE_CASING))
+        .add(key(ModBlocks.TITANIUM_ORE)).add(key(ModBlocks.DEEPSLATE_TITANIUM_ORE))
+        .add(key(ModBlocks.TITANIUM_BLOCK)).add(key(ModBlocks.RAW_TITANIUM_BLOCK))
+        .add(key(ModBlocks.MONAZITE_ORE))
         .addTag(DEVICES);
+
+    tag(BlockTags.NEEDS_STONE_TOOL)
+        .add(key(ModBlocks.TIN_ORE)).add(key(ModBlocks.DEEPSLATE_TIN_ORE))
+        .add(key(ModBlocks.TIN_BLOCK)).add(key(ModBlocks.RAW_TIN_BLOCK))
+        .add(key(ModBlocks.SULFUR_ORE)).add(key(ModBlocks.BORAX_BLOCK));
+
+    tag(cTag("ores/tin")).add(key(ModBlocks.TIN_ORE)).add(key(ModBlocks.DEEPSLATE_TIN_ORE));
+    tag(cTag("ores/titanium")).add(key(ModBlocks.TITANIUM_ORE)).add(key(ModBlocks.DEEPSLATE_TITANIUM_ORE));
+    tag(cTag("ores/monazite")).add(key(ModBlocks.MONAZITE_ORE));
+    tag(cTag("ores/sulfur")).add(key(ModBlocks.SULFUR_ORE));
+    tag(cTag("ores")).addTag(cTag("ores/tin")).addTag(cTag("ores/titanium")).addTag(cTag("ores/monazite")).addTag(cTag("ores/sulfur"));
+    tag(cTag("storage_blocks/tin")).add(key(ModBlocks.TIN_BLOCK));
+    tag(cTag("storage_blocks/raw_tin")).add(key(ModBlocks.RAW_TIN_BLOCK));
+    tag(cTag("storage_blocks/titanium")).add(key(ModBlocks.TITANIUM_BLOCK));
+    tag(cTag("storage_blocks/raw_titanium")).add(key(ModBlocks.RAW_TITANIUM_BLOCK));
+    tag(cTag("storage_blocks/borax")).add(key(ModBlocks.BORAX_BLOCK));
+    tag(cTag("storage_blocks")).addTag(cTag("storage_blocks/tin")).addTag(cTag("storage_blocks/raw_tin")).addTag(cTag("storage_blocks/titanium")).addTag(cTag("storage_blocks/raw_titanium")).addTag(cTag("storage_blocks/borax"));
   }
 
   private static ResourceKey<Block> key(DeferredHolder<?, ?> holder) {

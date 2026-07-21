@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.5,
+  "ingredient": {
+    "item": "ten4:monazite_dust"
+  },
+  "result": {
+    "id": "ten4:monazite"
+  }
+}

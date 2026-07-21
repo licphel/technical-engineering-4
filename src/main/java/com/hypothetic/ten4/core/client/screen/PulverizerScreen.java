@@ -20,7 +20,7 @@ public class PulverizerScreen extends ComponentedContainerScreen<ContainerMenu> 
 
   @Override
   protected void buildElements() {
-    add(BuiltinComponents.defaultPanels(this));
+    add(BuiltinComponents.standardDeviceUI(this));
     add(BuiltinComponents.energyGauge(9, 18, menu.fieldsReader()));
     add(BuiltinComponents.progressGauge(68, 35, menu.fieldsReader()));
   }

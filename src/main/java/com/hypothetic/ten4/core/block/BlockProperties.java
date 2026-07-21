@@ -9,7 +9,7 @@ import net.minecraft.world.level.material.PushReaction;
 public final class BlockProperties {
   public static final Block.Properties METAL_DEVICE = Block.Properties.of()
       .mapColor(MapColor.METAL)
-      .strength(3.5F)
+      .strength(3.5F, 3.5F)
       .requiresCorrectToolForDrops()
       .sound(SoundType.METAL)
       // .lightLevel(state -> state.hasProperty(BuiltinBlockStates.ACTIVE)
@@ -27,6 +27,22 @@ public final class BlockProperties {
       .requiresCorrectToolForDrops()
       .sound(SoundType.METAL)
       .explosionResistance(1.25F);
+
+  public static BlockBehaviour.Properties metalBlock(float strength, float explosionResistance, MapColor mapColor) {
+    return BlockBehaviour.Properties.of()
+        .mapColor(mapColor)
+        .strength(strength, explosionResistance)
+        .requiresCorrectToolForDrops()
+        .sound(SoundType.METAL);
+  }
+
+  public static BlockBehaviour.Properties ore(float strength, float explosionResistance, MapColor mapColor) {
+    return BlockBehaviour.Properties.of()
+        .mapColor(mapColor)
+        .strength(strength, explosionResistance)
+        .requiresCorrectToolForDrops()
+        .sound(SoundType.STONE);
+  }
 
   public static BlockBehaviour.Properties coloredFluid(MapColor color) {
     return Block.Properties.of()

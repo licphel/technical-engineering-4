@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item_tag": "c:storage_blocks/raw_tin"
+    },
+    {
+      "item": "ten4:depacking_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:raw_tin",
+      "count": 9
+    }
+  ],
+  "time": 100
+}

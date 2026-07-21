@@ -1,0 +1,19 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "fluid_tag": "c:water",
+      "amount": 100
+    },
+    {
+      "item_tag": "c:foods"
+    }
+  ],
+  "outputs": [
+    {
+      "fluid": "ten4:nutrient_solution",
+      "amount": 100
+    }
+  ],
+  "time": 100
+}

@@ -7,8 +7,8 @@
   ],
   "outputs": [
     {
-      "count": 8,
-      "item": "minecraft:snow_block"
+      "item": "minecraft:snow_block",
+      "count": 8
     }
   ],
   "time": 200

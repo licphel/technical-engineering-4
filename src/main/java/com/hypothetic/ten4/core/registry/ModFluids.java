@@ -4,6 +4,7 @@ import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.registry.FluidDeferredRegister;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -21,6 +22,7 @@ public final class ModFluids {
 
   public static final FluidDeferredRegister.FluidHolder TORAN = FLUIDS.register("toran_concentrate")
       .density(10000).viscosity(20000)
+      .rarity(Rarity.RARE).lightLevel(5)
       .block(ModBlocks.TORAN).build();
   public static final FluidDeferredRegister.FluidHolder EXPERIENCE = FLUIDS.register("liquid_experience")
       .density(1000).viscosity(500)
@@ -33,6 +35,17 @@ public final class ModFluids {
       .density(1100).viscosity(1500)
       .texture(WATER_STILL, WATER_FLOW).tint(0xFF33AA33)
       .block(ModBlocks.NUTRIENT).build();
+  public static final FluidDeferredRegister.FluidHolder CRUDE_OIL = FLUIDS.register("crude_oil")
+      .density(900).viscosity(3000)
+      .block(ModBlocks.CRUDE_OIL).build();
+  public static final FluidDeferredRegister.FluidHolder NAPHTHA = FLUIDS.register("naphtha")
+      .density(700).viscosity(500)
+      .texture(WATER_STILL, WATER_FLOW).tint(0xFFD4A017)
+      .block(ModBlocks.NAPHTHA).build();
+  public static final FluidDeferredRegister.FluidHolder KEROSENE = FLUIDS.register("kerosene")
+      .density(800).viscosity(800)
+      .texture(WATER_STILL, WATER_FLOW).tint(0xFFE8D5A3)
+      .block(ModBlocks.KEROSENE).build();
 
   public static final Map<DyeColor, FluidDeferredRegister.FluidHolder> DYES = new EnumMap<>(DyeColor.class);
   static {

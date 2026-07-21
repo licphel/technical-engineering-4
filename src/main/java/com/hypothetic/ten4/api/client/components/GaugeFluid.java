@@ -81,4 +81,8 @@ public class GaugeFluid extends UiComponent {
 
     tooltips.add(DisplayUtil.milliBucket(stack.getAmount(), capacity.getAsInt()));
   }
+
+  public FluidStack getStack() {
+    return stackSupplier.get();
+  }
 }

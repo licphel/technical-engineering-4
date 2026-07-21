@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.5,
+  "ingredient": {
+    "item": "ten4:borax_dust"
+  },
+  "result": {
+    "id": "ten4:borax"
+  }
+}

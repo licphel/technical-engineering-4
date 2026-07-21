@@ -9,10 +9,10 @@ import net.minecraft.network.chat.MutableComponent;
 
 import java.util.List;
 
-class IoTypeButton extends Button {
-  final IoConfigState state;
+public class IoTypeButton extends Button {
+  final IoFlagReader state;
 
-  IoTypeButton(int x, int y, int w, int h, IoConfigState state) {
+  public IoTypeButton(int x, int y, int w, int h, IoFlagReader state) {
     super(x, y, w, h);
     this.state = state;
     setAction(() -> state.type = (state.type + 1) % 3);

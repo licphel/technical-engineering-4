@@ -67,6 +67,16 @@ public final class EnhancedGuiGraphics {
     draw(region, x, y, region.width(), region.height());
   }
 
+  public void draw(@Nullable ResourceLocation resource, int x, int y, int w, int h) {
+    if (resource == null) {
+      return;
+    }
+    Texture tex = Texture.of(resource);
+    if (tex != null) {
+      inner.blit(tex.resource(), x, y, w, h, 0f, 0f, tex.width(), tex.height(), tex.width(), tex.height());
+    }
+  }
+
   public void draw(@Nullable Texture texture, int x, int y, int w, int h) {
     if (texture == null) {
       return;

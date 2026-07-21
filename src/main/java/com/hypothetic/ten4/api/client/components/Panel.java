@@ -1,75 +1,108 @@
 package com.hypothetic.ten4.api.client.components;
 
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
+import com.hypothetic.ten4.api.client.gui.TextureRegion;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class Panel extends UiComponent {
-  private static final float ANIM_SPEED = 0.38F;
+public abstract class Panel extends UiComponent {
+  public static final int LEFT = 0;
+  public static final int RIGHT = 1;
+  public static final int EXPANDING_SPEED = 3;
+  public static final int MIN_WIDTH = 19;
+  public static final int MIN_HEIGHT = 19;
+  private static final int BORDER = 4; // border thickness
+  private final TextureRegion tabBg;
+  public boolean open;
+  public int side;
+  protected boolean fullyOpen;
+  protected int minWidth = MIN_WIDTH;
+  protected int maxWidth;
+  protected int minHeight = MIN_HEIGHT;
+  protected int maxHeight;
+  private Runnable beforeOpen;
 
-  private final UiComponent button;
-  private final int expandedWidth, expandedHeight;
-  private final int collapsedWidth, collapsedHeight;
-  private final int gap;
-  private float progress;
-  private boolean expanding;
-  private boolean expandLeft;
-
-  public Panel(UiComponent button, int expandedW, int expandedH, int gap) {
-    super(button.getX(), button.getY(), expandedW, expandedH);
-    this.button = button;
-    addChild(button);
-    this.expandedWidth = expandedW;
-    this.expandedHeight = expandedH;
-    this.collapsedWidth = button.getWidth();
-    this.collapsedHeight = button.getHeight();
-    this.gap = gap;
-    this.progress = 0;
+  protected Panel(TextureRegion tabBg, int expandedW, int expandedH, int side) {
+    super(0, 0, expandedW, expandedH);
+    this.tabBg = tabBg;
+    this.side = side;
+    this.maxWidth = expandedW;
+    this.maxHeight = expandedH;
+    this.width = minWidth;
+    this.height = minHeight;
   }
 
-  public Panel expandLeft() {
-    this.expandLeft = true;
+  protected @Nullable TextureRegion getIcon() {
+    return null;
+  }
+
+  protected @Nullable Component getTitle() {
+    return null;
+  }
+
+  public Panel minSize(int w, int h) {
+    minWidth = w;
+    minHeight = h;
+    width = w;
+    height = h;
     return this;
   }
 
-  private int bodyWidth() {
-    return expandLeft ? expandedWidth - collapsedWidth - gap : expandedWidth;
-  }
+  public void updateSize() {
+    if (open && width < maxWidth) {
+      width += EXPANDING_SPEED;
+    } else if (!open && width > minWidth) {
+      width -= EXPANDING_SPEED;
+    }
+    width = Math.clamp(width, minWidth, maxWidth);
 
-  private int bodyStartX() {
-    return expandLeft ? x - gap - bodyWidth() : x + collapsedWidth + gap;
-  }
+    if (open && height < maxHeight) {
+      height += EXPANDING_SPEED;
+    } else if (!open && height > minHeight) {
+      height -= EXPANDING_SPEED;
+    }
+    height = Math.clamp(height, minHeight, maxHeight);
 
-  public boolean isExpanded() {
-    return progress >= 1;
-  }
-
-  public UiComponent button() {
-    return button;
-  }
-
-  public int currentHeight() {
-    return (int) (collapsedHeight + (expandedHeight - collapsedHeight) * progress);
-  }
-
-  public int currentWidth() {
-    return collapsedWidth + (int) ((bodyWidth() - collapsedWidth) * progress);
-  }
-
-  public void toggle() {
-    expanding = !expanding;
-    if (expanding) {
-      progress = Math.max(0.01F, progress);
+    if (!fullyOpen && open && width == maxWidth && height == maxHeight) {
+      setFullyOpen();
     }
   }
 
-  @Override
-  public void onRescaled(int i, int j) {
-    x = semanticX + i;
-    y = semanticY + j;
+  public void setFullyOpen() {
+    open = true;
+    fullyOpen = true;
+    width = maxWidth;
+    height = maxHeight;
+  }
 
+  public void toggleOpen() {
+    if (open) {
+      open = false;
+      fullyOpen = false;
+    } else {
+      if (beforeOpen != null) {
+        beforeOpen.run();
+      }
+      open = true;
+    }
+  }
+
+  void setBeforeOpen(Runnable cb) {
+    this.beforeOpen = cb;
+  }
+
+  public int effectiveX() {
+    return side == LEFT ? x - width + minWidth : x;
+  }
+
+  @Override
+  public void onRescaled(int guiX, int guiY) {
+    x = semanticX + guiX;
+    y = semanticY + guiY;
     for (UiComponent child : children) {
       child.onRescaled(effectiveX(), y);
     }
@@ -77,70 +110,101 @@ public class Panel extends UiComponent {
 
   @Override
   public void onRender(EnhancedGuiGraphics g, float pt) {
-    GuiGraphics gg = g.inner();
-    button.onRender(g, pt);
+    int ex = effectiveX();
+    drawBackground(g, ex, y);
+    if (fullyOpen) {
+      renderBody(g, ex, y, maxWidth, maxHeight);
+      for (UiComponent child : children) {
+        if (child.isVisible()) {
+          child.onRender(g, pt);
+        }
+      }
+    }
+    drawForeground(g, ex, y);
+  }
 
-    if (progress <= 0) {
+  @Override
+  public void onMouseClicked(int mx, int my, int btn) {
+    int ex = effectiveX();
+
+    if (mx >= ex && mx < ex + width && my >= y && my < y + minHeight) {
+      toggleOpen();
       return;
     }
 
-    int bodyW = bodyWidth();
-    int bodyX = bodyStartX();
-    int bodyH = expandedHeight;
-    int visibleW = Math.max(1, (int) (bodyW * progress));
-    int visibleH = Math.max(1, (int) (bodyH * progress));
-
-    if (expandLeft) {
-      bodyX += bodyW - visibleW;
+    if (fullyOpen) {
+      super.onMouseClicked(mx, my, btn);
     }
-
-    gg.enableScissor(bodyX, y, bodyX + visibleW, y + visibleH);
-    renderBody(g, bodyX, y, bodyW, bodyH);
-
-    if (expanding && progress < 1) {
-      progress = Math.min(1, progress + ANIM_SPEED * pt);
-    } else if (!expanding && progress > 0f) {
-      progress = Math.max(0, progress - ANIM_SPEED * pt);
-    }
-
-    button.setVisible(false);
-    super.onRender(g, pt);
-
-    gg.disableScissor();
-  }
-
-  @Override
-  public void onTick() {
-    // Do not do animation in tick - it lags.
-    super.onTick();
-  }
-
-  @Override
-  public void onMouseClicked(int mx, int my, int button) {
-    if (mx >= effectiveX() && mx < effectiveX() + currentWidth() && my >= y && my <= y + this.button.getHeight()) {
-      toggle();
-    }
-
-    super.onMouseClicked(mx, my, button);
   }
 
   @Override
   public boolean isMouseHovering(int mx, int my) {
     int ex = effectiveX();
-    return mx >= ex && my >= y && mx <= ex + width && my <= y + currentHeight();
+    return mx >= ex && my >= y && mx <= ex + width && my <= y + height;
   }
 
+  @Override
+  public void onCollectingTooltips(List<Component> tooltips) {
+    super.onCollectingTooltips(tooltips);
+
+    tooltips.add(getTitle());
+  }
+
+  @Override
   public List<Rect2i> getTakeUp() {
-    int ex = effectiveX();
-    return List.of(new Rect2i(ex, y, x + currentWidth() - ex, currentHeight()));
+    return List.of(new Rect2i(effectiveX(), y, width, height));
   }
 
-  private int effectiveX() {
-    return expandLeft ? x - (int) ((bodyWidth() + gap) * progress) : x;
+  protected void drawBackground(EnhancedGuiGraphics g, int px, int py) {
+    if (tabBg == null) {
+      return;
+    }
+    GuiGraphics gg = g.inner();
+    var res = tabBg.texture().resource();
+    int texW = tabBg.texture().width();
+    int texH = tabBg.texture().height();
+    int u0 = tabBg.u(), v0 = tabBg.v();
+    int rgnW = tabBg.width(), rgnH = tabBg.height();
+    int w = width, h = height;
+    int innerW = rgnW - 2 * BORDER, innerH = rgnH - 2 * BORDER;
+    int midW = w - 2 * BORDER, midH = h - 2 * BORDER;
+
+    // corners
+    gg.blit(res, px, py, BORDER, BORDER, (float) u0, (float) v0, BORDER, BORDER, texW, texH);                    // TL
+    gg.blit(res, px + w - BORDER, py, BORDER, BORDER, (float) (u0 + rgnW - BORDER), (float) v0, BORDER, BORDER, texW, texH);       // TR
+    gg.blit(res, px, py + h - BORDER, BORDER, BORDER, (float) u0, (float) (v0 + rgnH - BORDER), BORDER, BORDER, texW, texH);       // BL
+    gg.blit(res, px + w - BORDER, py + h - BORDER, BORDER, BORDER, (float) (u0 + rgnW - BORDER), (float) (v0 + rgnH - BORDER), BORDER, BORDER, texW, texH); // BR
+
+    // edges
+    gg.blit(res, px + BORDER, py, midW, BORDER, (float) (u0 + BORDER), (float) v0, innerW, BORDER, texW, texH);         // T
+    gg.blit(res, px + BORDER, py + h - BORDER, midW, BORDER, (float) (u0 + BORDER), (float) (v0 + rgnH - BORDER), innerW, BORDER, texW, texH); // B
+    gg.blit(res, px, py + BORDER, BORDER, midH, (float) u0, (float) (v0 + BORDER), BORDER, innerH, texW, texH);         // L
+    gg.blit(res, px + w - BORDER, py + BORDER, BORDER, midH, (float) (u0 + rgnW - BORDER), (float) (v0 + BORDER), BORDER, innerH, texW, texH); // R
+
+    // center
+    gg.blit(res, px + BORDER, py + BORDER, midW, midH, (float) (u0 + BORDER), (float) (v0 + BORDER), innerW, innerH, texW, texH);
   }
 
-  protected void renderBody(EnhancedGuiGraphics g, int bx, int by, int bw, int bh) {
-    g.inner().fill(bx, by, bx + bw, by + bh, 0xCC222244);
-    g.inner().renderOutline(bx, by, bw, bh, 0xFFFFFFFF);
+  protected void drawForeground(EnhancedGuiGraphics g, int px, int py) {
+    TextureRegion icon = getIcon();
+    if (icon != null) {
+      int iconX = px + sideOffset();
+      int iconY = py + 2;
+      g.draw(icon, iconX, iconY);
+    }
+
+    if (fullyOpen) {
+      Component title = getTitle();
+      if (title != null) {
+        g.drawString(title, px + sideOffset() + 14, py + 4, 0x404040, false);
+      }
+    }
+  }
+
+  protected void renderBody(EnhancedGuiGraphics g, int px, int py, int pw, int ph) {
+  }
+
+  protected int sideOffset() {
+    return 4;
   }
 }

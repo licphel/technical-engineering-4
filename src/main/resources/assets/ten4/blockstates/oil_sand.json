@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "ten4:block/oil_sand"
+      },
+      {
+        "model": "ten4:block/oil_sand",
+        "y": 90
+      },
+      {
+        "model": "ten4:block/oil_sand",
+        "y": 180
+      },
+      {
+        "model": "ten4:block/oil_sand",
+        "y": 270
+      }
+    ]
+  }
+}

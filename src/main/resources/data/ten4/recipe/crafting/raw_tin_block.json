@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "tag": "c:raw_materials/tin"
+    }
+  },
+  "result": {
+    "id": "ten4:raw_tin_block"
+  }
+}

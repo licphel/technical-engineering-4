@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#c:storage_blocks/borax",
+    "#c:storage_blocks/tin",
+    "#c:storage_blocks/raw_tin",
+    "#c:storage_blocks/titanium",
+    "#c:storage_blocks/raw_titanium"
+  ]
+}

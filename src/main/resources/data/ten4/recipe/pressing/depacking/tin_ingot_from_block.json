@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item": "ten4:tin_block"
+    },
+    {
+      "item": "ten4:depacking_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:tin_ingot",
+      "count": 9
+    }
+  ],
+  "time": 100
+}

@@ -8,6 +8,10 @@
   "outputs": [
     {
       "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "ten4:sulfur_dust",
+      "chance": 0.05
     }
   ],
   "time": 200

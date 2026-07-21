@@ -1,5 +1,0 @@
-// 1.21.1	2026-07-18T22:52:35.7134063	Tags for minecraft:block mod id ten4
-ab25a22433cf0b7ba175a6ccfb216797b0d3c7fa data/minecraft/tags/block/mineable/pickaxe.json
-9841333e51cf0c798520bc4454faa4a7ca3218e4 data/minecraft/tags/block/needs_iron_tool.json
-ebfffa25ac8307611eef92175c8287c44b521806 data/ten4/tags/block/devices.json
-5f2e3e282f6673ef5cc667f261baf5c7e41e386b data/ten4/tags/block/ducts.json

@@ -1,0 +1,22 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:raw_materials/titanium"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:titanium_dust"
+    },
+    {
+      "item": "ten4:titanium_dust",
+      "chance": 0.4
+    },
+    {
+      "item": "ten4:iron_dust",
+      "chance": 0.2
+    }
+  ],
+  "time": 100
+}

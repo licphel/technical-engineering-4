@@ -1,0 +1,18 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:end_stones"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "minecraft:gravel"
+    },
+    {
+      "item": "ten4:monazite",
+      "chance": 0.05
+    }
+  ],
+  "time": 200
+}

@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/titanium"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:titanium_dust"
+    }
+  ],
+  "time": 100
+}

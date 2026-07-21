@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:block/cube",
   "textures": {
-    "particle": "ten4:block/water_pump_active",
-    "north": "ten4:block/water_pump_active",
-    "south": "ten4:block/water_pump_active",
-    "east": "ten4:block/water_pump_active",
-    "west": "ten4:block/water_pump_active",
-    "up": "ten4:block/device_top",
-    "down": "ten4:block/water_pump_bottom"
+    "particle": "ten4:block/device/device_side",
+    "north": "ten4:block/device/water_pump_active",
+    "south": "ten4:block/device/water_pump_active",
+    "east": "ten4:block/device/water_pump_active",
+    "west": "ten4:block/device/water_pump_active",
+    "up": "ten4:block/device/device_top",
+    "down": "ten4:block/device/device_bottom"
   }
 }

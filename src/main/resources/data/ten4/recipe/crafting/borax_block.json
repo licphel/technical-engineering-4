@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "II",
+    "II"
+  ],
+  "key": {
+    "I": {
+      "tag": "c:gems/borax"
+    }
+  },
+  "result": {
+    "id": "ten4:borax_block"
+  }
+}

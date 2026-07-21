@@ -1,0 +1,19 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item": "minecraft:redstone_block"
+    },
+    {
+      "fluid_tag": "c:lava",
+      "amount": 900
+    }
+  ],
+  "outputs": [
+    {
+      "fluid": "ten4:liquid_redstone",
+      "amount": 900
+    }
+  ],
+  "time": 300
+}

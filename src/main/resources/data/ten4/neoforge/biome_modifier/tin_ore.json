@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#ten4:spawn_ore_overworld",
+  "features": "ten4:tin_ore",
+  "step": "underground_ores"
+}

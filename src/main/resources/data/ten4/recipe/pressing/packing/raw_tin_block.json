@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item_tag": "c:raw_materials/tin",
+      "count": 9
+    },
+    {
+      "item": "ten4:packing_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:raw_tin_block"
+    }
+  ],
+  "time": 100
+}

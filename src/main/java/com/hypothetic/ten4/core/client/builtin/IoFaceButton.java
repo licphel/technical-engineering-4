@@ -19,13 +19,13 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
-class IoFaceButton extends Button {
+public class IoFaceButton extends Button {
   final Direction dir;
   final ComponentedContainerScreen<ContainerMenu> screen;
-  final IoConfigState state;
+  final IoFlagReader state;
   final String relSide;
 
-  IoFaceButton(int x, int y, Direction dir, ComponentedContainerScreen<ContainerMenu> screen, IoConfigState state, String relSide) {
+  public IoFaceButton(int x, int y, Direction dir, ComponentedContainerScreen<ContainerMenu> screen, IoFlagReader state, String relSide) {
     super(x, y, 16, 16);
     this.dir = dir;
     this.screen = screen;

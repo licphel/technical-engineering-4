@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "ten4:copper_nugget"
+    }
+  },
+  "result": {
+    "id": "minecraft:copper_ingot"
+  }
+}

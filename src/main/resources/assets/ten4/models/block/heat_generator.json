@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:block/cube",
   "textures": {
-    "particle": "ten4:block/device_side",
-    "north": "ten4:block/heat_generator",
-    "south": "ten4:block/device_side",
-    "east": "ten4:block/device_side",
-    "west": "ten4:block/device_side",
-    "up": "ten4:block/device_top",
-    "down": "ten4:block/device_bottom"
+    "particle": "ten4:block/device/device_side",
+    "north": "ten4:block/device/heat_generator",
+    "south": "ten4:block/device/device_side",
+    "east": "ten4:block/device/device_side",
+    "west": "ten4:block/device/device_side",
+    "up": "ten4:block/device/device_top",
+    "down": "ten4:block/device/device_bottom"
   }
 }

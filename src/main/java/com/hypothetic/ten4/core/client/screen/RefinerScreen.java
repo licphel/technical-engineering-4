@@ -4,7 +4,6 @@ import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
 import com.hypothetic.ten4.api.container.ContainerMenu;
 import com.hypothetic.ten4.core.blockentity.device.RefinerBlockEntity;
-import com.hypothetic.ten4.core.blockentity.device.WaterPumpBlockEntity;
 import com.hypothetic.ten4.core.client.builtin.BuiltinComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +21,7 @@ public class RefinerScreen extends ComponentedContainerScreen<ContainerMenu> {
 
   @Override
   protected void buildElements() {
-    add(BuiltinComponents.defaultPanels(this));
+    add(BuiltinComponents.standardDeviceUI(this));
     add(BuiltinComponents.energyGauge(9, 18, menu.fieldsReader()));
     add(BuiltinComponents.progressGauge(81, 35, menu.fieldsReader()));
     add(BuiltinComponents.fluidGauge(29, 18, menu.fieldsReader(), RefinerBlockEntity.TANK_0));

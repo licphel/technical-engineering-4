@@ -1,0 +1,14 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:gems/borax"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:borax_dust"
+    }
+  ],
+  "time": 100
+}

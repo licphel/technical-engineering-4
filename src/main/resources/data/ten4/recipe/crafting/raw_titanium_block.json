@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "tag": "c:raw_materials/titanium"
+    }
+  },
+  "result": {
+    "id": "ten4:raw_titanium_block"
+  }
+}

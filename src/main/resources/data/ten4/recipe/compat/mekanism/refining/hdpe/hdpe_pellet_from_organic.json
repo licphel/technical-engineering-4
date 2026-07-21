@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item": "mekanism:hdpe_pellet"
+    },
+    {
+      "fluid_tag": "c:nutrient_solution",
+      "amount": 50
+    }
+  ],
+  "outputs": [
+    {
+      "item": "mekanism:hdpe_pellet",
+      "count": 2
+    }
+  ],
+  "time": 200
+}

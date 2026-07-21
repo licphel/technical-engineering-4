@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:ores/sulfur"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:sulfur_dust",
+      "count": 2
+    },
+    {
+      "item": "ten4:sulfur_dust",
+      "chance": 0.5
+    }
+  ],
+  "time": 200
+}

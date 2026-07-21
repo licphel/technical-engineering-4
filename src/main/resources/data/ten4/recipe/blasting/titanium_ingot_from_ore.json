@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 1.0,
+  "ingredient": {
+    "item": "ten4:titanium_ore"
+  },
+  "result": {
+    "id": "ten4:titanium_ingot"
+  }
+}

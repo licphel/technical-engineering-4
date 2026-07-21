@@ -1,0 +1,15 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item": "ten4:oil_sand"
+    }
+  ],
+  "outputs": [
+    {
+      "fluid": "ten4:crude_oil",
+      "amount": 500
+    }
+  ],
+  "time": 200
+}

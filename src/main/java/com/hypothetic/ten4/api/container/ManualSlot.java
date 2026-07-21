@@ -64,7 +64,7 @@ public class ManualSlot extends Slot {
      * Always removable.
      * Do not let !canExtract check forbid player picking up action.
      */
-    return true;
+    return isActive();
   }
 
   @Override

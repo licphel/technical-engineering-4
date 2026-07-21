@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:raw_materials/osmium"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "mekanism:dust_osmium"
+    },
+    {
+      "item": "mekanism:dust_osmium",
+      "chance": 0.4
+    }
+  ],
+  "time": 100
+}

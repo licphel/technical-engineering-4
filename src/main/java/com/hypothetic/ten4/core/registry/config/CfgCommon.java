@@ -5,10 +5,12 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class CfgCommon {
   public final Devices devices;
   public final Ducts ducts;
+  public final Others others;
 
   public CfgCommon(ModConfigSpec.Builder b) {
     devices = new Devices(b);
     ducts = new Ducts(b);
+    others = new Others(b);
   }
 
   public static class Devices {
@@ -105,6 +107,18 @@ public final class CfgCommon {
       copperFluidThroughput = b.defineInRange("copperFluidThroughput", 100, 0, Integer.MAX_VALUE);
       copperItemBuffer = b.defineInRange("copperItemBuffer", 1, 0, Integer.MAX_VALUE);
       copperItemThroughput = b.defineInRange("copperItemThroughput", 20, 0, Integer.MAX_VALUE);
+      b.pop();
+    }
+  }
+
+  public static class Others {
+    public final ModConfigSpec.DoubleValue asphaltSpeedBoost;
+    public final ModConfigSpec.DoubleValue asphaltJumpBoost;
+
+    Others(ModConfigSpec.Builder b) {
+      b.push("others");
+      asphaltSpeedBoost = b.defineInRange("asphaltSpeedBoost", 0.3, 0.0, 1.0);
+      asphaltJumpBoost = b.defineInRange("asphaltJumpBoost", 0.5, 0.0, 1.0);
       b.pop();
     }
   }

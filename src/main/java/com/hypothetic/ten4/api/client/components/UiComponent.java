@@ -22,6 +22,7 @@ public class UiComponent {
   protected boolean visible = true;
   protected List<UiComponent> children = new ArrayList<>();
   protected @Nullable SoundEvent soundOnClicked;
+  protected @Nullable UiTag tag;
 
   public UiComponent(int x, int y, int w, int h) {
     this.x = semanticX = x;
@@ -168,6 +169,13 @@ public class UiComponent {
     this.y += delta;
   }
 
+  @SuppressWarnings("unchecked")
+  public <T extends UiComponent> T setSemanticPosition(int x, int y) {
+    setSemanticX(x);
+    setSemanticY(y);
+    return (T) this;
+  }
+
   public int getWidth() {
     return width;
   }
@@ -184,16 +192,30 @@ public class UiComponent {
     this.height = height;
   }
 
+  public Rect2i getBounds() {
+    return new Rect2i(x, y, width, height);
+  }
+
   public List<Rect2i> getTakeUp() {
     if (children.isEmpty()) {
-      return List.of(new Rect2i(x, y, width, height));
+      return List.of(getBounds());
     }
     List<Rect2i> takeUp = new ArrayList<>();
-    takeUp.add(new Rect2i(x, y, width, height));
+    takeUp.add(getBounds());
 
     for (UiComponent child : children) {
       takeUp.addAll(child.getTakeUp());
     }
     return takeUp;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends UiComponent> T tagged(@Nullable UiTag tag) {
+    this.tag = tag;
+    return (T) this;
+  }
+
+  public @Nullable UiTag getTag() {
+    return tag;
   }
 }

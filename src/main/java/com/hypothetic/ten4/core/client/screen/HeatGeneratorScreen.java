@@ -20,7 +20,7 @@ public class HeatGeneratorScreen extends ComponentedContainerScreen<ContainerMen
 
   @Override
   protected void buildElements() {
-    add(BuiltinComponents.defaultPanels(this));
+    add(BuiltinComponents.standardDeviceUI(this));
     add(BuiltinComponents.energyGauge(120, 18, menu.fieldsReader()));
     add(BuiltinComponents.fuelGauge(80, 36, menu.fieldsReader()));
   }

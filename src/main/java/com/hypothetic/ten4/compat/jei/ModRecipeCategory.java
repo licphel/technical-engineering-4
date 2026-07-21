@@ -4,11 +4,11 @@ import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.api.client.gui.TextureRegion;
 import com.hypothetic.ten4.api.recipe.Complex;
-import com.hypothetic.ten4.core.client.builtin.BuiltinComponents;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.neoforge.NeoForgeTypes;
@@ -22,8 +22,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 
+import static com.hypothetic.ten4.core.client.builtin.BuiltinComponents.TEXTURE;
+
 public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
-  private static final IDrawable fluidTank = new IDrawable() {
+  public static final TextureRegion ENERGY_EMPTY = TextureRegion.of(TEXTURE, 204, 52, 8, 50);
+  public static final TextureRegion FUEL_EMPTY = TextureRegion.of(TEXTURE, 168, 52, 14, 14);
+  public static final TextureRegion FUEL_FULL = TextureRegion.of(TEXTURE, 168, 14 + 52, 14, 14);
+  public static final TextureRegion PROGRESS_EMPTY = TextureRegion.of(TEXTURE, 234, 52, 22, 16);
+  public static final TextureRegion PROGRESS_FULL = TextureRegion.of(TEXTURE, 234, 16 + 52, 22, 16);
+  public static final TextureRegion FLUID_TANK = TextureRegion.of(TEXTURE, 214, 52, 18, 50);
+  public static final TextureRegion FLUID_TANK_OVERLAY = TextureRegion.of(TEXTURE, 150, 0, 18, 50);
+  public static final TextureRegion SLOT = TextureRegion.of(TEXTURE, 184, 52, 18, 18);
+
+  private static final IDrawable FLUID_BACKGROUND = new IDrawable() {
     @Override
     public int getWidth() {
       return 18;
@@ -37,9 +48,28 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
     @Override
     public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
       EnhancedGuiGraphics g = new EnhancedGuiGraphics(guiGraphics);
-      g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, 214, 0, 18, 50), xOffset - 1, yOffset - 1);
+      g.draw(FLUID_TANK, xOffset - 1, yOffset - 1);
     }
   };
+
+  private static final IDrawable FLUID_OVERLAY = new IDrawable() {
+    @Override
+    public int getWidth() {
+      return 18;
+    }
+
+    @Override
+    public int getHeight() {
+      return 50;
+    }
+
+    @Override
+    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+      EnhancedGuiGraphics g = new EnhancedGuiGraphics(guiGraphics);
+      g.draw(FLUID_TANK_OVERLAY, xOffset - 1, yOffset - 1);
+    }
+  };
+
   private final RecipeType<T> type;
   private final Component title;
   private final IDrawable icon;
@@ -71,6 +101,11 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
     return icon;
   }
 
+  @Override
+  public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    createBackground().draw(guiGraphics);
+  }
+
   protected void addItemInput(IRecipeLayoutBuilder builder, Complex input, int x, int y) {
     builder.addInputSlot(x, y)
         .addItemStacks(input.itemStacks())
@@ -93,7 +128,8 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
   protected void addFluidInput(IRecipeLayoutBuilder builder, Complex input, int x, int y) {
     IRecipeSlotBuilder sb = builder.addInputSlot(x, y)
         .addIngredients(NeoForgeTypes.FLUID_STACK, input.fluidStacks())
-        .setBackground(fluidTank, 0, 0);
+        .setBackground(FLUID_BACKGROUND, 0, 0)
+        .setOverlay(FLUID_OVERLAY, 0, 0);
 
     if (input.count() > 0) {
       sb.setFluidRenderer(input.count(), false, 16, 48);
@@ -104,7 +140,8 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
     FluidStack stack = output.symbolFluid();
     IRecipeSlotBuilder sb = builder.addOutputSlot(x, y)
         .addFluidStack(stack.getFluid(), stack.getAmount())
-        .setBackground(fluidTank, 0, 0);
+        .setBackground(FLUID_BACKGROUND, 0, 0)
+        .setOverlay(FLUID_OVERLAY, 0, 0);
 
     if (output.count() > 0) {
       sb.setFluidRenderer(output.count(), false, 16, 48);
@@ -137,7 +174,7 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
         float frac = me > 0 ? (float) e / me : 0;
         int fill = Math.round(innerH * frac);
 
-        g.draw(BuiltinComponents.ENERGY_EMPTY, x, y, width, height);
+        g.draw(ENERGY_EMPTY, x, y, width, height);
 
         if (fill > 0) {
           int ox = Math.round((width - innerW) / 2.0F);
@@ -172,11 +209,11 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
         float frac = me > 0 ? (float) e / me : 0;
         int fill = Math.round(height * frac);
 
-        g.draw(BuiltinComponents.FUEL_EMPTY, x, y, width, height);
+        g.draw(FUEL_EMPTY, x, y, width, height);
 
         if (fill > 0) {
           int fillUV = Math.round(height * frac);
-          g.draw(BuiltinComponents.FUEL_FULL, x, y + height - fill, width, fill, 0, height - fillUV, width, fillUV);
+          g.draw(FUEL_FULL, x, y + height - fill, width, fill, 0, height - fillUV, width, fillUV);
         }
       }
     });
@@ -206,13 +243,35 @@ public abstract class ModRecipeCategory<T> implements IRecipeCategory<T> {
         float frac = me > 0 ? (float) e / me : 0;
         int fill = Math.round(width * frac);
 
-        g.draw(BuiltinComponents.PROGRESS_EMPTY, x, y, width, height);
+        g.draw(PROGRESS_EMPTY, x, y, width, height);
 
         if (fill > 0) {
           int fillUV = Math.round(width * frac);
-          g.draw(BuiltinComponents.PROGRESS_FULL, x, y, fill, height, 0, 0, fillUV, height);
+          g.draw(PROGRESS_FULL, x, y, fill, height, 0, 0, fillUV, height);
         }
       }
     });
+  }
+
+  protected IDrawable createBackground() {
+    return new IDrawable() {
+      @Override
+      public int getWidth() {
+        return ModRecipeCategory.this.getWidth();
+      }
+
+      @Override
+      public int getHeight() {
+        return ModRecipeCategory.this.getHeight();
+      }
+
+      @Override
+      public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+        EnhancedGuiGraphics g = new EnhancedGuiGraphics(guiGraphics);
+        TextureRegion tr = TextureRegion.of(Ten4.id("textures/gui/compat/" +
+            getRecipeType().getUid().getPath() + ".png"), 0, 0, getWidth(), getHeight());
+        g.draw(tr, xOffset, yOffset);
+      }
+    };
   }
 }

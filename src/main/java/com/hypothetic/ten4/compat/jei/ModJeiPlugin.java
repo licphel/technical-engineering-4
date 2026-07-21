@@ -2,6 +2,9 @@ package com.hypothetic.ten4.compat.jei;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
+import com.hypothetic.ten4.api.client.components.GaugeFluid;
+import com.hypothetic.ten4.api.client.components.UiComponent;
+import com.hypothetic.ten4.api.client.components.UiTag;
 import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import com.hypothetic.ten4.compat.jei.core.*;
 import com.hypothetic.ten4.core.client.screen.*;
@@ -11,24 +14,28 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.runtime.IClickableIngredient;
+import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @JeiPlugin
 public class ModJeiPlugin implements IModPlugin {
@@ -99,21 +106,13 @@ public class ModJeiPlugin implements IModPlugin {
 
   @Override
   public void registerGuiHandlers(IGuiHandlerRegistration registry) {
-    registry.addRecipeClickArea(PulverizerScreen.class, 68, 35, 22, 16, PULVERIZING);
-    registry.addRecipeClickArea(PressScreen.class, 75, 35, 22, 16, PRESSING);
-    registry.addRecipeClickArea(SmelterScreen.class, 75, 35, 22, 16, ELECTRICAL_SMELTING);
-    registry.addRecipeClickArea(RefinerScreen.class, 81, 35, 22, 16, REFINING);
-    registry.addRecipeClickArea(HeatGeneratorScreen.class, 80, 36, 14, 14, HEAT_GENERATING);
+    registry.addGuiContainerHandler(PulverizerScreen.class, new RecipeClickDetector(PULVERIZING));
+    registry.addGuiContainerHandler(PressScreen.class, new RecipeClickDetector(PRESSING));
+    registry.addGuiContainerHandler(SmelterScreen.class, new RecipeClickDetector(ELECTRICAL_SMELTING));
+    registry.addGuiContainerHandler(RefinerScreen.class, new RecipeClickDetector(REFINING));
+    registry.addGuiContainerHandler(HeatGeneratorScreen.class, new RecipeClickDetector(HEAT_GENERATING));
 
-    // Excluded areas
-    registry.addGenericGuiContainerHandler(ComponentedContainerScreen.class, new IGuiContainerHandler<>() {
-      @Override
-      public List<Rect2i> getGuiExtraAreas(AbstractContainerScreen<?> containerScreen) {
-        if (containerScreen instanceof ComponentedContainerScreen<?> cs) {
-          return cs.getComponentAreas();
-        }
-        return Collections.emptyList();
-      }
-    });
+    // General Handler
+    registry.addGenericGuiContainerHandler(ComponentedContainerScreen.class, new GeneralDetector(registry));
   }
 }

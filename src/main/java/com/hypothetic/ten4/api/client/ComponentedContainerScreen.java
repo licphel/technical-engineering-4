@@ -24,10 +24,14 @@ public abstract class ComponentedContainerScreen<T extends AbstractContainerMenu
     this.imageHeight = getGuiSize()[1];
   }
 
+  public List<UiComponent> getComponents() {
+    return components;
+  }
+
   protected abstract ResourceLocation getBackground();
 
   public int[] getGuiSize() {
-    return new int[] {176, 166};
+    return new int[] {176, 167};
   }
 
   @Override

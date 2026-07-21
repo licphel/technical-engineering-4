@@ -12,6 +12,10 @@
     {
       "item": "minecraft:flint",
       "chance": 0.25
+    },
+    {
+      "item": "ten4:borax",
+      "chance": 0.05
     }
   ],
   "time": 200

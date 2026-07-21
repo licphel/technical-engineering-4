@@ -1,0 +1,18 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item_tag": "c:ingots/titanium"
+    },
+    {
+      "item": "ten4:sheet_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:titanium_plate"
+    }
+  ],
+  "time": 100
+}

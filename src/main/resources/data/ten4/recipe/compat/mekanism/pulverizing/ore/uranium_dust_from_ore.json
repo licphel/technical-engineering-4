@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:ores/uranium"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "mekanism:dust_uranium",
+      "count": 2
+    },
+    {
+      "item": "mekanism:dust_uranium",
+      "chance": 0.8
+    }
+  ],
+  "time": 200
+}

@@ -1,0 +1,19 @@
+{
+  "type": "ten4:pressing",
+  "inputs": [
+    {
+      "item": "minecraft:copper_ingot"
+    },
+    {
+      "item": "ten4:depacking_die",
+      "catalyst": true
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:copper_nugget",
+      "count": 9
+    }
+  ],
+  "time": 100
+}

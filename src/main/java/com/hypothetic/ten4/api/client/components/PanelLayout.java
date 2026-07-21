@@ -7,12 +7,10 @@ import java.util.List;
 
 public class PanelLayout extends UiComponent {
   private final List<Panel> panels = new ArrayList<>();
-  private final int topY;
   private int panelGap;
 
   public PanelLayout(int x, int topY) {
     super(x, topY, 1, 1);
-    this.topY = topY;
   }
 
   public PanelLayout panelGap(int gap) {
@@ -32,18 +30,20 @@ public class PanelLayout extends UiComponent {
 
   @Override
   public void onRender(EnhancedGuiGraphics g, float pt) {
-    super.onRender(g, pt);
     recomputeLayout();
+    for (Panel p : panels) {
+      p.updateSize();
+    }
+    super.onRender(g, pt);
   }
 
   private void recomputeLayout() {
     int cy = 0;
-    for (int i = 0; i < panels.size(); i++) {
-      Panel p = panels.get(i);
+    for (Panel p : panels) {
       p.setSemanticX(0);
       p.setSemanticY(cy);
-      cy += p.currentHeight();
-      if (i < panels.size() - 1) {
+      cy += p.height;
+      if (panels.indexOf(p) < panels.size() - 1) {
         cy += panelGap;
       }
     }

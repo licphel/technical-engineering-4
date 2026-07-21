@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:ores/fluorite"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "mekanism:dust_fluorite",
+      "count": 4
+    },
+    {
+      "item": "mekanism:dust_fluorite",
+      "chance": 0.5
+    },
+    {
+      "item": "mekanism:dust_fluorite",
+      "chance": 0.2
+    }
+  ],
+  "time": 200
+}

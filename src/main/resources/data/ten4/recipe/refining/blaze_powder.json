@@ -2,11 +2,11 @@
   "type": "ten4:refining",
   "inputs": [
     {
-      "item": "minecraft:gun_powder"
-    },
-    {
       "fluid_tag": "c:lava",
       "amount": 200
+    },
+    {
+      "item": "minecraft:gunpowder"
     }
   ],
   "outputs": [

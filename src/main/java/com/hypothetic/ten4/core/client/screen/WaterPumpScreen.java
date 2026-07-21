@@ -21,7 +21,7 @@ public class WaterPumpScreen extends ComponentedContainerScreen<ContainerMenu> {
 
   @Override
   protected void buildElements() {
-    add(BuiltinComponents.defaultPanels(this));
+    add(BuiltinComponents.standardDeviceUI(this));
     add(BuiltinComponents.energyGauge(9, 18, menu.fieldsReader()));
     add(BuiltinComponents.fluidGauge(79, 18, menu.fieldsReader(), WaterPumpBlockEntity.TANK_0));
   }

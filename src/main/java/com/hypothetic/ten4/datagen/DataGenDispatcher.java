@@ -26,6 +26,10 @@ public final class DataGenDispatcher {
 
   @SubscribeEvent
   public static void gatherData(GatherDataEvent event) {
+    if (!Ten4.DATA_GEN) {
+      return;
+    }
+
     DataGenerator generator = event.getGenerator();
     PackOutput output = generator.getPackOutput();
     CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();

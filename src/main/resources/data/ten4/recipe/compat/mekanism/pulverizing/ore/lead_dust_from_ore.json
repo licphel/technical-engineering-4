@@ -1,0 +1,25 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],
+  "type": "ten4:pulverizing",
+  "inputs": [
+    {
+      "item_tag": "c:ores/lead"
+    }
+  ],
+  "outputs": [
+    {
+      "item": "mekanism:dust_lead",
+      "count": 2
+    },
+    {
+      "item": "mekanism:dust_lead",
+      "chance": 0.8
+    }
+  ],
+  "time": 200
+}
