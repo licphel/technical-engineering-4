@@ -6,6 +6,7 @@ import com.hypothetic.ten4.core.block.AsphaltBlock;
 import com.hypothetic.ten4.core.block.BlockProperties;
 import com.hypothetic.ten4.core.block.DeviceBlock;
 import com.hypothetic.ten4.core.block.OilSandBlock;
+import com.hypothetic.ten4.core.block.TankBlock;
 import com.hypothetic.ten4.core.block.duct.EnergyDuctBlock;
 import com.hypothetic.ten4.core.block.duct.FluidDuctBlock;
 import com.hypothetic.ten4.core.block.duct.ItemDuctBlock;
@@ -40,6 +41,9 @@ public final class ModBlocks {
 
   // Generators
   public static final DeferredHolder<Block, Block> HEAT_GENERATOR = BLOCKS.register("heat_generator", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
+
+  // Storage
+  public static final DeferredHolder<Block, Block> TANK = BLOCKS.register("tank", () -> new TankBlock(BlockProperties.METAL_DEVICE).tickBothSide());
 
   // Other Blocks
   public static final DeferredHolder<Block, Block> ASPHALT = BLOCKS.register("asphalt", () -> new AsphaltBlock(BlockBehaviour.Properties.of().sound(SoundType.LODESTONE).mapColor(DyeColor.BLACK).strength(2.5F, 3.5F)));

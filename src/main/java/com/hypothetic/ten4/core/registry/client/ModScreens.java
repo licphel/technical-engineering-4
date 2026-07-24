@@ -18,5 +18,6 @@ public class ModScreens {
     event.register(ModMenus.REFINER.get(), RefinerScreen::new);
     event.register(ModMenus.HEAT_GENERATOR.get(), HeatGeneratorScreen::new);
     event.register(ModMenus.WATER_PUMP.get(), WaterPumpScreen::new);
+    event.register(ModMenus.TANK.get(), TankScreen::new);
   }
 }

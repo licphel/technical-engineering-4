@@ -58,8 +58,8 @@ public class IoFlagButton extends Button {
   }
 
   @Override
-  public void onCollectingTooltips(List<Component> tooltips) {
-    super.onCollectingTooltips(tooltips);
+  public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
+    super.onCollectingTooltips(tooltips, mx, my);
     MutableComponent mc = Component.translatable(Ten4.lang("misc." + langKey));
     mc.append(isOn()
         ? Component.translatable(Ten4.lang("misc.enabled"))

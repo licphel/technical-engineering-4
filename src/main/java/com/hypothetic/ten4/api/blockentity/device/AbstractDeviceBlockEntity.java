@@ -79,6 +79,7 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   protected int fluidAutoFlags;
   private long lastPlay;
   private @Nullable UUID owner;
+
   public AbstractDeviceBlockEntity(BlockPos pos, BlockState state) {
     super(pos, state);
 
@@ -548,6 +549,10 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     return info.power;
   }
 
+  public IFluidHandler getFluidInventory() {
+    return fluidInventory;
+  }
+
   @Override
   protected void loadAdditional(CompoundTag tag, HolderLookup.Provider reg) {
     super.loadAdditional(tag, reg);
@@ -622,7 +627,7 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   }
 
   @Override
-  public void getLoot(List<ItemStack> loot) {
+  public void getLoot(List<ItemStack> loot, boolean shouldDropSelf) {
     for (int i = 0; i < inventory.getSlots(); i++) {
       if (inventory.getStackInSlot(i).isEmpty()) {
         continue;

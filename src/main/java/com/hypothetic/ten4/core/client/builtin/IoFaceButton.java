@@ -59,8 +59,8 @@ public class IoFaceButton extends Button {
   }
 
   @Override
-  public void onCollectingTooltips(List<Component> tooltips) {
-    super.onCollectingTooltips(tooltips);
+  public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
+    super.onCollectingTooltips(tooltips, mx, my);
 
     MutableComponent mc = Component.translatable(Ten4.lang("misc.facemode"));
     mc.append(state.get(dir).createTranslation());

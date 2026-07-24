@@ -70,10 +70,10 @@ public class UiComponent {
     }
   }
 
-  public void onCollectingTooltips(List<Component> tooltips) {
+  public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
     for (UiComponent child : children) {
       if (child.isVisible() && child.hovering) {
-        child.onCollectingTooltips(tooltips);
+        child.onCollectingTooltips(tooltips, mx, my);
       }
     }
   }

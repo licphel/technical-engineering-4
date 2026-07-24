@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,active=false": { "model": "ten4:block/other/tank", "uvlock": false },
+    "facing=south,active=false": { "model": "ten4:block/other/tank", "y": 180 },
+    "facing=west,active=false":  { "model": "ten4:block/other/tank", "y": 270 },
+    "facing=east,active=false":  { "model": "ten4:block/other/tank", "y": 90 },
+    "facing=north,active=true":  { "model": "ten4:block/other/tank", "uvlock": false },
+    "facing=south,active=true":  { "model": "ten4:block/other/tank", "y": 180 },
+    "facing=west,active=true":   { "model": "ten4:block/other/tank", "y": 270 },
+    "facing=east,active=true":   { "model": "ten4:block/other/tank", "y": 90 }
+  }
+}

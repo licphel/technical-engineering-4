@@ -13,18 +13,18 @@ import java.util.List;
 public interface ILootProvider {
   static void onRemoved(BlockState oldState, BlockState newState, Level level, BlockPos pos) {
     if (!oldState.is(newState.getBlock())) {
-      createDrops(level, pos);
+      createDrops(level, pos, false);
     }
   }
 
-  static void createDrops(Level level, BlockPos pos) {
+  static void createDrops(Level level, BlockPos pos, boolean shouldDropSelf) {
     BlockEntity be = level.getBlockEntity(pos);
     if (be instanceof ILootProvider provider) {
       NonNullList<ItemStack> loot = NonNullList.create();
-      provider.getLoot(loot);
+      provider.getLoot(loot, shouldDropSelf);
       Containers.dropContents(level, pos, loot);
     }
   }
 
-  void getLoot(List<ItemStack> loot);
+  void getLoot(List<ItemStack> loot, boolean shouldDropSelf);
 }

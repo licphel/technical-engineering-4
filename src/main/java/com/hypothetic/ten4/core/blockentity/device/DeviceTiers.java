@@ -14,9 +14,6 @@ public final class DeviceTiers {
   public static Supplier<DeviceInfo> WATER_PUMP;
   public static Supplier<DeviceInfo> HEAT_GENERATOR;
 
-  private DeviceTiers() {
-  }
-
   static {
     CfgCommon.Devices d = ModConfigs.COMMON.devices;
     PULVERIZER = () -> new DeviceInfo()
@@ -56,12 +53,15 @@ public final class DeviceTiers {
         .setEnergyCapacity(d.waterPumpEnergyCapacity.get())
         .setEnergyThroughput(d.waterPumpEnergyThroughput.get())
         .setFluidThroughput(d.waterPumpFluidThroughput.get());
-    HEAT_GENERATOR = () -> new DeviceInfo().
-        enableEnergy()
+    HEAT_GENERATOR = () -> new DeviceInfo()
+        .enableEnergy()
         .enableItem()
         .setPower(d.heatGeneratorPower.get())
         .setEnergyCapacity(d.heatGeneratorEnergyCapacity.get())
         .setEnergyThroughput(d.heatGeneratorEnergyThroughput.get())
         .setItemThroughput(d.heatGeneratorItemThroughput.get());
+  }
+
+  private DeviceTiers() {
   }
 }

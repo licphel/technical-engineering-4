@@ -101,8 +101,8 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
   }
 
   @Override
-  public void getLoot(List<ItemStack> loot) {
-    super.getLoot(loot);
+  public void getLoot(List<ItemStack> loot, boolean shouldDropSelf) {
+    super.getLoot(loot, shouldDropSelf);
 
     for (int i = 0; i < augments.getSlots(); i++) {
       if (augments.getStackInSlot(i).isEmpty()) {

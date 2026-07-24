@@ -4,6 +4,7 @@ import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.item.IAugment;
 import com.hypothetic.ten4.core.item.GeneralAugmentItem;
 import com.hypothetic.ten4.core.item.ItemProperties;
+import com.hypothetic.ten4.core.item.TankItem;
 import com.hypothetic.ten4.core.item.WrenchItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -29,6 +30,10 @@ public final class ModItems {
 
   // Generators
   public static final DeferredHolder<Item, BlockItem> HEAT_GENERATOR = bridgeBlockItem(ModBlocks.HEAT_GENERATOR);
+
+  // Storage
+  public static final DeferredHolder<Item, TankItem> TANK = ITEMS.register("tank",
+      () -> new TankItem(ModBlocks.TANK.get(), ItemProperties.NONSPECIAL));
 
   // DuctTiers
   public static final DeferredHolder<Item, BlockItem> COPPER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.COPPER_ENERGY_DUCT);

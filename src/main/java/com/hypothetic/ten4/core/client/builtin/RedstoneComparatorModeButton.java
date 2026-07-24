@@ -42,8 +42,8 @@ public class RedstoneComparatorModeButton extends Button {
   }
 
   @Override
-  public void onCollectingTooltips(List<Component> tooltips) {
-    super.onCollectingTooltips(tooltips);
+  public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
+    super.onCollectingTooltips(tooltips, mx, my);
 
     int mode = reader.getInt(BuiltinSyncedFields.COMPARATOR_MODE);
     ComparatorMode cm = ComparatorMode.of(mode);

@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.HolderLookup;
 
-public final class RecipeUtil {
-  private RecipeUtil() {
+public final class RegistryUtil {
+  private RegistryUtil() {
   }
 
   public static HolderLookup.Provider registryAccess() {

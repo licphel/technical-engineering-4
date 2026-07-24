@@ -92,9 +92,11 @@ public class FluidTransmitter extends BufferedTransmitter<IFluidHandler, FluidNe
       if (!netBuf.isEmpty()) {
         int size = net.getTransmitters().size();
         if (size > 0) {
-          int share = netBuf.getAmount() / size;
+          int total = netBuf.getAmount();
+          int share = Math.max(1, total / size);
+          FluidStack taken = netBuf.copyWithAmount(share); // copy before shrinking
           netBuf.shrink(share);
-          buffer = netBuf.copyWithAmount(share);
+          buffer = taken;
         }
       }
     }

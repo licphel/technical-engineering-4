@@ -7,6 +7,7 @@ import com.hypothetic.ten4.api.registry.BlockEntityBridges;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BridgedEntityBlock extends BaseEntityBlock {
@@ -59,6 +61,17 @@ public abstract class BridgedEntityBlock extends BaseEntityBlock {
       return clientTicker ? new SimpleTicker<>() : null;
     }
     return serverTicker ? new SimpleTicker<>() : null;
+  }
+
+  @Override
+  public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+    boolean suc = super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+
+    if (suc && !level.isClientSide() && willHarvest) {
+      ILootProvider.createDrops(level, pos, true);
+    }
+
+    return suc;
   }
 
   @Override

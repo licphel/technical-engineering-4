@@ -4,6 +4,7 @@ import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.core.client.renderer.RenderEnergyDuct;
 import com.hypothetic.ten4.core.client.renderer.RenderFluidDuct;
 import com.hypothetic.ten4.core.client.renderer.RenderItemDuct;
+import com.hypothetic.ten4.core.client.renderer.RenderTankBlock;
 import com.hypothetic.ten4.core.registry.ModBlockEntities;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,6 +27,8 @@ public class ModBlockEntityRenderers {
     register(event, ModBlockEntities.COPPER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_fluid_duct")));
     register(event, ModBlockEntities.OPAQUE_COPPER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/opaque_copper_fluid_duct")).setOpaque());
     register(event, ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_controller_fluid_duct")));
+
+    register(event, ModBlockEntities.TANK.get(), RenderTankBlock::new);
   }
 
   @SuppressWarnings("unchecked")

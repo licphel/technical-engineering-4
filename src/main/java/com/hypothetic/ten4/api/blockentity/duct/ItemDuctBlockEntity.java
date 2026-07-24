@@ -43,7 +43,7 @@ public class ItemDuctBlockEntity extends DuctBlockEntity<ItemTransmitter> implem
   }
 
   @Override
-  public void getLoot(List<ItemStack> loot) {
+  public void getLoot(List<ItemStack> loot, boolean shouldDropSelf) {
     TransitEntry e = transmitter.transitEntry;
     if (e != null && !e.stack.isEmpty()) {
       loot.add(e.stack.copy());

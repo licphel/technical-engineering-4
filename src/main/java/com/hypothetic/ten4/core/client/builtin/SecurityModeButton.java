@@ -40,8 +40,8 @@ public class SecurityModeButton extends Button {
   }
 
   @Override
-  public void onCollectingTooltips(List<Component> tooltips) {
-    super.onCollectingTooltips(tooltips);
+  public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
+    super.onCollectingTooltips(tooltips, mx, my);
     int mode = reader.getInt(BuiltinSyncedFields.SECURITY_MODE);
     SecurityMode sm = SecurityMode.of(mode);
     MutableComponent mc = Component.translatable(Ten4.lang("misc.security_mode"));

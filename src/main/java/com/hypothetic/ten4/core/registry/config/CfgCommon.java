@@ -115,10 +115,16 @@ public final class CfgCommon {
     public final ModConfigSpec.DoubleValue asphaltSpeedBoost;
     public final ModConfigSpec.DoubleValue asphaltJumpBoost;
 
+    public final ModConfigSpec.IntValue tankCapacity;
+    public final ModConfigSpec.IntValue tankFluidThroughput;
+
     Others(ModConfigSpec.Builder b) {
       b.push("others");
       asphaltSpeedBoost = b.defineInRange("asphaltSpeedBoost", 0.3, 0.0, 1.0);
       asphaltJumpBoost = b.defineInRange("asphaltJumpBoost", 0.5, 0.0, 1.0);
+
+      tankCapacity = b.defineInRange("tankCapacity", 100_000, 0, Integer.MAX_VALUE);
+      tankFluidThroughput = b.defineInRange("tankFluidThroughput", 1000, 0, Integer.MAX_VALUE);
       b.pop();
     }
   }

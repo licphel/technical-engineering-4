@@ -57,7 +57,7 @@ public abstract class ComponentedContainerScreen<T extends AbstractContainerMenu
 
     for (UiComponent e : components) {
       if (e.isVisible() && e.isMouseHovering(mx, my)) {
-        e.onCollectingTooltips(tooltips);
+        e.onCollectingTooltips(tooltips, mx, my);
       }
     }
 

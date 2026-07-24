@@ -159,16 +159,10 @@ public final class TransmitterNetworkRegistry {
 
       Network oldNet = removed.getNetwork();
       if (oldNet != null) {
-        // Detach EVERY transmitter in the old network and queue them all for re-join
-        for (Object o : new ArrayList<>(oldNet.getTransmitters())) {
-          Transmitter t = (Transmitter) o;
-          t.takeShare();
-          t.setNetwork(null, false);
-          if (t != removed && t.isValid()) {
-            pendingJoins.add(t);
-          }
-        }
-        oldNet.deregister();
+        // Delegate to Network.invalidate() which handles even buffer distribution.
+        // BufferedNetwork subclasses (FluidNetwork, EnergyNetwork) override this to
+        // pre-divide the buffer without loss.
+        oldNet.invalidate((Transmitter<?, ?, ?>) removed);
       }
       removed.setNetwork(null, false);
     }

@@ -47,7 +47,7 @@ public final class BuiltinComponents {
         () -> reader.getInt(BuiltinSyncedFields.MAX_ENERGY)
     ) {
       @Override
-      public void onCollectingTooltips(List<Component> tooltips) {
+      public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
         FluidStack stack = stackSupplier.get();
         tooltips.add(DisplayUtil.forgeEnergy(stack.getAmount(), capacity.getAsInt()));
       }
@@ -60,7 +60,7 @@ public final class BuiltinComponents {
         () -> reader.getInt(BuiltinSyncedFields.MAX_FUEL)
     ) {
       @Override
-      public void onCollectingTooltips(List<Component> tooltips) {
+      public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
       }
     }.withTexture(FUEL_EMPTY, FUEL_FULL).tagged(UiTag.JEI_RECIPE_CLICKABLE);
   }
@@ -101,8 +101,8 @@ public final class BuiltinComponents {
       }
 
       @Override
-      public void onCollectingTooltips(List<Component> tooltips) {
-        super.onCollectingTooltips(tooltips);
+      public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
+        super.onCollectingTooltips(tooltips, mx, my);
 
         String power = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.POWER));
         String eThru = DisplayUtil.compactInt(reader.getInt(BuiltinSyncedFields.ENERGY_THROUGHPUT));

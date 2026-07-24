@@ -14,7 +14,6 @@ import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import com.hypothetic.ten4.core.registry.ModMenus;
 import com.hypothetic.ten4.core.registry.ModRecipes;
 import com.hypothetic.ten4.core.registry.ModSoundEvents;
-import com.hypothetic.ten4.datagen.tag.ItemTagData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -49,6 +48,19 @@ public class RefinerBlockEntity extends ComplexRecipeDeviceBlockEntity {
   }
 
   @Override
+  protected RecipeType<IComplexRecipe> getRecipeType() {
+    return ModRecipes.REFINING.get();
+  }
+
+  @Override
+  protected void initializeRecipeAutomation() {
+    inputSlots.add(0);
+    outputSlots.add(1);
+    inputTanks.add(0);
+    outputTanks.add(1);
+  }
+
+  @Override
   protected DeviceInfo makeDeviceInfo() {
     return DeviceTiers.REFINER.get()
         .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput))
@@ -68,18 +80,5 @@ public class RefinerBlockEntity extends ComplexRecipeDeviceBlockEntity {
   @Override
   public void onSoundPlay() {
     playSound(1.0F, ModSoundEvents.DEVICE_NOISE_2.get());
-  }
-
-  @Override
-  protected RecipeType<IComplexRecipe> getRecipeType() {
-    return ModRecipes.REFINING.get();
-  }
-
-  @Override
-  protected void initializeRecipeAutomation() {
-    inputSlots.add(0);
-    outputSlots.add(1);
-    inputTanks.add(0);
-    outputTanks.add(1);
   }
 }

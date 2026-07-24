@@ -124,10 +124,19 @@ public abstract class Panel extends UiComponent {
   }
 
   @Override
+  public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
+    super.onCollectingTooltips(tooltips, mx, my);
+
+    if (isHoveringUpper(mx, my)) {
+      tooltips.add(getTitle());
+    }
+  }
+
+  @Override
   public void onMouseClicked(int mx, int my, int btn) {
     int ex = effectiveX();
 
-    if (mx >= ex && mx < ex + width && my >= y && my < y + minHeight) {
+    if (isHoveringUpper(mx, my)) {
       toggleOpen();
       return;
     }
@@ -144,15 +153,13 @@ public abstract class Panel extends UiComponent {
   }
 
   @Override
-  public void onCollectingTooltips(List<Component> tooltips) {
-    super.onCollectingTooltips(tooltips);
-
-    tooltips.add(getTitle());
-  }
-
-  @Override
   public List<Rect2i> getTakeUp() {
     return List.of(new Rect2i(effectiveX(), y, width, height));
+  }
+
+  private boolean isHoveringUpper(int mx, int my) {
+    int ex = effectiveX();
+    return mx >= ex && my >= y && mx <= ex + width && my <= y + minHeight;
   }
 
   protected void drawBackground(EnhancedGuiGraphics g, int px, int py) {

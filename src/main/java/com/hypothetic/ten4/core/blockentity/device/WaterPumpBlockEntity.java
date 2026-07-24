@@ -6,7 +6,6 @@ import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
 import com.hypothetic.ten4.api.capability.fluid.FluidTank;
 import com.hypothetic.ten4.api.capability.fluid.TankOption;
 import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
-import com.hypothetic.ten4.api.container.ContainerMenu;
 import com.hypothetic.ten4.api.container.ContainerMenuLayout;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.SyncedFluidStack;

@@ -3,14 +3,17 @@ package com.hypothetic.ten4.api.transmission.fluid;
 import com.hypothetic.ten4.api.transmission.BufferedNetwork;
 import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
+import com.hypothetic.ten4.api.transmission.TransmitterNetworkRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.neoforged.fml.util.thread.EffectiveSide;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import java.util.*;
+import org.jetbrains.annotations.Nullable;
 
 public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, FluidStack, FluidTransmitter> {
   private FluidStack buffer = FluidStack.EMPTY;
@@ -227,6 +230,45 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
       buffer.shrink(totalSent);
     }
     prevTransferAmount = totalSent;
+  }
+
+  @Override
+  public void invalidate(@Nullable FluidTransmitter trigger) {
+    if (size() == 1 && trigger != null && !trigger.isValid()) {
+      onLastTransmitterRemoved(trigger);
+    }
+    removeInvalid(trigger);
+    if (!EffectiveSide.get().isClient()) {
+      // Pre-divide the network buffer equally among all remaining valid
+      // transmitters so the diminishing-buffer bug (each takeShare() call
+      // reading a smaller amount than the last) cannot cause fluid loss.
+      List<FluidTransmitter> valid = new ArrayList<>();
+      for (FluidTransmitter t : getTransmitters()) {
+        if (t.isValid()) valid.add(t);
+      }
+      if (!valid.isEmpty() && !buffer.isEmpty()) {
+        int n = valid.size();
+        int total = buffer.getAmount();
+        int share = Math.max(1, total / n);
+        for (int i = 0; i < n; i++) {
+          FluidTransmitter t = valid.get(i);
+          int take = (i == n - 1) ? buffer.getAmount() : share; // last gets remainder
+          if (take > 0) {
+            t.setBuffer(buffer.copyWithAmount(take));
+            buffer.shrink(take);
+          }
+          t.setNetwork(null, false);
+          TransmitterNetworkRegistry.join(t);
+        }
+      } else {
+        for (FluidTransmitter t : valid) {
+          t.setNetwork(null, false);
+          TransmitterNetworkRegistry.join(t);
+        }
+      }
+    }
+    deregister();
+    buffer = FluidStack.EMPTY;
   }
 
   public FluidStack getFluid() {

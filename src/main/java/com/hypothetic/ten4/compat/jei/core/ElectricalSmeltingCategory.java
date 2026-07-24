@@ -2,7 +2,7 @@ package com.hypothetic.ten4.compat.jei.core;
 
 import com.hypothetic.ten4.compat.jei.ModRecipeCategory;
 import com.hypothetic.ten4.core.registry.ModBlocks;
-import com.hypothetic.ten4.util.RecipeUtil;
+import com.hypothetic.ten4.util.RegistryUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -36,7 +36,7 @@ public class ElectricalSmeltingCategory extends ModRecipeCategory<SmeltingRecipe
         .addItemStacks(Arrays.stream(inputs.getFirst().getItems()).toList())
         .setStandardSlotBackground();
     builder.addOutputSlot(71, 18)
-        .addItemStack(recipe.getResultItem(RecipeUtil.registryAccess()))
+        .addItemStack(recipe.getResultItem(RegistryUtil.registryAccess()))
         .setOutputSlotBackground();
   }
 

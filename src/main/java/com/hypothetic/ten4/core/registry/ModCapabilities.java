@@ -40,6 +40,9 @@ public class ModCapabilities {
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.HEAT_GENERATOR.get(), AbstractDeviceBlockEntity::getEnergyStorage);
     register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.HEAT_GENERATOR.get(), AbstractDeviceBlockEntity::getItemHandler);
 
+    // Storage
+    register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.TANK.get(), AbstractDeviceBlockEntity::getFluidHandler);
+
     // DuctTiers
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.OPAQUE_COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);

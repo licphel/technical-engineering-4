@@ -41,8 +41,8 @@ public class RedstoneModeButton extends Button {
   }
 
   @Override
-  public void onCollectingTooltips(List<Component> tooltips) {
-    super.onCollectingTooltips(tooltips);
+  public void onCollectingTooltips(List<Component> tooltips, int mx, int my) {
+    super.onCollectingTooltips(tooltips, mx, my);
 
     int mode = reader.getInt(BuiltinSyncedFields.SIG_MODE);
     SignalMode sig = SignalMode.of(mode);
