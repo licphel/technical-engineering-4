@@ -23,29 +23,36 @@ public final class ModFluids {
   public static final FluidDeferredRegister.FluidHolder TORAN = FLUIDS.register("toran_concentrate")
       .density(10000).viscosity(20000)
       .rarity(Rarity.RARE).lightLevel(5)
-      .block(ModBlocks.TORAN).build();
+      .block(ModBlocks.TORAN)
+      .bucket(ModItems.TORAN_BUCKET).build();
   public static final FluidDeferredRegister.FluidHolder EXPERIENCE = FLUIDS.register("liquid_experience")
       .density(1000).viscosity(500)
-      .block(ModBlocks.EXPERIENCE).build();
+      .block(ModBlocks.EXPERIENCE)
+      .bucket(ModItems.EXPERIENCE_BUCKET).build();
   public static final FluidDeferredRegister.FluidHolder REDSTONE = FLUIDS.register("liquid_redstone")
       .density(1000).viscosity(3000).lightLevel(7)
       .texture(WATER_STILL, WATER_FLOW).tint(0xFFCC0000)
-      .block(ModBlocks.REDSTONE).build();
+      .block(ModBlocks.REDSTONE)
+      .bucket(ModItems.REDSTONE_BUCKET).build();
   public static final FluidDeferredRegister.FluidHolder NUTRIENT = FLUIDS.register("nutrient_solution")
       .density(1100).viscosity(1500)
       .texture(WATER_STILL, WATER_FLOW).tint(0xFF33AA33)
-      .block(ModBlocks.NUTRIENT).build();
+      .block(ModBlocks.NUTRIENT)
+      .bucket(ModItems.NUTRIENT_BUCKET).build();
   public static final FluidDeferredRegister.FluidHolder CRUDE_OIL = FLUIDS.register("crude_oil")
       .density(900).viscosity(3000)
-      .block(ModBlocks.CRUDE_OIL).build();
+      .block(ModBlocks.CRUDE_OIL)
+      .bucket(ModItems.CRUDE_OIL_BUCKET).build();
   public static final FluidDeferredRegister.FluidHolder NAPHTHA = FLUIDS.register("naphtha")
       .density(700).viscosity(500)
       .texture(WATER_STILL, WATER_FLOW).tint(0xFFD4A017)
-      .block(ModBlocks.NAPHTHA).build();
+      .block(ModBlocks.NAPHTHA)
+      .bucket(ModItems.NAPHTHA_BUCKET).build();
   public static final FluidDeferredRegister.FluidHolder KEROSENE = FLUIDS.register("kerosene")
       .density(800).viscosity(800)
       .texture(WATER_STILL, WATER_FLOW).tint(0xFFE8D5A3)
-      .block(ModBlocks.KEROSENE).build();
+      .block(ModBlocks.KEROSENE)
+      .bucket(ModItems.KEROSENE_BUCKET).build();
 
   public static final Map<DyeColor, FluidDeferredRegister.FluidHolder> DYES = new EnumMap<>(DyeColor.class);
   static {
@@ -55,6 +62,7 @@ public final class ModFluids {
           .texture(WATER_STILL, WATER_FLOW)
           .tint(0xFF000000 | dye.getFireworkColor())
           .block(ModBlocks.DYE_BLOCKS.get(dye))
+          .bucket(ModItems.DYE_BUCKETS.get(dye))
           .build());
     }
   }

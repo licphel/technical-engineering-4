@@ -77,8 +77,8 @@ public class SmelterBlockEntity extends AbstractRecipeDeviceBlockEntity<SingleRe
   @Override
   protected DeviceInfo makeDeviceInfo() {
     return DeviceTiers.SMELTER.get()
-        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput))
-        .addSlot(new ItemSlot(SlotOption.OUTPUT));
+        .addSlot(new ItemSlot(SlotOption.INPUT, augSlotLimiter()).setValidator(this::isValidInput))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT, augSlotLimiter()));
   }
 
   @Override

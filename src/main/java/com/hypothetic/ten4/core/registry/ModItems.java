@@ -1,18 +1,21 @@
 package com.hypothetic.ten4.core.registry;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.api.item.IAugment;
-import com.hypothetic.ten4.core.item.GeneralAugmentItem;
 import com.hypothetic.ten4.core.item.ItemProperties;
-import com.hypothetic.ten4.core.item.TankItem;
+import com.hypothetic.ten4.core.item.LiquidUnitItem;
 import com.hypothetic.ten4.core.item.WrenchItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public final class ModItems {
@@ -30,10 +33,11 @@ public final class ModItems {
 
   // Generators
   public static final DeferredHolder<Item, BlockItem> HEAT_GENERATOR = bridgeBlockItem(ModBlocks.HEAT_GENERATOR);
+  public static final DeferredHolder<Item, BlockItem> FUEL_GENERATOR = bridgeBlockItem(ModBlocks.FUEL_GENERATOR);
 
   // Storage
-  public static final DeferredHolder<Item, TankItem> TANK = ITEMS.register("tank",
-      () -> new TankItem(ModBlocks.TANK.get(), ItemProperties.NONSPECIAL));
+  public static final DeferredHolder<Item, LiquidUnitItem> LIQUID_UNIT = ITEMS.register("liquid_unit",
+      () -> new LiquidUnitItem(ModBlocks.LIQUID_UNIT.get(), ItemProperties.NONSPECIAL));
 
   // DuctTiers
   public static final DeferredHolder<Item, BlockItem> COPPER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.COPPER_ENERGY_DUCT);
@@ -92,6 +96,30 @@ public final class ModItems {
   public static final DeferredHolder<Item, Item> MONAZITE = ITEMS.register("monazite", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> MONAZITE_DUST = ITEMS.register("monazite_dust", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> SULFUR_DUST = ITEMS.register("sulfur_dust", () -> new Item(ItemProperties.NONSPECIAL));
+
+  // Fluid Buckets
+  public static final DeferredHolder<Item, BucketItem> TORAN_BUCKET = ITEMS.register("toran_concentrate_bucket",
+      () -> new BucketItem(ModFluids.TORAN.still().get(), ItemProperties.BUCKET));
+  public static final DeferredHolder<Item, BucketItem> EXPERIENCE_BUCKET = ITEMS.register("liquid_experience_bucket",
+      () -> new BucketItem(ModFluids.EXPERIENCE.still().get(), ItemProperties.BUCKET));
+  public static final DeferredHolder<Item, BucketItem> REDSTONE_BUCKET = ITEMS.register("liquid_redstone_bucket",
+      () -> new BucketItem(ModFluids.REDSTONE.still().get(), ItemProperties.BUCKET));
+  public static final DeferredHolder<Item, BucketItem> NUTRIENT_BUCKET = ITEMS.register("nutrient_solution_bucket",
+      () -> new BucketItem(ModFluids.NUTRIENT.still().get(), ItemProperties.BUCKET));
+  public static final DeferredHolder<Item, BucketItem> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket",
+      () -> new BucketItem(ModFluids.CRUDE_OIL.still().get(), ItemProperties.BUCKET));
+  public static final DeferredHolder<Item, BucketItem> NAPHTHA_BUCKET = ITEMS.register("naphtha_bucket",
+      () -> new BucketItem(ModFluids.NAPHTHA.still().get(), ItemProperties.BUCKET));
+  public static final DeferredHolder<Item, BucketItem> KEROSENE_BUCKET = ITEMS.register("kerosene_bucket",
+      () -> new BucketItem(ModFluids.KEROSENE.still().get(), ItemProperties.BUCKET));
+
+  public static final Map<DyeColor, DeferredHolder<Item, BucketItem>> DYE_BUCKETS = new EnumMap<>(DyeColor.class);
+  static {
+    for (DyeColor dye : DyeColor.values()) {
+      DYE_BUCKETS.put(dye, ITEMS.register(dye.getSerializedName() + "_dye_solution_bucket",
+          () -> new BucketItem(ModFluids.DYES.get(dye).still().get(), ItemProperties.BUCKET)));
+    }
+  }
 
   private ModItems() {
   }

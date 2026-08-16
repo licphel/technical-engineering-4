@@ -1,23 +1,19 @@
 package com.hypothetic.ten4.api.capability.energy;
 
+import java.util.function.IntSupplier;
+
 public class EnergyTank implements IEnergyProvider {
   private int energy;
-  private int capacity;
-  private int throughput;
+  private final IntSupplier capacity;
+  private final IntSupplier throughput;
 
-  public int getCapacity() {
-    return capacity;
+  public EnergyTank(int capacity, int throughput) {
+    this.capacity = () -> capacity;
+    this.throughput = () -> throughput;
   }
 
-  public void setCapacity(int capacity) {
+  public EnergyTank(IntSupplier capacity, IntSupplier throughput) {
     this.capacity = capacity;
-  }
-
-  public int getThroughput() {
-    return throughput;
-  }
-
-  public void setThroughput(int throughput) {
     this.throughput = throughput;
   }
 
@@ -28,16 +24,16 @@ public class EnergyTank implements IEnergyProvider {
 
   @Override
   public void setEnergy(int e) {
-    energy = Math.clamp(e, 0, capacity);
+    energy = Math.clamp(e, 0, capacity.getAsInt());
   }
 
   @Override
   public int getEnergyCapacity() {
-    return capacity;
+    return capacity.getAsInt();
   }
 
   @Override
   public int getEnergyThroughput() {
-    return throughput;
+    return throughput.getAsInt();
   }
 }

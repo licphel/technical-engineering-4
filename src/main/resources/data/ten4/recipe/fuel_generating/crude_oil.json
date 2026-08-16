@@ -1,0 +1,11 @@
+{
+  "type": "ten4:fuel_generating",
+  "inputs": [
+    {
+      "fluid_tag": "c:crude_oil",
+      "amount": 10
+    }
+  ],
+  "outputs": [],
+  "time": 100
+}

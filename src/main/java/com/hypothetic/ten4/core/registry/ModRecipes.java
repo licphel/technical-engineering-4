@@ -19,6 +19,8 @@ public class ModRecipes {
   public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<IComplexRecipe>> PRESSING_SER = SERIALIZERS.register("pressing", () -> new ComplexRecipeSerializer(PRESSING));
   public static final DeferredHolder<RecipeType<?>, RecipeType<IComplexRecipe>> REFINING = simpleType("refining");
   public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<IComplexRecipe>> REFINING_SER = SERIALIZERS.register("refining", () -> new ComplexRecipeSerializer(REFINING));
+  public static final DeferredHolder<RecipeType<?>, RecipeType<IComplexRecipe>> FUEL_GENERATING = simpleType("fuel_generating");
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<IComplexRecipe>> FUEL_GENERATING_SER = SERIALIZERS.register("fuel_generating", () -> new ComplexRecipeSerializer(FUEL_GENERATING));
 
   public static DeferredHolder<RecipeType<?>, RecipeType<IComplexRecipe>> simpleType(String id) {
     return TYPES.register(id, () -> RecipeType.simple(Ten4.id(id)));

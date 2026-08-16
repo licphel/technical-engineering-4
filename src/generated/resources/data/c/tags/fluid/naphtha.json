@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "ten4:naphtha",
+      "required": false
+    },
+    {
+      "id": "ten4:naphtha_flowing",
+      "required": false
+    }
+  ]
+}

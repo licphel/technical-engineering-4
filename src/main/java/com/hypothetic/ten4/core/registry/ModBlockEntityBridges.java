@@ -13,9 +13,10 @@ public final class ModBlockEntityBridges {
 
     // Generators
     BlockEntityBridges.register(ModBlocks.HEAT_GENERATOR, ModBlockEntities.HEAT_GENERATOR);
+    BlockEntityBridges.register(ModBlocks.FUEL_GENERATOR, ModBlockEntities.FUEL_GENERATOR);
 
     // Storage
-    BlockEntityBridges.register(ModBlocks.TANK, ModBlockEntities.TANK);
+    BlockEntityBridges.register(ModBlocks.LIQUID_UNIT, ModBlockEntities.LIQUID_UNIT);
 
     // DuctTiers
     BlockEntityBridges.register(ModBlocks.COPPER_ENERGY_DUCT, ModBlockEntities.COPPER_ENERGY_DUCT);

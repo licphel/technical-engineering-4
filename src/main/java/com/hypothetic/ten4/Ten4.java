@@ -15,7 +15,7 @@ public class Ten4 {
   public static final Logger LOGGER = LogManager.getLogger();
   public static final String ID = "ten4";
   public static final String VERSION = "26.1.3";
-  public static final boolean DATA_GEN = false;
+  public static final boolean DATA_GEN = true;
 
   public Ten4(IEventBus modBus, ModContainer container) {
     ModBlockEntityBridges.createMapBeforeRegistry();

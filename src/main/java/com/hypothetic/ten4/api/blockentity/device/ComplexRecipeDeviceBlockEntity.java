@@ -1,6 +1,8 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
+import com.hypothetic.ten4.api.blockentity.IClickFluidInteractable;
 import com.hypothetic.ten4.api.blockentity.ITickable;
+import com.hypothetic.ten4.api.capability.fluid.FluidClickInteractionHandler;
 import com.hypothetic.ten4.api.recipe.Complex;
 import com.hypothetic.ten4.api.recipe.IComplexRecipe;
 import net.minecraft.core.BlockPos;
@@ -10,9 +12,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
-public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDeviceBlockEntity<RecipeInput, IComplexRecipe> implements ITickable {
+public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDeviceBlockEntity<RecipeInput, IComplexRecipe>
+    implements ITickable, IClickFluidInteractable {
   public ComplexRecipeDeviceBlockEntity(BlockPos pos, BlockState state) {
     super(pos, state);
+  }
+
+  @Override
+  public IFluidHandler getFluidInputHandler() {
+    return new FluidClickInteractionHandler(fluidInventory, inputTanks);
+  }
+
+  @Override
+  public IFluidHandler getFluidOutputHandler() {
+    return new FluidClickInteractionHandler(fluidInventory, outputTanks);
   }
 
   @Override
@@ -42,13 +55,13 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
       return false;
     }
 
-    if (!isItemStrictInput()) {
+    if (!isFluidStrictInput()) {
       return true;
     }
 
     return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
         .anyMatch(h -> {
-          for (Complex in : h.value().itemInputs()) {
+          for (Complex in : h.value().fluidInputs()) {
             if (in.test(stack)) {
               return true;
             }
@@ -157,7 +170,7 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
         FluidStack f = fluidInventory.getFluidInTank(i);
         if (in.containsFluid(f.getFluid())) {
           int t = Math.min(n, f.getAmount());
-          fluidInventory.getTank(i).drain(t, IFluidHandler.FluidAction.EXECUTE);
+          fluidInventory.getTank(i).drain(t, IFluidHandler.FluidAction.EXECUTE, true);
           n -= t;
         }
       }

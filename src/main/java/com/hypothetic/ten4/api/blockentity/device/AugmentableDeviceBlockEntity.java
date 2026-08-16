@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
+import java.util.function.IntSupplier;
 
 public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEntity {
   public static final int AUGMENT_CAPACITY = 4;
@@ -26,9 +27,8 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
     augments.setChangeListener(this::setChanged);
     augments.setStillValidCheck(p -> level != null && level.getBlockEntity(worldPosition) == this);
     for (int i = 0; i < AUGMENT_CAPACITY; i++) {
-      augments.add(new ItemSlot(SlotOption.BOTH)
+      augments.add(new ItemSlot(SlotOption.BOTH, AUGMENT_SLOT_LIMIT)
           .setValidator(s -> s.getItem() instanceof IAugment<?>)
-          .setSlotLimit(AUGMENT_SLOT_LIMIT)
       );
     }
   }
@@ -63,27 +63,27 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
 
   @Override
   public int getEnergyCapacity() {
-    return applyAugments(IAugment.AugmentableField.ENERGY_CAPACITY, super.getEnergyCapacity());
+    return applyAugments(IAugment.AugmentableField.ENERGY_CAPACITY, info.energyCapacity);
   }
 
   @Override
   public int getEnergyThroughput() {
-    return applyAugments(IAugment.AugmentableField.ENERGY_THROUGHPUT, super.getEnergyThroughput());
+    return applyAugments(IAugment.AugmentableField.ENERGY_THROUGHPUT, info.energyThroughput);
   }
 
   @Override
   public int getFluidThroughput() {
-    return applyAugments(IAugment.AugmentableField.FLUID_THROUGHPUT, super.getFluidThroughput());
+    return applyAugments(IAugment.AugmentableField.FLUID_THROUGHPUT, info.fluidThroughput);
   }
 
   @Override
   public int getItemThroughput() {
-    return applyAugments(IAugment.AugmentableField.ITEM_THROUGHPUT, super.getItemThroughput());
+    return applyAugments(IAugment.AugmentableField.ITEM_THROUGHPUT, info.itemThroughput);
   }
 
   @Override
   public int getActualPower() {
-    return applyAugments(IAugment.AugmentableField.POWER, super.getActualPower());
+    return applyAugments(IAugment.AugmentableField.POWER, info.power);
   }
 
   @Override
@@ -116,5 +116,17 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
     if (countAugment(MuteAugment.class) == 0) {
       onSoundPlay();
     }
+  }
+
+  public IntSupplier augSlotLimiter() {
+    return augSlotLimiter(Integer.MAX_VALUE);
+  }
+
+  public IntSupplier augSlotLimiter(int capacity) {
+    return () -> applyAugments(IAugment.AugmentableField.SLOT_CAPACITY, capacity);
+  }
+
+  public IntSupplier augTankLimiter(int capacity) {
+    return () -> applyAugments(IAugment.AugmentableField.TANK_CAPACITY, capacity);
   }
 }

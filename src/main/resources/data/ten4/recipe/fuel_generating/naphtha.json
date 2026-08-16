@@ -1,0 +1,11 @@
+{
+  "type": "ten4:fuel_generating",
+  "inputs": [
+    {
+      "fluid_tag": "c:naphtha",
+      "amount": 10
+    }
+  ],
+  "outputs": [],
+  "time": 250
+}

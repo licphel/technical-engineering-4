@@ -45,6 +45,12 @@ public final class CfgCommon {
     public final ModConfigSpec.IntValue heatGeneratorEnergyThroughput;
     public final ModConfigSpec.IntValue heatGeneratorItemThroughput;
 
+    public final ModConfigSpec.IntValue fuelGeneratorPower;
+    public final ModConfigSpec.IntValue fuelGeneratorEnergyCapacity;
+    public final ModConfigSpec.IntValue fuelGeneratorEnergyThroughput;
+    public final ModConfigSpec.IntValue fuelGeneratorFluidCapacity;
+    public final ModConfigSpec.IntValue fuelGeneratorFluidThroughput;
+
     public final ModConfigSpec.DoubleValue overclockingMultiplier;
     public final ModConfigSpec.DoubleValue energyCoilMultiplier;
     public final ModConfigSpec.DoubleValue pistonMultiplier;
@@ -83,6 +89,12 @@ public final class CfgCommon {
       heatGeneratorEnergyThroughput = b.defineInRange("heatGeneratorEnergyThroughput", 100, 0, Integer.MAX_VALUE);
       heatGeneratorItemThroughput = b.defineInRange("heatGeneratorItemThroughput", 1, 0, Integer.MAX_VALUE);
 
+      fuelGeneratorPower = b.defineInRange("fuelGeneratorPower", 80, 0, Integer.MAX_VALUE);
+      fuelGeneratorEnergyCapacity = b.defineInRange("fuelGeneratorEnergyCapacity", 40000, 0, Integer.MAX_VALUE);
+      fuelGeneratorEnergyThroughput = b.defineInRange("fuelGeneratorEnergyThroughput", 400, 0, Integer.MAX_VALUE);
+      fuelGeneratorFluidCapacity = b.defineInRange("fuelGeneratorFluidCapacity", 10000, 0, Integer.MAX_VALUE);
+      fuelGeneratorFluidThroughput = b.defineInRange("fuelGeneratorFluidThroughput", 100, 0, Integer.MAX_VALUE);
+
       overclockingMultiplier = b.defineInRange("overclockingMultiplier", 1.25, 1.0, 100.0);
       energyCoilMultiplier = b.defineInRange("energyCoilMultiplier", 2.0, 1.0, 100.0);
       pistonMultiplier = b.defineInRange("pistonMultiplier", 2.0, 1.0, 100.0);
@@ -115,16 +127,16 @@ public final class CfgCommon {
     public final ModConfigSpec.DoubleValue asphaltSpeedBoost;
     public final ModConfigSpec.DoubleValue asphaltJumpBoost;
 
-    public final ModConfigSpec.IntValue tankCapacity;
-    public final ModConfigSpec.IntValue tankFluidThroughput;
+    public final ModConfigSpec.IntValue liquidUnitCapacity;
+    public final ModConfigSpec.IntValue liquidUnitFluidThroughput;
 
     Others(ModConfigSpec.Builder b) {
       b.push("others");
-      asphaltSpeedBoost = b.defineInRange("asphaltSpeedBoost", 0.3, 0.0, 1.0);
-      asphaltJumpBoost = b.defineInRange("asphaltJumpBoost", 0.5, 0.0, 1.0);
+      asphaltSpeedBoost = b.defineInRange("asphaltSpeedBoost", 0.25, 0.0, 1.0);
+      asphaltJumpBoost = b.defineInRange("asphaltJumpBoost", 0.25, 0.0, 1.0);
 
-      tankCapacity = b.defineInRange("tankCapacity", 100_000, 0, Integer.MAX_VALUE);
-      tankFluidThroughput = b.defineInRange("tankFluidThroughput", 1000, 0, Integer.MAX_VALUE);
+      liquidUnitCapacity = b.defineInRange("liquidUnitCapacity", 200_000, 0, Integer.MAX_VALUE);
+      liquidUnitFluidThroughput = b.defineInRange("liquidUnitFluidThroughput", 1000, 0, Integer.MAX_VALUE);
       b.pop();
     }
   }

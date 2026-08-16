@@ -26,7 +26,8 @@ public class HeatGeneratorBlockEntity extends SimpleGeneratorBlockEntity {
   @Override
   protected DeviceInfo makeDeviceInfo() {
     return DeviceTiers.HEAT_GENERATOR.get()
-        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput));
+        .addSlot(new ItemSlot(SlotOption.INPUT, augSlotLimiter())
+            .setValidator(this::isValidInput));
   }
 
   @Override

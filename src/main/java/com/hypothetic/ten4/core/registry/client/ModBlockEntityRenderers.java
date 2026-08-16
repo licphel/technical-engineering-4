@@ -1,11 +1,14 @@
 package com.hypothetic.ten4.core.registry.client;
 
 import com.hypothetic.ten4.Ten4;
+import com.hypothetic.ten4.core.client.renderer.LiquidUnitItemRenderer;
 import com.hypothetic.ten4.core.client.renderer.RenderEnergyDuct;
 import com.hypothetic.ten4.core.client.renderer.RenderFluidDuct;
 import com.hypothetic.ten4.core.client.renderer.RenderItemDuct;
-import com.hypothetic.ten4.core.client.renderer.RenderTankBlock;
+import com.hypothetic.ten4.core.client.renderer.RenderLiquidUnitBlock;
 import com.hypothetic.ten4.core.registry.ModBlockEntities;
+import com.hypothetic.ten4.core.registry.ModItems;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -13,6 +16,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 @EventBusSubscriber(modid = Ten4.ID, value = Dist.CLIENT)
 public class ModBlockEntityRenderers {
@@ -28,7 +33,18 @@ public class ModBlockEntityRenderers {
     register(event, ModBlockEntities.OPAQUE_COPPER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/opaque_copper_fluid_duct")).setOpaque());
     register(event, ModBlockEntities.COPPER_CONTROLLER_FLUID_DUCT.get(), ctx -> new RenderFluidDuct(ctx, Ten4.id("block/duct/copper_controller_fluid_duct")));
 
-    register(event, ModBlockEntities.TANK.get(), RenderTankBlock::new);
+    register(event, ModBlockEntities.LIQUID_UNIT.get(), RenderLiquidUnitBlock::new);
+  }
+
+  @SubscribeEvent
+  public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+    // IClientItemExtensions for the liquid unit — renders stored fluid in the item form
+    event.registerItem(new IClientItemExtensions() {
+      @Override
+      public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+        return LiquidUnitItemRenderer.INSTANCE;
+      }
+    }, ModItems.LIQUID_UNIT.get());
   }
 
   @SuppressWarnings("unchecked")

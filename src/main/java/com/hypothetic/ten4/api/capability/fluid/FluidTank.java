@@ -7,15 +7,21 @@ import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 
 public class FluidTank implements IFluidTank, IFluidHandler {
   protected @Nullable Predicate<FluidStack> validator;
-  protected TankOption option = TankOption.BOTH;
+  protected TankOption option;
   protected FluidStack fluid = FluidStack.EMPTY;
-  protected int capacity;
+  protected IntSupplier capacity;
 
   public FluidTank(TankOption option, int capacity) {
+    this.option = option;
+    this.capacity = () -> capacity;
+  }
+
+  public FluidTank(TankOption option, IntSupplier capacity) {
     this.option = option;
     this.capacity = capacity;
   }
@@ -36,12 +42,7 @@ public class FluidTank implements IFluidTank, IFluidHandler {
   }
 
   public int getCapacity() {
-    return capacity;
-  }
-
-  public FluidTank setCapacity(int capacity) {
-    this.capacity = capacity;
-    return this;
+    return capacity.getAsInt();
   }
 
   public boolean isFluidValid(FluidStack stack) {
@@ -80,6 +81,7 @@ public class FluidTank implements IFluidTank, IFluidHandler {
     if (!force && !isFluidValid(resource)) {
       return 0;
     }
+    int capacity = this.capacity.getAsInt();
     if (action.simulate()) {
       if (fluid.isEmpty()) {
         return Math.min(capacity, resource.getAmount());
@@ -172,7 +174,7 @@ public class FluidTank implements IFluidTank, IFluidHandler {
   }
 
   public int getSpace() {
-    return Math.max(0, capacity - fluid.getAmount());
+    return Math.max(0, capacity.getAsInt() - fluid.getAmount());
   }
 
   public boolean canDrain() {

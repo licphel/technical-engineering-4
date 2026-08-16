@@ -32,7 +32,8 @@ public class ModMenus {
 
   // Generators
   public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> HEAT_GENERATOR = MENUS.register("heat_generator", DEVICE_MENU_GENERATOR);
+  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> FUEL_GENERATOR = MENUS.register("fuel_generator", DEVICE_MENU_GENERATOR);
 
   // Storage
-  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> TANK = MENUS.register("tank", DEVICE_MENU_GENERATOR);
+  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> LIQUID_UNIT = MENUS.register("liquid_unit", DEVICE_MENU_GENERATOR);
 }

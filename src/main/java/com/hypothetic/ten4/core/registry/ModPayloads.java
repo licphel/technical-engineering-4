@@ -3,6 +3,7 @@ package com.hypothetic.ten4.core.registry;
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.network.device.DeviceConfigPayload;
 import com.hypothetic.ten4.api.network.device.IoFacePayload;
+import com.hypothetic.ten4.api.network.device.LiquidUnitFluidPayload;
 import com.hypothetic.ten4.api.network.device.SigmodePayload;
 import com.hypothetic.ten4.api.network.duct.DuctConnectionPayload;
 import com.hypothetic.ten4.api.network.duct.DuctEnergyPayload;
@@ -25,5 +26,6 @@ public final class ModPayloads {
     r.playToClient(DuctEnergyPayload.TYPE, DuctEnergyPayload.CODEC, DuctEnergyPayload::handle);
     r.playToClient(DuctItemPayload.TYPE, DuctItemPayload.CODEC, DuctItemPayload::handle);
     r.playToClient(DuctFluidPayload.TYPE, DuctFluidPayload.CODEC, DuctFluidPayload::handle);
+    r.playToClient(LiquidUnitFluidPayload.TYPE, LiquidUnitFluidPayload.CODEC, LiquidUnitFluidPayload::handle);
   }
 }

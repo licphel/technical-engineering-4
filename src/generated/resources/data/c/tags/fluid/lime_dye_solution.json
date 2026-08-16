@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "ten4:lime_dye_solution",
+      "required": false
+    },
+    {
+      "id": "ten4:lime_dye_solution_flowing",
+      "required": false
+    }
+  ]
+}

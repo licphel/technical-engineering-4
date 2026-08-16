@@ -63,10 +63,10 @@ public class RefinerBlockEntity extends ComplexRecipeDeviceBlockEntity {
   @Override
   protected DeviceInfo makeDeviceInfo() {
     return DeviceTiers.REFINER.get()
-        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput))
-        .addSlot(new ItemSlot(SlotOption.OUTPUT))
-        .addTank(new FluidTank(TankOption.INPUT, 10_000).setValidator(this::isValidInput))
-        .addTank(new FluidTank(TankOption.OUTPUT, 10_000));
+        .addSlot(new ItemSlot(SlotOption.INPUT, augSlotLimiter()).setValidator(this::isValidInput))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT, augSlotLimiter()))
+        .addTank(new FluidTank(TankOption.INPUT, augTankLimiter(10_000)).setValidator(this::isValidInput))
+        .addTank(new FluidTank(TankOption.OUTPUT, augTankLimiter(10_000)));
   }
 
   @Override

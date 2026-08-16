@@ -42,7 +42,9 @@ public class BlockTagData extends net.minecraft.data.tags.TagsProvider<Block> {
         .add(key(ModBlocks.PRESS))
         .add(key(ModBlocks.SMELTER))
         .add(key(ModBlocks.WATER_PUMP))
-        .add(key(ModBlocks.HEAT_GENERATOR));
+        .add(key(ModBlocks.HEAT_GENERATOR))
+        .add(key(ModBlocks.FUEL_GENERATOR))
+        .add(key(ModBlocks.LIQUID_UNIT));
 
     tag(BlockTags.MINEABLE_WITH_SHOVEL)
         .add(key(ModBlocks.OIL_SAND));

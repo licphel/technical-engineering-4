@@ -1,6 +1,6 @@
 package com.hypothetic.ten4.compat.jei.core;
 
-import com.hypothetic.ten4.compat.jei.ModRecipeCategory;
+import com.hypothetic.ten4.compat.jei.JeiModCategory;
 import com.hypothetic.ten4.core.registry.ModBlocks;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
@@ -9,7 +9,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.world.item.ItemStack;
 
-public class HeatGeneratingCategory extends ModRecipeCategory<ItemStack> {
+public class HeatGeneratingCategory extends JeiModCategory<ItemStack> {
   public HeatGeneratingCategory(IGuiHelper helper, RecipeType<ItemStack> type) {
     super(helper, type, ModBlocks.HEAT_GENERATOR.get().asItem().getDefaultInstance());
   }

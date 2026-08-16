@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "ten4:kerosene",
+      "required": false
+    },
+    {
+      "id": "ten4:kerosene_flowing",
+      "required": false
+    }
+  ]
+}

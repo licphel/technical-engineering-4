@@ -1,5 +1,6 @@
 package com.hypothetic.ten4.core.blockentity.device;
 
+import com.hypothetic.ten4.api.blockentity.IClickFluidInteractable;
 import com.hypothetic.ten4.api.blockentity.ITickable;
 import com.hypothetic.ten4.api.blockentity.device.AugmentableDeviceBlockEntity;
 import com.hypothetic.ten4.api.blockentity.device.DeviceInfo;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implements ITickable {
+public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implements ITickable, IClickFluidInteractable {
   public static final SyncedFluidStack TANK_0 = new SyncedFluidStack(0);
 
   public WaterPumpBlockEntity(BlockPos pos, BlockState state) {
@@ -40,7 +41,7 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
   @Override
   protected DeviceInfo makeDeviceInfo() {
     return DeviceTiers.WATER_PUMP.get()
-        .addTank(new FluidTank(TankOption.OUTPUT, 20_000));
+        .addTank(new FluidTank(TankOption.OUTPUT, augTankLimiter(10_000)));
   }
 
   @Override
@@ -119,5 +120,15 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
     syncer.set(BuiltinSyncedFields.MAX_ENERGY, getEnergyCapacity());
     synchronizeBasicData();
     TANK_0.sync(syncer, fluidInventory.getTank(0));
+  }
+
+  @Override
+  public IFluidHandler getFluidInputHandler() {
+    return fluidInventory;
+  }
+
+  @Override
+  public IFluidHandler getFluidOutputHandler() {
+    return fluidInventory;
   }
 }

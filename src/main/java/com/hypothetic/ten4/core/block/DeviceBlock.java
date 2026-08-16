@@ -1,6 +1,7 @@
 package com.hypothetic.ten4.core.block;
 
 import com.hypothetic.ten4.api.block.BridgedEntityBlock;
+import com.hypothetic.ten4.api.blockentity.IClickFluidInteractable;
 import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
 import com.hypothetic.ten4.api.blockentity.device.ComparatorMode;
 import com.mojang.serialization.MapCodec;
@@ -67,6 +68,11 @@ public class DeviceBlock extends BridgedEntityBlock {
       return ItemInteractionResult.SUCCESS;
     }
     BlockEntity be = level.getBlockEntity(pos);
+    if (be instanceof IClickFluidInteractable fluid) {
+      if (fluid.tryInteractFluid(level, pos, player, hand, stack, hit)) {
+        return ItemInteractionResult.sidedSuccess(level.isClientSide());
+      }
+    }
     if (be instanceof MenuProvider menuProvider) {
       player.openMenu(menuProvider, pos);
     }

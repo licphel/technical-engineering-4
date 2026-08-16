@@ -7,13 +7,13 @@ import com.hypothetic.ten4.core.registry.config.ModConfigs;
 import java.util.function.Supplier;
 
 public final class OtherTiers {
-  public static Supplier<DeviceInfo> TANK;
+  public static Supplier<DeviceInfo> LIQUID_UNIT;
 
   static {
     CfgCommon.Others o = ModConfigs.COMMON.others;
-    TANK = () -> new DeviceInfo()
+    LIQUID_UNIT = () -> new DeviceInfo()
         .enableFluid()
-        .setFluidThroughput(o.tankFluidThroughput.get());
+        .setFluidThroughput(o.liquidUnitFluidThroughput.get());
   }
 
   private OtherTiers() {

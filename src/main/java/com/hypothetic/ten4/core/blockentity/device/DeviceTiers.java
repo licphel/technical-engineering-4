@@ -13,6 +13,7 @@ public final class DeviceTiers {
   public static Supplier<DeviceInfo> REFINER;
   public static Supplier<DeviceInfo> WATER_PUMP;
   public static Supplier<DeviceInfo> HEAT_GENERATOR;
+  public static Supplier<DeviceInfo> FUEL_GENERATOR;
 
   static {
     CfgCommon.Devices d = ModConfigs.COMMON.devices;
@@ -60,6 +61,13 @@ public final class DeviceTiers {
         .setEnergyCapacity(d.heatGeneratorEnergyCapacity.get())
         .setEnergyThroughput(d.heatGeneratorEnergyThroughput.get())
         .setItemThroughput(d.heatGeneratorItemThroughput.get());
+    FUEL_GENERATOR = () -> new DeviceInfo()
+        .enableEnergy()
+        .enableFluid()
+        .setPower(d.fuelGeneratorPower.get())
+        .setEnergyCapacity(d.fuelGeneratorEnergyCapacity.get())
+        .setEnergyThroughput(d.fuelGeneratorEnergyThroughput.get())
+        .setFluidThroughput(d.fuelGeneratorFluidThroughput.get());
   }
 
   private DeviceTiers() {

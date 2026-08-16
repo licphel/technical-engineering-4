@@ -27,9 +27,11 @@ public class PressBlockEntity extends ComplexRecipeDeviceBlockEntity {
   @Override
   protected DeviceInfo makeDeviceInfo() {
     return DeviceTiers.PRESS.get()
-        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(s -> isValidInput(s) && !s.is(ItemTagData.DIES)))
-        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(s -> s.is(ItemTagData.DIES)))
-        .addSlot(new ItemSlot(SlotOption.OUTPUT));
+        .addSlot(new ItemSlot(SlotOption.INPUT, augSlotLimiter())
+            .setValidator(s -> isValidInput(s) && !s.is(ItemTagData.DIES)))
+        .addSlot(new ItemSlot(SlotOption.INPUT, augSlotLimiter())
+            .setValidator(s -> s.is(ItemTagData.DIES)))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT, augSlotLimiter()));
   }
 
   @Override

@@ -26,11 +26,11 @@ public class PulverizerBlockEntity extends ComplexRecipeDeviceBlockEntity {
   @Override
   protected DeviceInfo makeDeviceInfo() {
     return DeviceTiers.PULVERIZER.get()
-        .addSlot(new ItemSlot(SlotOption.INPUT).setValidator(this::isValidInput))
-        .addSlot(new ItemSlot(SlotOption.OUTPUT))
-        .addSlot(new ItemSlot(SlotOption.OUTPUT))
-        .addSlot(new ItemSlot(SlotOption.OUTPUT))
-        .addSlot(new ItemSlot(SlotOption.OUTPUT));
+        .addSlot(new ItemSlot(SlotOption.INPUT, augSlotLimiter()).setValidator(this::isValidInput))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT, augSlotLimiter()))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT, augSlotLimiter()))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT, augSlotLimiter()))
+        .addSlot(new ItemSlot(SlotOption.OUTPUT, augSlotLimiter()));
   }
 
   @Override

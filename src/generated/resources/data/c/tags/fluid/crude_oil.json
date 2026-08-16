@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "ten4:crude_oil",
+      "required": false
+    },
+    {
+      "id": "ten4:crude_oil_flowing",
+      "required": false
+    }
+  ]
+}

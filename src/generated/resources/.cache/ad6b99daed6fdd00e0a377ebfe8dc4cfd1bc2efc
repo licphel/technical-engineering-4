@@ -1,0 +1,18 @@
+// 1.21.1	2026-08-15T22:24:20.4493277	Tags for minecraft:block mod id ten4
+47ab96b43ee2a96013f27979e98712c37c14a446 data/c/tags/block/ores.json
+3abb788b304a973f751689a54cee29037f281ad8 data/c/tags/block/ores/monazite.json
+b3083b90140b28b81404595f1e60cfab8ba0de7d data/c/tags/block/ores/sulfur.json
+60c47c4d5b3eeab56f3124600b3a2355915638ae data/c/tags/block/ores/tin.json
+7654e8c00e321071aab1eee2173a32edc7b1d3b2 data/c/tags/block/ores/titanium.json
+a6fa032f158c67e49b5cd6643ac956262b71f061 data/c/tags/block/storage_blocks.json
+312277f46c440ba43e25cf87a8e0fa5a085c4582 data/c/tags/block/storage_blocks/borax.json
+3a8175b7f321324ef9101884725e564fdc94ee08 data/c/tags/block/storage_blocks/raw_tin.json
+618ce9cb3a54c76fd345d6af8450f387e204bf26 data/c/tags/block/storage_blocks/raw_titanium.json
+ff6a117e6bebe023210de47b3eeec9b9a8c62915 data/c/tags/block/storage_blocks/tin.json
+bba4f2ae3796e29aff4016eee464028abfadb788 data/c/tags/block/storage_blocks/titanium.json
+79af76843cb33e2d18ba74e605c93e49f792f600 data/minecraft/tags/block/mineable/pickaxe.json
+a782928755ad529ce3c717ee5ec4cec14950fba5 data/minecraft/tags/block/mineable/shovel.json
+d81d9f2e3d7c0fa5344e9e7a529270b3903bab9d data/minecraft/tags/block/needs_iron_tool.json
+edfbfe516f03f98605d7471b683e88fbe4b7b608 data/minecraft/tags/block/needs_stone_tool.json
+f145f500286e5a2711ec554f8b162f9e7994ff57 data/ten4/tags/block/devices.json
+5f2e3e282f6673ef5cc667f261baf5c7e41e386b data/ten4/tags/block/ducts.json

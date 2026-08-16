@@ -45,6 +45,8 @@ public class BlockLootData extends BlockLootSubProvider {
     dropSelf(ModBlocks.REFINER.get());
     dropSelf(ModBlocks.WATER_PUMP.get());
     dropSelf(ModBlocks.HEAT_GENERATOR.get());
+    dropSelf(ModBlocks.FUEL_GENERATOR.get());
+    dropSelf(ModBlocks.LIQUID_UNIT.get());
 
     // Ducts
     dropSelf(ModBlocks.COPPER_ENERGY_DUCT.get());

@@ -618,12 +618,7 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
 
   @Override
   public String createTranslationKey() {
-    ResourceLocation id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(getType());
-    if (id == null) {
-      Ten4.LOGGER.warn("Cannot find BlockEntityType: '{}'", getType());
-      return "";
-    }
-    return Ten4.lang(id.getPath());
+    return getBlockState().getBlock().getDescriptionId();
   }
 
   @Override

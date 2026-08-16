@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "ten4:liquid_experience",
+      "required": false
+    },
+    {
+      "id": "ten4:liquid_experience_flowing",
+      "required": false
+    }
+  ]
+}

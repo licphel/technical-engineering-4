@@ -1,0 +1,25 @@
+// 1.21.1	2026-08-15T22:24:20.4473167	Tags for minecraft:fluid mod id ten4
+2790f743014cafe8304a907c087e7ec410dbb322 data/c/tags/fluid/black_dye_solution.json
+15dab1b37e8bbb6e842207fd23ab1127e0cb3397 data/c/tags/fluid/blue_dye_solution.json
+8c156ca5b09c1fa8631e406db934613e96b5edce data/c/tags/fluid/brown_dye_solution.json
+c58dfdd22dc0d89ebecd75d59389300c82e31f3a data/c/tags/fluid/crude_oil.json
+1542112df22eb384f79d70a8c59ee3b1081f6892 data/c/tags/fluid/cyan_dye_solution.json
+5cf7e1fee8e381f67c4e75a348a3cd99c5b50bb4 data/c/tags/fluid/gray_dye_solution.json
+5f1c40cb54f9ee2fcb97fee988c1b0e8e310f153 data/c/tags/fluid/green_dye_solution.json
+56836acb9d92b2e20f3a3188adf5b2c1b40330e1 data/c/tags/fluid/kerosene.json
+7f0a25a86233cbc9fc2be5e8094670e5208844b9 data/c/tags/fluid/light_blue_dye_solution.json
+007b08c0fed196965192803dd51f56ca84637a2d data/c/tags/fluid/light_gray_dye_solution.json
+a3f27c2e6208dfb563fd2a10a36e8c1e313c31b4 data/c/tags/fluid/lime_dye_solution.json
+25d99b0d0eab5e5fe881081fc06bcc20cd57fd49 data/c/tags/fluid/liquid_experience.json
+f045ab5e84bf7c7ec1d3cc251a5327c4437c6058 data/c/tags/fluid/liquid_redstone.json
+7460c1fbcf38fea682bdfd37e696b9c5bd72cdca data/c/tags/fluid/magenta_dye_solution.json
+3b72addf69deb27bacde610e1b9eadb996f037be data/c/tags/fluid/naphtha.json
+ef0fc67411e0426ea03c00fb7cb4768b817632e1 data/c/tags/fluid/nutrient_solution.json
+e8141f4a4b6eb5cc8a53e282272cfd26ca73cc73 data/c/tags/fluid/orange_dye_solution.json
+8a789c09d279e4561894764de28696160277c996 data/c/tags/fluid/pink_dye_solution.json
+ba4b88746ccc5aff8bcb8f996eccf2f84ca1cd25 data/c/tags/fluid/purple_dye_solution.json
+f6378dfd8383d95699448c80d93456e653c39b4f data/c/tags/fluid/red_dye_solution.json
+0d5984f823113d7e787d5ed665756493b47e2d07 data/c/tags/fluid/toran_concentrate.json
+92ce97348ca215ea1c77e05a0e63c9285d68fed9 data/c/tags/fluid/white_dye_solution.json
+90ff48942cd70538777047c5d88acde1cc28dc9e data/c/tags/fluid/yellow_dye_solution.json
+25d99b0d0eab5e5fe881081fc06bcc20cd57fd49 data/minecraft/tags/fluid/water.json

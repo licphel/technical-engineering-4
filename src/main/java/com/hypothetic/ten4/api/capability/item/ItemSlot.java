@@ -6,19 +6,27 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 
 public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
   protected @Nullable Predicate<ItemStack> validator;
-  protected SlotOption type = SlotOption.BOTH;
+  protected SlotOption type;
   protected ItemStack stack = ItemStack.EMPTY;
-  protected int slotLimit = Integer.MAX_VALUE;
-
-  public ItemSlot() {
-  }
+  protected IntSupplier slotLimit = () -> Integer.MAX_VALUE;
 
   public ItemSlot(SlotOption type) {
     this.type = type;
+  }
+
+  public ItemSlot(SlotOption type, int slotLimit) {
+    this.type = type;
+    this.slotLimit = () -> slotLimit;
+  }
+
+  public ItemSlot(SlotOption type, IntSupplier slotLimit) {
+    this.type = type;
+    this.slotLimit = slotLimit;
   }
 
   public ItemSlot setValidator(@Nullable Predicate<ItemStack> v) {
@@ -57,14 +65,9 @@ public class ItemSlot implements IItemSlot, IItemHandlerModifiable {
   @Override
   public int getSlotLimit() {
     if (stack.isEmpty()) {
-      return slotLimit;
+      return slotLimit.getAsInt();
     }
-    return Math.min(stack.getMaxStackSize(), slotLimit);
-  }
-
-  public ItemSlot setSlotLimit(int slotLimit) {
-    this.slotLimit = slotLimit;
-    return this;
+    return Math.min(stack.getMaxStackSize(), slotLimit.getAsInt());
   }
 
   @Override

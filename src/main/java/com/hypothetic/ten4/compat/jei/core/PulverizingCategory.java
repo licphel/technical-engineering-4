@@ -2,7 +2,7 @@ package com.hypothetic.ten4.compat.jei.core;
 
 import com.hypothetic.ten4.api.recipe.Complex;
 import com.hypothetic.ten4.api.recipe.IComplexRecipe;
-import com.hypothetic.ten4.compat.jei.ModRecipeCategory;
+import com.hypothetic.ten4.compat.jei.JeiModCategory;
 import com.hypothetic.ten4.core.registry.ModBlocks;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
@@ -12,7 +12,7 @@ import mezz.jei.api.recipe.RecipeType;
 
 import java.util.List;
 
-public class PulverizingCategory extends ModRecipeCategory<IComplexRecipe> {
+public class PulverizingCategory extends JeiModCategory<IComplexRecipe> {
   public PulverizingCategory(IGuiHelper helper, RecipeType<IComplexRecipe> type) {
     super(helper, type, ModBlocks.PULVERIZER.get().asItem().getDefaultInstance());
   }

@@ -19,6 +19,8 @@ public interface IAugment<T extends AugmentableDeviceBlockEntity> {
     ENERGY_THROUGHPUT,
     ENERGY_CAPACITY,
     ITEM_THROUGHPUT,
-    FLUID_THROUGHPUT
+    FLUID_THROUGHPUT,
+    SLOT_CAPACITY,
+    TANK_CAPACITY
   }
 }
