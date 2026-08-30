@@ -37,7 +37,7 @@ public class RedstoneModeButton extends Button {
   public void onRender(EnhancedGuiGraphics g, float pt) {
     int sm = reader.getInt(BuiltinSyncedFields.SIG_MODE);
     int u = sm * 12;
-    g.draw(TextureRegion.of(BuiltinComponents.PANELS, u, 190, 12, 12), x, y, width, height);
+    g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, u, 190, 12, 12), x, y, width, height);
   }
 
   @Override

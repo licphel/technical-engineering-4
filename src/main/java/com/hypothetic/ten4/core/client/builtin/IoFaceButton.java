@@ -41,7 +41,7 @@ public class IoFaceButton extends Button {
 
   private static void renderFaceModeIcon(EnhancedGuiGraphics g, int x, int y, FaceMode mode) {
     int u = 52 + 9 * mode.ordinal();
-    g.draw(TextureRegion.of(BuiltinComponents.PANELS, u, 218, 7, 8), x, y);
+    g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, u, 218, 7, 8), x, y);
   }
 
   @Override

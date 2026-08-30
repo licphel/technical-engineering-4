@@ -1,7 +1,7 @@
 package com.hypothetic.ten4.api.blockentity.duct;
 
+import com.hypothetic.ten4.api.blockentity.ILightProvider;
 import com.hypothetic.ten4.api.blockentity.ITickable;
-import com.hypothetic.ten4.core.client.renderer.RenderTransmitterBlock;
 import com.hypothetic.ten4.api.network.PacketDist;
 import com.hypothetic.ten4.api.network.duct.DuctFluidPayload;
 import com.hypothetic.ten4.api.transmission.fluid.FluidNetwork;
@@ -77,8 +77,7 @@ public class FluidDuctBlockEntity extends DuctBlockEntity<FluidTransmitter> impl
       float scale = net != null ? net.currentScale
           : (transmitter.getCapacity() > 0 ? (float) transmitter.getBufferAmount() / transmitter.getCapacity() : 0);
       FluidStack fluid = net != null ? net.getFluid() : transmitter.getBuffer();
-      PacketDist.sendToNearbyPlayers(sl, new DuctFluidPayload(worldPosition, scale, fluid), getBlockPos(),
-          RenderTransmitterBlock.LOD_DISTANCE.getAsInt());
+      PacketDist.sendToNearbyPlayers(sl, new DuctFluidPayload(worldPosition, scale, fluid), getBlockPos(), 32D);
     }
   }
 }

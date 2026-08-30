@@ -23,8 +23,9 @@ public class RefinerScreen extends ComponentedContainerScreen<ContainerMenu> {
   protected void buildElements() {
     add(BuiltinComponents.standardDeviceUI(this));
     add(BuiltinComponents.energyGauge(9, 18, menu.fieldsReader()));
-    add(BuiltinComponents.progressGauge(81, 35, menu.fieldsReader()));
+    add(BuiltinComponents.progressGauge(78, 35, menu.fieldsReader()));
     add(BuiltinComponents.fluidGauge(29, 18, menu.fieldsReader(), RefinerBlockEntity.TANK_0));
-    add(BuiltinComponents.fluidGauge(137, 18, menu.fieldsReader(), RefinerBlockEntity.TANK_1));
+    add(BuiltinComponents.fluidGauge(131, 18, menu.fieldsReader(), RefinerBlockEntity.TANK_1));
+    add(BuiltinComponents.fluidGauge(149, 18, menu.fieldsReader(), RefinerBlockEntity.TANK_2));
   }
 }

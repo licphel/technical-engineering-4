@@ -121,14 +121,4 @@ public class WaterPumpBlockEntity extends AugmentableDeviceBlockEntity implement
     synchronizeBasicData();
     TANK_0.sync(syncer, fluidInventory.getTank(0));
   }
-
-  @Override
-  public IFluidHandler getFluidInputHandler() {
-    return fluidInventory;
-  }
-
-  @Override
-  public IFluidHandler getFluidOutputHandler() {
-    return fluidInventory;
-  }
 }

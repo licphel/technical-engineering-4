@@ -17,12 +17,21 @@ public class ScrollableTextView extends UiComponent {
     this.renderContent = renderContent;
   }
 
-  public ScrollableTextView padding(int px) { this.padding = px; return this; }
-  public ScrollableTextView noScrollbar() { this.showScrollbar = false; return this; }
+  public ScrollableTextView padding(int px) {
+    this.padding = px;
+    return this;
+  }
+
+  public ScrollableTextView noScrollbar() {
+    this.showScrollbar = false;
+    return this;
+  }
 
   @Override
   public void onRender(EnhancedGuiGraphics g, float pt) {
-    if (!visible) return;
+    if (!visible) {
+      return;
+    }
     int sbW = showScrollbar ? SCROLLBAR_WIDTH + 1 : 0;
     int innerX = x + padding;
     int innerW = width - padding * 2 - sbW;
@@ -45,7 +54,9 @@ public class ScrollableTextView extends UiComponent {
   @Override
   public boolean onMouseScrolled(double mx, double my, double delta) {
     int innerH = height - padding * 2;
-    if (contentHeight <= innerH) return false;
+    if (contentHeight <= innerH) {
+      return false;
+    }
     scrollY = Mth.clamp(scrollY - delta * SCROLL_SPEED, 0, Math.max(0, contentHeight - innerH));
     return true;
   }

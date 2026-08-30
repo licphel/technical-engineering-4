@@ -17,6 +17,10 @@ public final class ModBlockEntityBridges {
 
     // Storage
     BlockEntityBridges.register(ModBlocks.LIQUID_UNIT, ModBlockEntities.LIQUID_UNIT);
+    BlockEntityBridges.register(ModBlocks.ENERGY_UNIT, ModBlockEntities.ENERGY_UNIT);
+
+    // Utility
+    BlockEntityBridges.register(ModBlocks.VOID_UNIT, ModBlockEntities.VOID_UNIT);
 
     // DuctTiers
     BlockEntityBridges.register(ModBlocks.COPPER_ENERGY_DUCT, ModBlockEntities.COPPER_ENERGY_DUCT);

@@ -19,7 +19,7 @@ public class RefiningCategory extends JeiModCategory<IComplexRecipe> {
 
   @Override
   public int getWidth() {
-    return 133;
+    return 151;
   }
 
   @Override
@@ -40,6 +40,7 @@ public class RefiningCategory extends JeiModCategory<IComplexRecipe> {
 
     outputs = recipe.fluidOutputs();
     addFluidOutput(builder, !outputs.isEmpty() ? outputs.getFirst() : Complex.EMPTY, 114, 3);
+    addFluidOutput(builder, outputs.size() > 1 ? outputs.get(1) : Complex.EMPTY, 132, 3);
   }
 
   @Override

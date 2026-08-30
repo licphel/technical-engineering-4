@@ -5,7 +5,9 @@ import com.hypothetic.ten4.api.blockentity.duct.EnergyDuctBlockEntity;
 import com.hypothetic.ten4.api.blockentity.duct.FluidDuctBlockEntity;
 import com.hypothetic.ten4.api.blockentity.duct.ItemDuctBlockEntity;
 import com.hypothetic.ten4.api.registry.BlockEntityBridges;
+import com.hypothetic.ten4.core.blockentity.EnergyUnitBlockEntity;
 import com.hypothetic.ten4.core.blockentity.LiquidUnitBlockEntity;
+import com.hypothetic.ten4.core.blockentity.VoidUnitBlockEntity;
 import com.hypothetic.ten4.core.blockentity.device.*;
 import com.hypothetic.ten4.core.blockentity.duct.ControllerEnergyDuctBlockEntity;
 import com.hypothetic.ten4.core.blockentity.duct.ControllerFluidDuctBlockEntity;
@@ -33,6 +35,10 @@ public class ModBlockEntities {
 
   // Storage
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> LIQUID_UNIT = register("liquid_unit", LiquidUnitBlockEntity::new);
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> ENERGY_UNIT = register("energy_unit", EnergyUnitBlockEntity::new);
+
+  // Utility
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> VOID_UNIT = register("void_unit", VoidUnitBlockEntity::new);
 
   // DuctTiers
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> COPPER_ENERGY_DUCT = register("copper_energy_duct", (p, s) -> new EnergyDuctBlockEntity(p, s, DuctTiers.COPPER_ENERGY.get()));

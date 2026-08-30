@@ -3,8 +3,12 @@
     "ten4:pulverizer",
     "ten4:press",
     "ten4:smelter",
+    "ten4:refiner",
     "ten4:water_pump",
     "ten4:heat_generator",
-    "ten4:fuel_generator"
+    "ten4:fuel_generator",
+    "ten4:liquid_unit",
+    "ten4:energy_unit",
+    "ten4:void_unit"
   ]
 }

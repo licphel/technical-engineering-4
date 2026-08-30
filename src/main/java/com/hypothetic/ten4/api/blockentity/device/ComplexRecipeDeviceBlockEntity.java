@@ -19,18 +19,24 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
   }
 
   @Override
-  public IFluidHandler getFluidInputHandler() {
+  public IFluidHandler getInteractedFluidInputView() {
     return new FluidClickInteractionHandler(fluidInventory, inputTanks);
   }
 
   @Override
-  public IFluidHandler getFluidOutputHandler() {
+  public IFluidHandler getInteractedFluidOutputView() {
     return new FluidClickInteractionHandler(fluidInventory, outputTanks);
   }
 
   @Override
   public boolean isValidInput(ItemStack stack) {
     if (level == null || level.isClientSide()) {
+      return false;
+    }
+
+    // Type-exclusion: an already-present type may only merge into its existing
+    // slot, never overflow into other input slots (independent of strict mode).
+    if (!canMergeIntoExistingItemSlot(stack)) {
       return false;
     }
 
@@ -49,9 +55,27 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
         });
   }
 
+  /** True if the item type is absent from the input slots, or can merge into its existing slot. */
+  protected boolean canMergeIntoExistingItemSlot(ItemStack stack) {
+    for (int i : inputSlots) {
+      ItemStack existing = inventory.getStackInSlot(i);
+      if (existing.isEmpty() || !ItemStack.isSameItem(existing, stack)) {
+        continue;
+      }
+      return existing.getCount() + stack.getCount() <= inventory.getSlotLimit(i);
+    }
+    return true; // type not present yet — occupies a fresh slot
+  }
+
   @Override
   public boolean isValidInput(FluidStack stack) {
     if (level == null || level.isClientSide()) {
+      return false;
+    }
+
+    // Type-exclusion: an already-present fluid may only merge into its existing
+    // tank, never overflow into other input tanks (independent of strict mode).
+    if (!canMergeIntoExistingFluidTank(stack)) {
       return false;
     }
 
@@ -68,6 +92,18 @@ public abstract class ComplexRecipeDeviceBlockEntity extends AbstractRecipeDevic
           }
           return false;
         });
+  }
+
+  /** True if the fluid is absent from the input tanks, or can merge into its existing tank. */
+  protected boolean canMergeIntoExistingFluidTank(FluidStack stack) {
+    for (int i : inputTanks) {
+      FluidStack existing = fluidInventory.getFluidInTank(i);
+      if (existing.isEmpty() || !FluidStack.isSameFluidSameComponents(existing, stack)) {
+        continue;
+      }
+      return existing.getAmount() + stack.getAmount() <= fluidInventory.getTankCapacity(i);
+    }
+    return true; // fluid not present yet — occupies a fresh tank
   }
 
   protected boolean hasEnoughOutputSpace() {

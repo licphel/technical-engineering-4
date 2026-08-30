@@ -77,11 +77,11 @@ public final class Complex {
   private final ResourceLocation id;
   private final int count;
   private final double chance;
+  private final boolean isCatalyst;
   private List<Item> itemTagContents = new ArrayList<>();
   private @Nullable TagKey<Item> itemTagKey;
   private List<Fluid> fluidTagContents = new ArrayList<>();
   private @Nullable TagKey<Fluid> fluidTagKey;
-  private final boolean isCatalyst;
 
   private Complex(Kind kind, ResourceLocation id, int count, double chance, boolean isCatalyst) {
     this.kind = kind;

@@ -1,9 +1,7 @@
 package com.hypothetic.ten4.api.client.gui;
 
-import com.hypothetic.ten4.util.ClientUtil;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.material.Fluid;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;

@@ -34,9 +34,13 @@ public final class DuctInteractions {
 
   public static ItemInteractionResult changeConnection(Level level, BlockPos pos, Direction side, Player player) {
     BlockEntity be = level.getBlockEntity(pos);
-    if (be == null) return ItemInteractionResult.FAIL;
+    if (be == null) {
+      return ItemInteractionResult.FAIL;
+    }
     Transmitter<?, ?, ?> t = findTransmitter(be);
-    if (t == null) return ItemInteractionResult.FAIL;
+    if (t == null) {
+      return ItemInteractionResult.FAIL;
+    }
 
     BlockEntity neighborBe = level.getBlockEntity(pos.relative(side));
 

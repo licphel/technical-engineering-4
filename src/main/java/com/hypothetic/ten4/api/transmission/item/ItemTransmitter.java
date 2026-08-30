@@ -6,7 +6,6 @@ import com.hypothetic.ten4.api.transmission.ConnectionType;
 import com.hypothetic.ten4.api.transmission.ITransmitterProvider;
 import com.hypothetic.ten4.api.transmission.Transmitter;
 import com.hypothetic.ten4.api.transmission.TransmitterFilter;
-import com.hypothetic.ten4.core.client.renderer.RenderTransmitterBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -81,8 +80,7 @@ public class ItemTransmitter extends Transmitter<IItemHandler, ItemNetwork, Item
 
   public void syncToTracking() {
     if (getLevel() instanceof ServerLevel sl) {
-      PacketDist.sendToNearbyPlayers(sl, new DuctItemPayload(getBlockPos(), transitEntry), getBlockPos(),
-          RenderTransmitterBlock.LOD_DISTANCE.getAsInt());
+      PacketDist.sendToNearbyPlayers(sl, new DuctItemPayload(getBlockPos(), transitEntry), getBlockPos(), 32D);
     }
   }
 

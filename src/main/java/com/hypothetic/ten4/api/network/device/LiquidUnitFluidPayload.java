@@ -10,19 +10,19 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record LiquidUnitFluidPayload(BlockPos pos, float scale, FluidStack fluid) implements CustomPacketPayload {
+public record LiquidUnitFluidPayload(BlockPos pos, FluidStack fluid, float scale) implements CustomPacketPayload {
   public static final Type<LiquidUnitFluidPayload> TYPE = new Type<>(Ten4.id("liquid_unit_fluid"));
   public static final StreamCodec<RegistryFriendlyByteBuf, LiquidUnitFluidPayload> CODEC = new StreamCodec<>() {
     @Override
     public LiquidUnitFluidPayload decode(RegistryFriendlyByteBuf buf) {
-      return new LiquidUnitFluidPayload(buf.readBlockPos(), buf.readFloat(), FluidStack.OPTIONAL_STREAM_CODEC.decode(buf));
+      return new LiquidUnitFluidPayload(buf.readBlockPos(), FluidStack.OPTIONAL_STREAM_CODEC.decode(buf), buf.readFloat());
     }
 
     @Override
     public void encode(RegistryFriendlyByteBuf buf, LiquidUnitFluidPayload pkt) {
       buf.writeBlockPos(pkt.pos);
-      buf.writeFloat(pkt.scale);
       FluidStack.OPTIONAL_STREAM_CODEC.encode(buf, pkt.fluid);
+      buf.writeFloat(pkt.scale);
     }
   };
 

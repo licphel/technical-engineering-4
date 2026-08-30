@@ -51,7 +51,7 @@ public class RenderFluidDuct extends RenderTransmitterBlock<FluidDuctBlockEntity
     }
 
     VertexConsumer vc = buffers.getBuffer(RenderType.translucent());
-    float alpha = Math.min(scale, 0.8f);
+    float alpha = 1;
     float s = 0.97f, off = (1 - s) / 2;
     int color = IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid);
     float r = ((color >> 16) & 0xFF) / 255f;

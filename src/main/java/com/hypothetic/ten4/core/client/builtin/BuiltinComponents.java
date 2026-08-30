@@ -26,7 +26,6 @@ import java.util.Objects;
 public final class BuiltinComponents {
   public static final SoundEvent BEEP = ModSoundEvents.BEEP.get();
   public static final ResourceLocation TEXTURE = Ten4.id("textures/gui/components.png");
-  public static final ResourceLocation PANELS = Ten4.id("textures/gui/panels.png");
   public static final TextureRegion PANEL_LEFT = TextureRegion.of(Ten4.id("textures/gui/panel_left.png"));
   public static final TextureRegion PANEL_RIGHT = TextureRegion.of(Ten4.id("textures/gui/panel_right.png"));
   public static final TextureRegion ENERGY_EMPTY = TextureRegion.of(TEXTURE, 204, 0, 8, 50);
@@ -79,7 +78,7 @@ public final class BuiltinComponents {
     ).withTexture(FLUID_TANK, FLUID_TANK_OVERLAY).tagged(UiTag.JEI_FLUID_TANK);
   }
 
-  public static CapturedSlot capturedSlot(int x, int y,  AbstractContainerScreen<? extends AbstractContainerMenu> menu, ManualSlot backingSlot) {
+  public static CapturedSlot capturedSlot(int x, int y, AbstractContainerScreen<? extends AbstractContainerMenu> menu, ManualSlot backingSlot) {
     return new CapturedSlot(x, y, menu, backingSlot).withTexture(SLOT);
   }
 

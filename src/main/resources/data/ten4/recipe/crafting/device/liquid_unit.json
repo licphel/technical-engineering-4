@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IAI",
+    "ABA",
+    "IAI"
+  ],
+  "key": {
+    "A": {
+      "tag": "c:glass_blocks"
+    },
+    "I": {
+      "tag": "c:plates/titanium"
+    },
+    "B": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "id": "ten4:liquid_unit"
+  }
+}

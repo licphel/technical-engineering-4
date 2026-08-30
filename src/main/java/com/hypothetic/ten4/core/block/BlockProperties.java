@@ -28,6 +28,9 @@ public final class BlockProperties {
       .sound(SoundType.METAL)
       .explosionResistance(1.25F);
 
+  private BlockProperties() {
+  }
+
   public static BlockBehaviour.Properties metalBlock(float strength, float explosionResistance, MapColor mapColor) {
     return BlockBehaviour.Properties.of()
         .mapColor(mapColor)
@@ -54,8 +57,5 @@ public final class BlockProperties {
         .liquid()
         .sound(SoundType.EMPTY)
         .mapColor(color);
-  }
-
-  private BlockProperties() {
   }
 }

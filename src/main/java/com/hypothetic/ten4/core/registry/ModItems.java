@@ -1,21 +1,14 @@
 package com.hypothetic.ten4.core.registry;
 
 import com.hypothetic.ten4.Ten4;
-import com.hypothetic.ten4.core.item.ItemProperties;
-import com.hypothetic.ten4.core.item.LiquidUnitItem;
-import com.hypothetic.ten4.core.item.WrenchItem;
+import com.hypothetic.ten4.core.item.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.util.EnumMap;
-import java.util.Map;
 
 @SuppressWarnings("unused")
 public final class ModItems {
@@ -25,19 +18,24 @@ public final class ModItems {
 
   // DeviceTiers
   public static final DeferredHolder<Item, BlockItem> DEVICE_CASING = bridgeBlockItem(ModBlocks.DEVICE_CASING);
-  public static final DeferredHolder<Item, BlockItem> PULVERIZER = bridgeBlockItem(ModBlocks.PULVERIZER);
-  public static final DeferredHolder<Item, BlockItem> PRESS = bridgeBlockItem(ModBlocks.PRESS);
-  public static final DeferredHolder<Item, BlockItem> SMELTER = bridgeBlockItem(ModBlocks.SMELTER);
-  public static final DeferredHolder<Item, BlockItem> REFINER = bridgeBlockItem(ModBlocks.REFINER);
-  public static final DeferredHolder<Item, BlockItem> WATER_PUMP = bridgeBlockItem(ModBlocks.WATER_PUMP);
+  public static final DeferredHolder<Item, BlockItem> PULVERIZER = bridgeDeviceItem(ModBlocks.PULVERIZER);
+  public static final DeferredHolder<Item, BlockItem> PRESS = bridgeDeviceItem(ModBlocks.PRESS);
+  public static final DeferredHolder<Item, BlockItem> SMELTER = bridgeDeviceItem(ModBlocks.SMELTER);
+  public static final DeferredHolder<Item, BlockItem> REFINER = bridgeDeviceItem(ModBlocks.REFINER);
+  public static final DeferredHolder<Item, BlockItem> WATER_PUMP = bridgeDeviceItem(ModBlocks.WATER_PUMP);
 
   // Generators
-  public static final DeferredHolder<Item, BlockItem> HEAT_GENERATOR = bridgeBlockItem(ModBlocks.HEAT_GENERATOR);
-  public static final DeferredHolder<Item, BlockItem> FUEL_GENERATOR = bridgeBlockItem(ModBlocks.FUEL_GENERATOR);
+  public static final DeferredHolder<Item, BlockItem> HEAT_GENERATOR = bridgeDeviceItem(ModBlocks.HEAT_GENERATOR);
+  public static final DeferredHolder<Item, BlockItem> FUEL_GENERATOR = bridgeDeviceItem(ModBlocks.FUEL_GENERATOR);
 
   // Storage
   public static final DeferredHolder<Item, LiquidUnitItem> LIQUID_UNIT = ITEMS.register("liquid_unit",
       () -> new LiquidUnitItem(ModBlocks.LIQUID_UNIT.get(), ItemProperties.NONSPECIAL));
+  public static final DeferredHolder<Item, EnergyUnitItem> ENERGY_UNIT = ITEMS.register("energy_unit",
+      () -> new EnergyUnitItem(ModBlocks.ENERGY_UNIT.get(), ItemProperties.NONSPECIAL));
+
+  // Utility
+  public static final DeferredHolder<Item, BlockItem> VOID_UNIT = bridgeBlockItem(ModBlocks.VOID_UNIT);
 
   // DuctTiers
   public static final DeferredHolder<Item, BlockItem> COPPER_ENERGY_DUCT = bridgeBlockItem(ModBlocks.COPPER_ENERGY_DUCT);
@@ -63,9 +61,9 @@ public final class ModItems {
   public static final DeferredHolder<Item, BlockItem> TITANIUM_BLOCK = bridgeBlockItem(ModBlocks.TITANIUM_BLOCK);
   public static final DeferredHolder<Item, BlockItem> RAW_TITANIUM_BLOCK = bridgeBlockItem(ModBlocks.RAW_TITANIUM_BLOCK);
   public static final DeferredHolder<Item, BlockItem> MONAZITE_ORE = bridgeBlockItem(ModBlocks.MONAZITE_ORE);
-  public static final DeferredHolder<Item, BlockItem> SULFUR_ORE = bridgeBlockItem(ModBlocks.SULFUR_ORE);
+  public static final DeferredHolder<Item, BlockItem> BORAX = bridgeBlockItem(ModBlocks.BORAX);
   public static final DeferredHolder<Item, BlockItem> OIL_SAND = bridgeBlockItem(ModBlocks.OIL_SAND);
-  public static final DeferredHolder<Item, BlockItem> BORAX_BLOCK = bridgeBlockItem(ModBlocks.BORAX_BLOCK);
+  public static final DeferredHolder<Item, BlockItem> SULFUR = bridgeBlockItem(ModBlocks.SULFUR);
 
   // Dies
   public static final DeferredHolder<Item, Item> SHEET_DIE = ITEMS.register("sheet_die", () -> new Item(ItemProperties.SINGLE_STACKED));
@@ -91,41 +89,20 @@ public final class ModItems {
   public static final DeferredHolder<Item, Item> TITANIUM_NUGGET = ITEMS.register("titanium_nugget", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> TITANIUM_DUST = ITEMS.register("titanium_dust", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> TITANIUM_PLATE = ITEMS.register("titanium_plate", () -> new Item(ItemProperties.NONSPECIAL));
-  public static final DeferredHolder<Item, Item> BORAX = ITEMS.register("borax", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> BORAX_DUST = ITEMS.register("borax_dust", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> MONAZITE = ITEMS.register("monazite", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> MONAZITE_DUST = ITEMS.register("monazite_dust", () -> new Item(ItemProperties.NONSPECIAL));
   public static final DeferredHolder<Item, Item> SULFUR_DUST = ITEMS.register("sulfur_dust", () -> new Item(ItemProperties.NONSPECIAL));
-
-  // Fluid Buckets
-  public static final DeferredHolder<Item, BucketItem> TORAN_BUCKET = ITEMS.register("toran_concentrate_bucket",
-      () -> new BucketItem(ModFluids.TORAN.still().get(), ItemProperties.BUCKET));
-  public static final DeferredHolder<Item, BucketItem> EXPERIENCE_BUCKET = ITEMS.register("liquid_experience_bucket",
-      () -> new BucketItem(ModFluids.EXPERIENCE.still().get(), ItemProperties.BUCKET));
-  public static final DeferredHolder<Item, BucketItem> REDSTONE_BUCKET = ITEMS.register("liquid_redstone_bucket",
-      () -> new BucketItem(ModFluids.REDSTONE.still().get(), ItemProperties.BUCKET));
-  public static final DeferredHolder<Item, BucketItem> NUTRIENT_BUCKET = ITEMS.register("nutrient_solution_bucket",
-      () -> new BucketItem(ModFluids.NUTRIENT.still().get(), ItemProperties.BUCKET));
-  public static final DeferredHolder<Item, BucketItem> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket",
-      () -> new BucketItem(ModFluids.CRUDE_OIL.still().get(), ItemProperties.BUCKET));
-  public static final DeferredHolder<Item, BucketItem> NAPHTHA_BUCKET = ITEMS.register("naphtha_bucket",
-      () -> new BucketItem(ModFluids.NAPHTHA.still().get(), ItemProperties.BUCKET));
-  public static final DeferredHolder<Item, BucketItem> KEROSENE_BUCKET = ITEMS.register("kerosene_bucket",
-      () -> new BucketItem(ModFluids.KEROSENE.still().get(), ItemProperties.BUCKET));
-
-  public static final Map<DyeColor, DeferredHolder<Item, BucketItem>> DYE_BUCKETS = new EnumMap<>(DyeColor.class);
-  static {
-    for (DyeColor dye : DyeColor.values()) {
-      DYE_BUCKETS.put(dye, ITEMS.register(dye.getSerializedName() + "_dye_solution_bucket",
-          () -> new BucketItem(ModFluids.DYES.get(dye).still().get(), ItemProperties.BUCKET)));
-    }
-  }
 
   private ModItems() {
   }
 
   private static DeferredHolder<Item, BlockItem> bridgeBlockItem(DeferredHolder<Block, ? extends Block> blockHolder) {
     return ITEMS.register(blockHolder.getId().getPath(), () -> new BlockItem(BuiltInRegistries.BLOCK.get(blockHolder.getId()), ItemProperties.NONSPECIAL));
+  }
+
+  private static DeferredHolder<Item, BlockItem> bridgeDeviceItem(DeferredHolder<Block, ? extends Block> blockHolder) {
+    return ITEMS.register(blockHolder.getId().getPath(), () -> new DeviceItem(BuiltInRegistries.BLOCK.get(blockHolder.getId()), ItemProperties.NONSPECIAL));
   }
 
   public static void trigger() {

@@ -1,0 +1,23 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "fluid_tag": "c:crude_oil",
+      "amount": 100
+    }
+  ],
+  "outputs": [
+    {
+      "item": "ten4:asphalt"
+    },
+    {
+      "fluid": "ten4:kerosene",
+      "amount": 50
+    },
+    {
+      "fluid": "ten4:naphtha",
+      "amount": 50
+    }
+  ],
+  "time": 200
+}

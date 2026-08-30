@@ -3,9 +3,14 @@ package com.hypothetic.ten4.api.blockentity.device;
 import com.hypothetic.ten4.api.container.sync.BuiltinSyncedFields;
 import com.hypothetic.ten4.api.container.sync.Syncer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class ComplexRecipeGeneratorBlockEntity extends ComplexRecipeDeviceBlockEntity {
+  private int fuel;
+  private int maxFuel;
+
   public ComplexRecipeGeneratorBlockEntity(BlockPos pos, BlockState state) {
     super(pos, state);
   }
@@ -18,14 +23,46 @@ public abstract class ComplexRecipeGeneratorBlockEntity extends ComplexRecipeDev
   }
 
   @Override
-  public void tick() {
-    super.tick();
-
-    if (level != null && !level.isClientSide()) {
-      // Fuel gauge mirrors REMAINING recipe progress: fuel% = 1 - progress/maxProgress.
-      syncer.set(BuiltinSyncedFields.MAX_FUEL, getMaxProgress());
-      syncer.set(BuiltinSyncedFields.FUEL, getMaxProgress() - getProgress());
+  protected void process() {
+    if (isSignalEnabled() && hasEnoughOutputSpace()) {
+      if (fuel > 0) {
+        setEnergy(getEnergy() + getActualPower());
+        fuel = Math.max(fuel - getActualPower(), 0);
+        setChanged();
+        triggerSound();
+        setActive(true);
+      } else {
+        recipe = findRecipe();
+        if (recipe != null) {
+          fuel = recipe.time() * info.power;
+          maxFuel = fuel;
+          finish();
+        } else {
+          setActive(false);
+        }
+      }
+    } else {
+      setActive(false);
     }
+
+    setChanged();
+
+    syncer.set(BuiltinSyncedFields.FUEL, fuel);
+    syncer.set(BuiltinSyncedFields.MAX_FUEL, maxFuel);
+  }
+
+  @Override
+  protected void loadAdditional(CompoundTag tag, HolderLookup.Provider reg) {
+    super.loadAdditional(tag, reg);
+    fuel = tag.getInt("Fuel");
+    maxFuel = tag.getInt("MaxFuel");
+  }
+
+  @Override
+  protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
+    super.saveAdditional(tag, reg);
+    tag.putInt("Fuel", fuel);
+    tag.putInt("MaxFuel", maxFuel);
   }
 
   @Override
@@ -35,47 +72,5 @@ public abstract class ComplexRecipeGeneratorBlockEntity extends ComplexRecipeDev
 
   protected boolean hasEnergyOutputSpace() {
     return getEnergy() + getActualPower() <= getEnergyCapacity();
-  }
-
-  @Override
-  protected void process() {
-    setActive(progress != maxProgress);
-
-    if (isSignalEnabled()) {
-      lastRecipe = recipe;
-      recipe = findRecipe();
-
-      if (recipe == null) {
-        progress = 0;
-        setChanged();
-        return;
-      }
-
-      maxProgress = getRecipeTime(recipe) * info.power;
-      int generated = getActualPower();
-      if (generated <= 0) {
-        return;
-      } else {
-        triggerSound();
-      }
-
-      progress += generated;
-      setEnergy(getEnergy() + generated);
-
-      if (progress >= maxProgress) {
-        if (hasEnoughOutputSpace()) {
-          finish();
-          progress = 0;
-        }
-        recipe = null;
-      }
-
-      setChanged();
-    } else {
-      if (progress > 0 && !hasEnergyOutputSpace()) {
-        progress = Math.max(0, progress - info.power);
-        setChanged();
-      }
-    }
   }
 }

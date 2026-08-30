@@ -5,7 +5,6 @@ import com.hypothetic.ten4.api.client.ComponentedContainerScreen;
 import com.hypothetic.ten4.api.client.components.CapturedSlot;
 import com.hypothetic.ten4.api.client.components.Panel;
 import com.hypothetic.ten4.api.client.components.UiComponent;
-import com.hypothetic.ten4.api.client.gui.EnhancedGuiGraphics;
 import com.hypothetic.ten4.api.client.gui.TextureRegion;
 import com.hypothetic.ten4.api.container.AugmentableContainerMenu;
 import com.hypothetic.ten4.api.container.ContainerMenu;

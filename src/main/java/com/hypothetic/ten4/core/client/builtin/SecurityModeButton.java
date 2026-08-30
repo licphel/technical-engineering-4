@@ -36,7 +36,7 @@ public class SecurityModeButton extends Button {
   public void onRender(EnhancedGuiGraphics g, float pt) {
     int mode = reader.getInt(BuiltinSyncedFields.SECURITY_MODE);
     int u = mode * 12;
-    g.draw(TextureRegion.of(BuiltinComponents.PANELS, u, 232, 12, 12), x, y, width, height);
+    g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, u, 232, 12, 12), x, y, width, height);
   }
 
   @Override

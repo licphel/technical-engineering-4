@@ -2,11 +2,7 @@ package com.hypothetic.ten4.core.registry;
 
 import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.registry.FluidDeferredRegister;
-import com.hypothetic.ten4.core.block.AsphaltBlock;
-import com.hypothetic.ten4.core.block.BlockProperties;
-import com.hypothetic.ten4.core.block.DeviceBlock;
-import com.hypothetic.ten4.core.block.OilSandBlock;
-import com.hypothetic.ten4.core.block.LiquidUnitBlock;
+import com.hypothetic.ten4.core.block.*;
 import com.hypothetic.ten4.core.block.duct.EnergyDuctBlock;
 import com.hypothetic.ten4.core.block.duct.FluidDuctBlock;
 import com.hypothetic.ten4.core.block.duct.ItemDuctBlock;
@@ -31,7 +27,7 @@ import java.util.function.Supplier;
 public final class ModBlocks {
   public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, Ten4.ID);
 
-  // DeviceTiers
+  // Devices
   public static final DeferredHolder<Block, Block> DEVICE_CASING = BLOCKS.register("device_casing", () -> new Block(BlockProperties.METAL_DEVICE));
   public static final DeferredHolder<Block, Block> PULVERIZER = BLOCKS.register("pulverizer", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
   public static final DeferredHolder<Block, Block> PRESS = BLOCKS.register("press", () -> new DeviceBlock(BlockProperties.METAL_DEVICE).tickBothSide());
@@ -45,6 +41,10 @@ public final class ModBlocks {
 
   // Storage
   public static final DeferredHolder<Block, Block> LIQUID_UNIT = BLOCKS.register("liquid_unit", () -> new LiquidUnitBlock(BlockProperties.METAL_DEVICE).tickBothSide());
+  public static final DeferredHolder<Block, Block> ENERGY_UNIT = BLOCKS.register("energy_unit", () -> new EnergyUnitBlock(BlockProperties.METAL_DEVICE).tickBothSide());
+
+  // Utility
+  public static final DeferredHolder<Block, Block> VOID_UNIT = BLOCKS.register("void_unit", () -> new VoidUnitBlock(BlockProperties.METAL_DEVICE));
 
   // Other Blocks
   public static final DeferredHolder<Block, Block> ASPHALT = BLOCKS.register("asphalt", () -> new AsphaltBlock(BlockBehaviour.Properties.of().sound(SoundType.LODESTONE).mapColor(DyeColor.BLACK).strength(2.5F, 3.5F)));
@@ -59,9 +59,9 @@ public final class ModBlocks {
   public static final DeferredHolder<Block, Block> TITANIUM_BLOCK = BLOCKS.register("titanium_block", () -> new Block(BlockProperties.metalBlock(5.0F, 6.0F, MapColor.METAL)));
   public static final DeferredHolder<Block, Block> RAW_TITANIUM_BLOCK = BLOCKS.register("raw_titanium_block", () -> new Block(BlockProperties.metalBlock(4.0F, 4.5F, MapColor.METAL)));
   public static final DeferredHolder<Block, Block> MONAZITE_ORE = BLOCKS.register("monazite_ore", () -> new DropExperienceBlock(ConstantInt.of(0), BlockProperties.ore(5.0F, 4.0F, MapColor.NETHER)));
-  public static final DeferredHolder<Block, Block> SULFUR_ORE = BLOCKS.register("sulfur_ore", () -> new DropExperienceBlock(UniformInt.of(2, 5), BlockProperties.ore(3.5F, 3.0F, MapColor.SAND)));
+  public static final DeferredHolder<Block, Block> SULFUR = BLOCKS.register("sulfur", () -> new DropExperienceBlock(ConstantInt.of(0), BlockProperties.ore(3.5F, 3.0F, MapColor.SAND)));
   public static final DeferredHolder<Block, Block> OIL_SAND = BLOCKS.register("oil_sand", OilSandBlock::new);
-  public static final DeferredHolder<Block, Block> BORAX_BLOCK = BLOCKS.register("borax_block", () -> new DropExperienceBlock(ConstantInt.of(0), BlockProperties.ore(3.5F, 3.0F, MapColor.SAND)));
+  public static final DeferredHolder<Block, Block> BORAX = BLOCKS.register("borax", () -> new DropExperienceBlock(ConstantInt.of(0), BlockProperties.ore(3.5F, 3.0F, MapColor.SAND)));
 
   // DuctTiers
   public static final DeferredHolder<Block, Block> COPPER_ENERGY_DUCT = BLOCKS.register("copper_energy_duct", () -> new EnergyDuctBlock(BlockProperties.COPPER_DUCT).tickBothSide());
@@ -84,6 +84,7 @@ public final class ModBlocks {
   public static final DeferredHolder<Block, Block> KEROSENE = fluidBlock("kerosene", () -> ModFluids.KEROSENE, MapColor.TERRACOTTA_YELLOW);
 
   public static final Map<DyeColor, DeferredHolder<Block, Block>> DYE_BLOCKS = new EnumMap<>(DyeColor.class);
+
   static {
     for (DyeColor dye : DyeColor.values()) {
       DYE_BLOCKS.put(dye, fluidBlock(dye.getSerializedName() + "_dye_solution", () -> ModFluids.DYES.get(dye), dye.getMapColor()));

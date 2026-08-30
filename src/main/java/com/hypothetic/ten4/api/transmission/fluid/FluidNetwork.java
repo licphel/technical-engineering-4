@@ -11,9 +11,9 @@ import net.neoforged.fml.util.thread.EffectiveSide;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import org.jetbrains.annotations.Nullable;
 
 public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, FluidStack, FluidTransmitter> {
   private FluidStack buffer = FluidStack.EMPTY;
@@ -244,7 +244,9 @@ public class FluidNetwork extends BufferedNetwork<IFluidHandler, FluidNetwork, F
       // reading a smaller amount than the last) cannot cause fluid loss.
       List<FluidTransmitter> valid = new ArrayList<>();
       for (FluidTransmitter t : getTransmitters()) {
-        if (t.isValid()) valid.add(t);
+        if (t.isValid()) {
+          valid.add(t);
+        }
       }
       if (!valid.isEmpty() && !buffer.isEmpty()) {
         int n = valid.size();

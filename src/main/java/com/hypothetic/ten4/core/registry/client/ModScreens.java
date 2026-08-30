@@ -20,5 +20,6 @@ public class ModScreens {
     event.register(ModMenus.FUEL_GENERATOR.get(), FuelGeneratorScreen::new);
     event.register(ModMenus.WATER_PUMP.get(), WaterPumpScreen::new);
     event.register(ModMenus.LIQUID_UNIT.get(), LiquidUnitScreen::new);
+    event.register(ModMenus.ENERGY_UNIT.get(), EnergyUnitScreen::new);
   }
 }

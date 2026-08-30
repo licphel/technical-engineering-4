@@ -1,7 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "ten4:block/device/liquid_unit"
-  },
-  "render_type": "minecraft:translucent"
+    "all": "ten4:block/device/liquid_unit_overlay"
+  }
 }

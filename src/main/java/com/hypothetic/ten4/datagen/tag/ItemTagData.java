@@ -23,6 +23,18 @@ public class ItemTagData extends net.minecraft.data.tags.TagsProvider<Item> {
     super(output, Registries.ITEM, lookupProvider, Ten4.ID, existingFileHelper);
   }
 
+  private static ResourceKey<Item> key(DeferredHolder<?, ?> holder) {
+    return ResourceKey.create(Registries.ITEM, holder.getId());
+  }
+
+  private static TagKey<Item> cTag(String path) {
+    return TagKey.create(Registries.ITEM, cLoc(path));
+  }
+
+  private static ResourceLocation cLoc(String path) {
+    return ResourceLocation.fromNamespaceAndPath("c", path);
+  }
+
   @Override
   protected void addTags(HolderLookup.Provider provider) {
     tag(DIES)
@@ -106,26 +118,14 @@ public class ItemTagData extends net.minecraft.data.tags.TagsProvider<Item> {
     tag(cTag("ores/tin")).add(key(ModBlocks.TIN_ORE)).add(key(ModBlocks.DEEPSLATE_TIN_ORE));
     tag(cTag("ores/titanium")).add(key(ModBlocks.TITANIUM_ORE)).add(key(ModBlocks.DEEPSLATE_TITANIUM_ORE));
     tag(cTag("ores/monazite")).add(key(ModBlocks.MONAZITE_ORE));
-    tag(cTag("ores/sulfur")).add(key(ModBlocks.SULFUR_ORE));
+    tag(cTag("ores/sulfur")).add(key(ModBlocks.SULFUR));
     tag(cTag("ores")).addTag(cTag("ores/tin")).addTag(cTag("ores/titanium")).addTag(cTag("ores/monazite")).addTag(cTag("ores/sulfur"));
 
     tag(cTag("storage_blocks/tin")).add(key(ModBlocks.TIN_BLOCK));
     tag(cTag("storage_blocks/raw_tin")).add(key(ModBlocks.RAW_TIN_BLOCK));
     tag(cTag("storage_blocks/titanium")).add(key(ModBlocks.TITANIUM_BLOCK));
     tag(cTag("storage_blocks/raw_titanium")).add(key(ModBlocks.RAW_TITANIUM_BLOCK));
-    tag(cTag("storage_blocks/borax")).add(key(ModBlocks.BORAX_BLOCK));
+    tag(cTag("storage_blocks/borax")).add(key(ModBlocks.BORAX));
     tag(cTag("storage_blocks")).addTag(cTag("storage_blocks/tin")).addTag(cTag("storage_blocks/raw_tin")).addTag(cTag("storage_blocks/titanium")).addTag(cTag("storage_blocks/raw_titanium")).addTag(cTag("storage_blocks/borax"));
-  }
-
-  private static ResourceKey<Item> key(DeferredHolder<?, ?> holder) {
-    return ResourceKey.create(Registries.ITEM, holder.getId());
-  }
-
-  private static TagKey<Item> cTag(String path) {
-    return TagKey.create(Registries.ITEM, cLoc(path));
-  }
-
-  private static ResourceLocation cLoc(String path) {
-    return ResourceLocation.fromNamespaceAndPath("c", path);
   }
 }

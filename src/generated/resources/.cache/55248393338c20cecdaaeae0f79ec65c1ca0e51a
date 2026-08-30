@@ -1,4 +1,4 @@
-// 1.21.1	2026-08-15T22:24:20.4459485	Tags for minecraft:item mod id ten4
+// 1.21.1	2026-08-16T15:05:47.6497325	Tags for minecraft:item mod id ten4
 30693569fbadb669b0c7262209cf4ab557a173f6 data/c/tags/item/dusts.json
 3326954536e636eb67a037bb49a3d6ce587b5ce5 data/c/tags/item/dusts/borax.json
 51aef737bf9b91ed4afdb2357797d419a8b761d9 data/c/tags/item/dusts/copper.json
@@ -20,7 +20,7 @@ bd06202bd39e3b2c10ae499fbac2b4c6f0a1b3cc data/c/tags/item/nuggets/copper.json
 641084564291a6199e928a473d124aa743312fa5 data/c/tags/item/nuggets/titanium.json
 47ab96b43ee2a96013f27979e98712c37c14a446 data/c/tags/item/ores.json
 3abb788b304a973f751689a54cee29037f281ad8 data/c/tags/item/ores/monazite.json
-b3083b90140b28b81404595f1e60cfab8ba0de7d data/c/tags/item/ores/sulfur.json
+cbecdd34282f7e34d2944b47f1a52dd7e88e9dea data/c/tags/item/ores/sulfur.json
 60c47c4d5b3eeab56f3124600b3a2355915638ae data/c/tags/item/ores/tin.json
 7654e8c00e321071aab1eee2173a32edc7b1d3b2 data/c/tags/item/ores/titanium.json
 e190540096e670d507d8e00a2bccea556b9a677c data/c/tags/item/plates.json
@@ -33,7 +33,7 @@ e8070b2111acb33040c3740ce0305845fa738a8c data/c/tags/item/raw_materials.json
 f773d0ddb6d5a217ad659356212a75ea1720168b data/c/tags/item/raw_materials/tin.json
 2563aea4eaf18d157d9229232b3662956efb0c02 data/c/tags/item/raw_materials/titanium.json
 a6fa032f158c67e49b5cd6643ac956262b71f061 data/c/tags/item/storage_blocks.json
-312277f46c440ba43e25cf87a8e0fa5a085c4582 data/c/tags/item/storage_blocks/borax.json
+c503b77eccfa7aee7e54fd1c224973ad2e89e440 data/c/tags/item/storage_blocks/borax.json
 3a8175b7f321324ef9101884725e564fdc94ee08 data/c/tags/item/storage_blocks/raw_tin.json
 618ce9cb3a54c76fd345d6af8450f387e204bf26 data/c/tags/item/storage_blocks/raw_titanium.json
 ff6a117e6bebe023210de47b3eeec9b9a8c62915 data/c/tags/item/storage_blocks/tin.json

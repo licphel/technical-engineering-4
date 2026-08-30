@@ -28,13 +28,13 @@ public final class FaceModePacker {
   public static int set(int packed, Direction d, FaceMode mode) {
     int s = shift(d);
     return (packed & ~(MASK << s)) | (mode.ordinal() << s);
-  }  private static final int BITS = 2, MASK = (1 << BITS) - 1;
+  }
 
   public static int cycle(int packed, Direction d) {
     FaceMode cur = get(packed, d);
     FaceMode next = FaceMode.of((cur.ordinal() + 1) % FaceMode.values().length);
     return set(packed, d, next);
-  }
+  }  private static final int BITS = 2, MASK = (1 << BITS) - 1;
 
   static int packFaces(Map<Direction, FaceMode> config) {
     int packed = 0;

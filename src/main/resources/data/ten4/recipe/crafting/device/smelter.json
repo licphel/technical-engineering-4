@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BDB",
+    "AOA",
+    "BCB"
+  ],
+  "key": {
+    "A": {
+      "tag": "c:stones"
+    },
+    "B": {
+      "item": "minecraft:brick"
+    },
+    "C": {
+      "item": "ten4:circuit"
+    },
+    "O": {
+      "item": "ten4:device_casing"
+    },
+    "D": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "id": "ten4:smelter"
+  }
+}

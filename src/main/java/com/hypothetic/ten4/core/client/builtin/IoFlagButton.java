@@ -54,7 +54,7 @@ public class IoFlagButton extends Button {
   @Override
   public void onRender(EnhancedGuiGraphics g, float pt) {
     super.onRender(g, pt);
-    g.draw(TextureRegion.of(BuiltinComponents.PANELS, u + (isOn() ? 12 : 0), v, 12, 12), x, y, width, height);
+    g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, u + (isOn() ? 12 : 0), v, 12, 12), x, y, width, height);
   }
 
   @Override

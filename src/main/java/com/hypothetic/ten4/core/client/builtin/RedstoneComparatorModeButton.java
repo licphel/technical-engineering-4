@@ -16,8 +16,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
-import static com.hypothetic.ten4.core.client.builtin.BuiltinComponents.PANELS;
-
 public class RedstoneComparatorModeButton extends Button {
   final SyncedFieldReader reader;
   final BlockPos pos;
@@ -38,7 +36,7 @@ public class RedstoneComparatorModeButton extends Button {
   public void onRender(EnhancedGuiGraphics g, float pt) {
     int mode = reader.getInt(BuiltinSyncedFields.COMPARATOR_MODE);
     int u = 38 + mode * 12, v = 190;
-    g.draw(TextureRegion.of(PANELS, u, v, 12, 12), x, y, width, height);
+    g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, u, v, 12, 12), x, y, width, height);
   }
 
   @Override

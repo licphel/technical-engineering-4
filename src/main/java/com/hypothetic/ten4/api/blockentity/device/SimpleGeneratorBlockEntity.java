@@ -30,28 +30,33 @@ public abstract class SimpleGeneratorBlockEntity extends AugmentableDeviceBlockE
       return;
     }
 
-    setActive(fuel > 0);
-
-    if (fuel > 0) {
-      setEnergy(getEnergy() + getActualPower());
-      fuel = Math.max(fuel - getActualPower(), 0);
-      setChanged();
-      triggerSound();
-    }
-
     if (isSignalEnabled()) {
       queuedPushPull();
 
-      if (hasOutputSpace() && fuel <= 0) {
-        int v = tryFueling(true);
-        if (v > 0) {
-          tryFueling(false);
-          fuel = v * info.power;
-          maxFuel = fuel;
+      if (hasOutputSpace()) {
+        if (fuel > 0) {
+          setEnergy(getEnergy() + getActualPower());
+          fuel = Math.max(fuel - getActualPower(), 0);
+          setChanged();
+          triggerSound();
+          setActive(true);
+        } else {
+          int v = tryFueling(true);
+          if (v > 0) {
+            tryFueling(false);
+            fuel = v * info.power;
+            maxFuel = fuel;
+          } else {
+            setActive(false);
+          }
         }
+      } else {
+        setActive(false);
       }
 
       setChanged();
+    } else {
+      setActive(false);
     }
 
     syncer.set(BuiltinSyncedFields.ENERGY, getEnergy());

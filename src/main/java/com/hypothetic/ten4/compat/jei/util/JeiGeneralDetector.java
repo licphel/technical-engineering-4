@@ -24,7 +24,7 @@ public record JeiGeneralDetector(
   }
 
   @Override
-  public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(ComponentedContainerScreen<? > containerScreen, double mouseX, double mouseY) {
+  public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(ComponentedContainerScreen<?> containerScreen, double mouseX, double mouseY) {
     IJeiHelpers jeiHelpers = registry.getJeiHelpers();
     IIngredientManager ingredientManager = jeiHelpers.getIngredientManager();
 

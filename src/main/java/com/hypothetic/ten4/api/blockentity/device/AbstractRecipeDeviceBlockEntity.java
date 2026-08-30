@@ -73,7 +73,7 @@ public abstract class AbstractRecipeDeviceBlockEntity<I extends RecipeInput, T e
     }
 
     syncer.set(BuiltinSyncedFields.ENERGY, getEnergy());
-    syncer.set(BuiltinSyncedFields.MAX_ENERGY, this.getEnergyCapacity());
+    syncer.set(BuiltinSyncedFields.MAX_ENERGY, getEnergyCapacity());
     syncer.set(BuiltinSyncedFields.PROGRESS, getProgress());
     syncer.set(BuiltinSyncedFields.MAX_PROGRESS, getMaxProgress());
     syncer.set(BuiltinSyncedFields.POWER, getActualPower());

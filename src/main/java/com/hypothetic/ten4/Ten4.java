@@ -1,7 +1,7 @@
 package com.hypothetic.ten4;
 
-import com.hypothetic.ten4.core.registry.config.ModConfigs;
 import com.hypothetic.ten4.core.registry.*;
+import com.hypothetic.ten4.core.registry.config.ModConfigs;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class Ten4 {
   public static final Logger LOGGER = LogManager.getLogger();
   public static final String ID = "ten4";
-  public static final String VERSION = "26.1.3";
+  public static final String NW_VER = "26.10";
   public static final boolean DATA_GEN = true;
 
   public Ten4(IEventBus modBus, ModContainer container) {

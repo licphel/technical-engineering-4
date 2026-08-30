@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "ten4:block/energy_unit"
+    },
+    "active=true": {
+      "model": "ten4:block/energy_unit_active"
+    }
+  }
+}

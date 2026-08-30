@@ -51,17 +51,6 @@ public abstract class DuctBlock extends BridgedEntityBlock implements SimpleWate
     return RenderShape.ENTITYBLOCK_ANIMATED;
   }
 
-  public abstract boolean hasConnection(Level level, Direction facing, BlockPos pos);
-
-  @Nullable
-  @Override
-  public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-    FluidState fluid = ctx.getLevel().getFluidState(ctx.getClickedPos());
-    return defaultBlockState()
-        .setValue(BuiltinBlockStates.ACTIVE, false)
-        .setValue(BlockStateProperties.WATERLOGGED, fluid.getType() == Fluids.WATER);
-  }
-
   @Override
   public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
     super.setPlacedBy(level, pos, state, placer, stack);
@@ -72,23 +61,6 @@ public abstract class DuctBlock extends BridgedEntityBlock implements SimpleWate
     ItemStack offhand = player.getItemInHand(InteractionHand.OFF_HAND);
     if (offhand.getItem() instanceof DyeItem dye) {
       DuctInteractions.dye(dye.getDyeColor(), level, pos);
-    }
-  }
-
-  @Override
-  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-    builder.add(BuiltinBlockStates.ACTIVE, BlockStateProperties.WATERLOGGED);
-  }
-
-  @Override
-  public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
-                              BlockPos neighborPos, boolean moved) {
-    super.neighborChanged(state, level, pos, neighborBlock, neighborPos, moved);
-    if (!level.isClientSide()) {
-      BlockEntity be = level.getBlockEntity(pos);
-      if (be instanceof ITransmitterProvider duct) {
-        duct.getTransmitter().refreshConnections();
-      }
     }
   }
 
@@ -116,13 +88,41 @@ public abstract class DuctBlock extends BridgedEntityBlock implements SimpleWate
   }
 
   @Override
-  public FluidState getFluidState(BlockState state) {
-    return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+  public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    return List.of(asItem().getDefaultInstance());
+  }
+
+  public abstract boolean hasConnection(Level level, Direction facing, BlockPos pos);
+
+  @Nullable
+  @Override
+  public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+    FluidState fluid = ctx.getLevel().getFluidState(ctx.getClickedPos());
+    return defaultBlockState()
+        .setValue(BuiltinBlockStates.ACTIVE, false)
+        .setValue(BlockStateProperties.WATERLOGGED, fluid.getType() == Fluids.WATER);
   }
 
   @Override
-  public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
-    return List.of(asItem().getDefaultInstance());
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    builder.add(BuiltinBlockStates.ACTIVE, BlockStateProperties.WATERLOGGED);
+  }
+
+  @Override
+  public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
+                              BlockPos neighborPos, boolean moved) {
+    super.neighborChanged(state, level, pos, neighborBlock, neighborPos, moved);
+    if (!level.isClientSide()) {
+      BlockEntity be = level.getBlockEntity(pos);
+      if (be instanceof ITransmitterProvider duct) {
+        duct.getTransmitter().refreshConnections();
+      }
+    }
+  }
+
+  @Override
+  public FluidState getFluidState(BlockState state) {
+    return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
   }
 
   @Override

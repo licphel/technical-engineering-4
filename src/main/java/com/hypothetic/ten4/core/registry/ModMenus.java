@@ -36,4 +36,5 @@ public class ModMenus {
 
   // Storage
   public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> LIQUID_UNIT = MENUS.register("liquid_unit", DEVICE_MENU_GENERATOR);
+  public static final DeferredHolder<MenuType<?>, MenuType<ContainerMenu>> ENERGY_UNIT = MENUS.register("energy_unit", DEVICE_MENU_GENERATOR);
 }

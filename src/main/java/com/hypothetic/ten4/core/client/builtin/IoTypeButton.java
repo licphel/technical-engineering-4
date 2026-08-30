@@ -23,7 +23,7 @@ public class IoTypeButton extends Button {
     super.onRender(g, pt);
 
     int u = 50 + state.type * 12;
-    g.draw(TextureRegion.of(BuiltinComponents.PANELS, u, 190, 12, 12), x, y, width, height);
+    g.draw(TextureRegion.of(BuiltinComponents.TEXTURE, u, 190, 12, 12), x, y, width, height);
   }
 
   @Override

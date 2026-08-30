@@ -38,6 +38,17 @@ public class FuelGeneratorBlockEntity extends ComplexRecipeGeneratorBlockEntity 
   }
 
   @Override
+  public @Nullable AbstractContainerMenu createMenu(int cid, Inventory inv, Player p) {
+    ContainerMenuLayout layout = new ContainerMenuLayout();
+    return new AugmentableContainerMenu(ModMenus.FUEL_GENERATOR.get(), cid, inv, this, layout);
+  }
+
+  @Override
+  public void onSoundPlay() {
+    playSound(1.0F, SoundEvents.FURNACE_FIRE_CRACKLE);
+  }
+
+  @Override
   protected void registerAdditionalSyncFields(Syncer syncer) {
     super.registerAdditionalSyncFields(syncer);
     TANK_0.register(syncer);
@@ -63,16 +74,5 @@ public class FuelGeneratorBlockEntity extends ComplexRecipeGeneratorBlockEntity 
   protected void initializeRecipeAutomation() {
     inputTanks.add(0);
     outputTanks.add(1);
-  }
-
-  @Override
-  public @Nullable AbstractContainerMenu createMenu(int cid, Inventory inv, Player p) {
-    ContainerMenuLayout layout = new ContainerMenuLayout();
-    return new AugmentableContainerMenu(ModMenus.FUEL_GENERATOR.get(), cid, inv, this, layout);
-  }
-
-  @Override
-  public void onSoundPlay() {
-    playSound(1.0F, SoundEvents.FURNACE_FIRE_CRACKLE);
   }
 }

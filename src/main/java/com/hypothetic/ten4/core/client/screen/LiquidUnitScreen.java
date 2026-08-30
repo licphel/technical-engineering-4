@@ -22,6 +22,6 @@ public class LiquidUnitScreen extends ComponentedContainerScreen<ContainerMenu> 
   @Override
   protected void buildElements() {
     add(BuiltinComponents.standardDeviceUI(this));
-    add(BuiltinComponents.fluidGauge(79, 18, menu.fieldsReader(), LiquidUnitBlockEntity.LIQUID_UNIT_0));
+    add(BuiltinComponents.fluidGauge(79, 18, menu.fieldsReader(), LiquidUnitBlockEntity.TANK_0));
   }
 }

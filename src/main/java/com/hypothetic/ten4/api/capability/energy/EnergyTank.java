@@ -3,9 +3,9 @@ package com.hypothetic.ten4.api.capability.energy;
 import java.util.function.IntSupplier;
 
 public class EnergyTank implements IEnergyProvider {
-  private int energy;
   private final IntSupplier capacity;
   private final IntSupplier throughput;
+  private int energy;
 
   public EnergyTank(int capacity, int throughput) {
     this.capacity = () -> capacity;

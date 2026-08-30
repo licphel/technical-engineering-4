@@ -22,9 +22,12 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class RefinerBlockEntity extends ComplexRecipeDeviceBlockEntity {
   public static final SyncedFluidStack TANK_0 = new SyncedFluidStack(0);
   public static final SyncedFluidStack TANK_1 = new SyncedFluidStack(1);
+  public static final SyncedFluidStack TANK_2 = new SyncedFluidStack(2);
 
   public RefinerBlockEntity(BlockPos pos, BlockState state) {
     super(pos, state);
@@ -35,6 +38,7 @@ public class RefinerBlockEntity extends ComplexRecipeDeviceBlockEntity {
     super.registerAdditionalSyncFields(syncer);
     TANK_0.register(syncer);
     TANK_1.register(syncer);
+    TANK_2.register(syncer);
   }
 
   @Override
@@ -44,6 +48,7 @@ public class RefinerBlockEntity extends ComplexRecipeDeviceBlockEntity {
     if (level != null && !level.isClientSide()) {
       TANK_0.sync(syncer, fluidInventory.getTank(0));
       TANK_1.sync(syncer, fluidInventory.getTank(1));
+      TANK_2.sync(syncer, fluidInventory.getTank(2));
     }
   }
 
@@ -58,6 +63,7 @@ public class RefinerBlockEntity extends ComplexRecipeDeviceBlockEntity {
     outputSlots.add(1);
     inputTanks.add(0);
     outputTanks.add(1);
+    outputTanks.add(2);
   }
 
   @Override
@@ -66,14 +72,15 @@ public class RefinerBlockEntity extends ComplexRecipeDeviceBlockEntity {
         .addSlot(new ItemSlot(SlotOption.INPUT, augSlotLimiter()).setValidator(this::isValidInput))
         .addSlot(new ItemSlot(SlotOption.OUTPUT, augSlotLimiter()))
         .addTank(new FluidTank(TankOption.INPUT, augTankLimiter(10_000)).setValidator(this::isValidInput))
+        .addTank(new FluidTank(TankOption.OUTPUT, augTankLimiter(10_000)))
         .addTank(new FluidTank(TankOption.OUTPUT, augTankLimiter(10_000)));
   }
 
   @Override
   public @Nullable AbstractContainerMenu createMenu(int cid, Inventory inv, Player p) {
     ContainerMenuLayout layout = new ContainerMenuLayout()
-        .add(0, 57, 35)
-        .add(1, 111, 35);
+        .add(0, 54, 35)
+        .add(1, 108, 35);
     return new AugmentableContainerMenu(ModMenus.REFINER.get(), cid, inv, this, layout);
   }
 

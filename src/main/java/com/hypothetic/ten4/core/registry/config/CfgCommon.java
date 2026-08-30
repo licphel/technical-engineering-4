@@ -130,6 +130,9 @@ public final class CfgCommon {
     public final ModConfigSpec.IntValue liquidUnitCapacity;
     public final ModConfigSpec.IntValue liquidUnitFluidThroughput;
 
+    public final ModConfigSpec.IntValue energyUnitCapacity;
+    public final ModConfigSpec.IntValue energyUnitThroughput;
+
     Others(ModConfigSpec.Builder b) {
       b.push("others");
       asphaltSpeedBoost = b.defineInRange("asphaltSpeedBoost", 0.25, 0.0, 1.0);
@@ -137,6 +140,9 @@ public final class CfgCommon {
 
       liquidUnitCapacity = b.defineInRange("liquidUnitCapacity", 200_000, 0, Integer.MAX_VALUE);
       liquidUnitFluidThroughput = b.defineInRange("liquidUnitFluidThroughput", 1000, 0, Integer.MAX_VALUE);
+
+      energyUnitCapacity = b.defineInRange("energyUnitCapacity", 1_000_000, 0, Integer.MAX_VALUE);
+      energyUnitThroughput = b.defineInRange("energyUnitThroughput", 5000, 0, Integer.MAX_VALUE);
       b.pop();
     }
   }

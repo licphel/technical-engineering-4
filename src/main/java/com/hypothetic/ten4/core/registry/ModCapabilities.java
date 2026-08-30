@@ -5,6 +5,8 @@ import com.hypothetic.ten4.api.blockentity.device.AbstractDeviceBlockEntity;
 import com.hypothetic.ten4.api.blockentity.duct.EnergyDuctBlockEntity;
 import com.hypothetic.ten4.api.blockentity.duct.FluidDuctBlockEntity;
 import com.hypothetic.ten4.api.blockentity.duct.ItemDuctBlockEntity;
+import com.hypothetic.ten4.core.capability.EnergyUnitEnergyHandler;
+import com.hypothetic.ten4.core.capability.LiquidUnitFluidHandler;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -13,6 +15,8 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 @EventBusSubscriber(modid = Ten4.ID)
@@ -45,6 +49,15 @@ public class ModCapabilities {
 
     // Storage
     register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.LIQUID_UNIT.get(), AbstractDeviceBlockEntity::getFluidHandler);
+    register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.ENERGY_UNIT.get(), AbstractDeviceBlockEntity::getEnergyStorage);
+
+    // Utility
+    register(event, Capabilities.ItemHandler.BLOCK, ModBlockEntities.VOID_UNIT.get(), AbstractDeviceBlockEntity::getItemHandler);
+    register(event, Capabilities.FluidHandler.BLOCK, ModBlockEntities.VOID_UNIT.get(), AbstractDeviceBlockEntity::getFluidHandler);
+
+    // Unit item capabilities — the item form stores its content
+    event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> new LiquidUnitFluidHandler(stack), ModItems.LIQUID_UNIT.get());
+    event.registerItem(Capabilities.EnergyStorage.ITEM, (stack, ctx) -> new EnergyUnitEnergyHandler(stack), ModItems.ENERGY_UNIT.get());
 
     // DuctTiers
     register(event, Capabilities.EnergyStorage.BLOCK, ModBlockEntities.COPPER_ENERGY_DUCT.get(), EnergyDuctBlockEntity::getEnergyStorage);

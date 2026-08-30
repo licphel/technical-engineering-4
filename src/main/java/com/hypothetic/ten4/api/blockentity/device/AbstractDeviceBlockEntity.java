@@ -1,8 +1,8 @@
 package com.hypothetic.ten4.api.blockentity.device;
 
-import com.hypothetic.ten4.Ten4;
 import com.hypothetic.ten4.api.ITranslatable;
-import com.hypothetic.ten4.api.blockentity.ILootProvider;
+import com.hypothetic.ten4.api.blockentity.IClickFluidInteractable;
+import com.hypothetic.ten4.api.blockentity.IRecoverablePlace;
 import com.hypothetic.ten4.api.blockentity.RedstoneAwareBlockEntity;
 import com.hypothetic.ten4.api.capability.energy.DirectionalEnergyStorage;
 import com.hypothetic.ten4.api.capability.energy.EnergyQueue;
@@ -21,15 +21,14 @@ import com.hypothetic.ten4.core.block.BuiltinBlockStates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -46,7 +45,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
-    implements ILootProvider, ITranslatable, IDirectionalEnergyProvider, IDirectionalFluidProvider, IDirectionalItemProvider, MenuProvider {
+    implements ITranslatable,
+               IRecoverablePlace,
+               IClickFluidInteractable,
+               IDirectionalEnergyProvider,
+               IDirectionalFluidProvider,
+               IDirectionalItemProvider,
+               MenuProvider {
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IEnergyStorage> ENERGY = AbstractDeviceBlockEntity::getEnergyStorage;
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IItemHandler> ITEM = AbstractDeviceBlockEntity::getItemHandler;
   public static final ICapabilityProvider<AbstractDeviceBlockEntity, @Nullable Direction, IFluidHandler> FLUID = AbstractDeviceBlockEntity::getFluidHandler;
@@ -561,6 +566,21 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     inventory.fromTag(tag.getCompound("Inventory"), reg);
     fluidInventory.fromTag(tag.getCompound("FluidTank"), reg);
 
+    loadCfg(tag);
+  }
+
+  @Override
+  protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
+    super.saveAdditional(tag, reg);
+
+    tag.putInt("Energy", getEnergy());
+    tag.put("Inventory", inventory.createTag(reg));
+    tag.put("FluidTank", fluidInventory.createTag(reg));
+
+    saveCfg(tag);
+  }
+
+  protected void loadCfg(CompoundTag tag) {
     CompoundTag cfg = tag.getCompound("Configuration");
     int enf = cfg.getInt("EnergyFaceMasks");
     int itf = cfg.getInt("ItemFaceMasks");
@@ -587,14 +607,7 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
     rebuildFluidQueues();
   }
 
-  @Override
-  protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
-    super.saveAdditional(tag, reg);
-
-    tag.putInt("Energy", getEnergy());
-    tag.put("Inventory", inventory.createTag(reg));
-    tag.put("FluidTank", fluidInventory.createTag(reg));
-
+  protected void saveCfg(CompoundTag tag) {
     CompoundTag cfg = new CompoundTag();
     cfg.putInt("EnergyFaceMasks", FaceModePacker.packFaces(energyFaceConfig));
     cfg.putInt("ItemFaceMasks", FaceModePacker.packFaces(itemFaceConfig));
@@ -622,13 +635,30 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   }
 
   @Override
-  public void getLoot(List<ItemStack> loot, boolean shouldDropSelf) {
+  public ItemStack createSelfStack() {
+    ItemStack stack = super.createSelfStack();
+    //CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+    //saveCfg(tag);
+    //stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+    return stack;
+  }
+
+  @Override
+  public void getLoot(List<ItemStack> loot) {
     for (int i = 0; i < inventory.getSlots(); i++) {
       if (inventory.getStackInSlot(i).isEmpty()) {
         continue;
       }
       loot.add(inventory.getStackInSlot(i));
     }
+  }
+
+  @Override
+  public void onPlaced(@Nullable LivingEntity entity, ItemStack stack) {
+    //CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+    //if (!tag.isEmpty()) {
+    //loadCfg(tag);
+    //}
   }
 
   @Override
@@ -646,5 +676,15 @@ public abstract class AbstractDeviceBlockEntity extends RedstoneAwareBlockEntity
   }
 
   public void onSoundPlay() {
+  }
+
+  @Override
+  public IFluidHandler getInteractedFluidInputView() {
+    return fluidInventory;
+  }
+
+  @Override
+  public IFluidHandler getInteractedFluidOutputView() {
+    return fluidInventory;
   }
 }

@@ -112,12 +112,12 @@ public abstract class JeiModCategory<T> implements IRecipeCategory<T> {
 
   protected void addItemInput(IRecipeLayoutBuilder builder, Complex input, int x, int y) {
     builder.addInputSlot(x, y)
-        .addItemStacks(input.itemStacks())
-        .setStandardSlotBackground();
+        .addItemStacks(input.itemStacks());
+        //.setStandardSlotBackground();
   }
 
   protected void addItemOutput(IRecipeLayoutBuilder builder, Complex output, int x, int y, boolean outputSlot) {
-     IRecipeSlotBuilder sb = builder.addOutputSlot(x, y)
+    IRecipeSlotBuilder sb = builder.addOutputSlot(x, y)
         .addItemStack(output.symbolItem())
         .addRichTooltipCallback((recipeSlotView, tooltip) -> {
           if (output.chance() < 1) {
@@ -126,11 +126,11 @@ public abstract class JeiModCategory<T> implements IRecipeCategory<T> {
             tooltip.add(mc);
           }
         });
-     if (outputSlot) {
-       sb.setOutputSlotBackground();
-     } else {
-       sb.setStandardSlotBackground();
-     }
+    if (outputSlot) {
+      //sb.setOutputSlotBackground();
+    } else {
+      //sb.setStandardSlotBackground();
+    }
   }
 
   protected void addItemOutput(IRecipeLayoutBuilder builder, Complex output, int x, int y) {
@@ -144,7 +144,7 @@ public abstract class JeiModCategory<T> implements IRecipeCategory<T> {
         .setOverlay(FLUID_OVERLAY, 0, 0);
 
     if (input.count() > 0) {
-      sb.setFluidRenderer(input.count(), false, 16, 48);
+      sb.setFluidRenderer(input.count() * 2L, false, 16, 48);
     }
   }
 
@@ -153,10 +153,17 @@ public abstract class JeiModCategory<T> implements IRecipeCategory<T> {
     IRecipeSlotBuilder sb = builder.addOutputSlot(x, y)
         .addFluidStack(stack.getFluid(), stack.getAmount())
         .setBackground(FLUID_BACKGROUND, 0, 0)
-        .setOverlay(FLUID_OVERLAY, 0, 0);
+        .setOverlay(FLUID_OVERLAY, 0, 0)
+        .addRichTooltipCallback((recipeSlotView, tooltip) -> {
+          if (output.chance() < 1) {
+            MutableComponent mc = Component.translatable(Ten4.lang("misc.chance")).withStyle(ChatFormatting.GOLD);
+            mc.append(Component.literal((int) (output.chance() * 100) + "%").withStyle(ChatFormatting.GRAY));
+            tooltip.add(mc);
+          }
+        });
 
     if (output.count() > 0) {
-      sb.setFluidRenderer(output.count(), false, 16, 48);
+      sb.setFluidRenderer(output.count() * 2L, false, 16, 48);
     }
   }
 
@@ -209,13 +216,6 @@ public abstract class JeiModCategory<T> implements IRecipeCategory<T> {
       }
 
       @Override
-      public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
-        if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-          tooltip.add(Component.translatable("ten4.misc.supplement_time").append(burnTime + "t"));
-        }
-      }
-
-      @Override
       public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         EnhancedGuiGraphics g = new EnhancedGuiGraphics(guiGraphics);
 
@@ -228,6 +228,13 @@ public abstract class JeiModCategory<T> implements IRecipeCategory<T> {
         if (fill > 0) {
           int fillUV = Math.round(height * frac);
           g.draw(FUEL_FULL, 0, height - fill, width, fill, 0, height - fillUV, width, fillUV);
+        }
+      }
+
+      @Override
+      public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
+        if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+          tooltip.add(Component.translatable("ten4.misc.supplement_time").append(burnTime + "t"));
         }
       }
     });
@@ -245,13 +252,6 @@ public abstract class JeiModCategory<T> implements IRecipeCategory<T> {
       }
 
       @Override
-      public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
-        if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-          tooltip.add(Component.translatable("ten4.misc.consumed_time").append(time + "t"));
-        }
-      }
-
-      @Override
       public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         EnhancedGuiGraphics g = new EnhancedGuiGraphics(guiGraphics);
 
@@ -264,6 +264,13 @@ public abstract class JeiModCategory<T> implements IRecipeCategory<T> {
         if (fill > 0) {
           int fillUV = Math.round(width * frac);
           g.draw(PROGRESS_FULL, 0, 0, fill, height, 0, 0, fillUV, height);
+        }
+      }
+
+      @Override
+      public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
+        if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+          tooltip.add(Component.translatable("ten4.misc.consumed_time").append(time + "t"));
         }
       }
     });

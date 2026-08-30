@@ -7,11 +7,14 @@ import com.hypothetic.ten4.api.item.IAugment;
 import com.hypothetic.ten4.api.item.MuteAugment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.IntSupplier;
 
 public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEntity {
@@ -89,26 +92,40 @@ public abstract class AugmentableDeviceBlockEntity extends AbstractDeviceBlockEn
   @Override
   protected void loadAdditional(CompoundTag tag, HolderLookup.Provider reg) {
     super.loadAdditional(tag, reg);
-
     augments.fromTag(tag.getCompound("augments"), reg);
   }
 
   @Override
   protected void saveAdditional(CompoundTag tag, HolderLookup.Provider reg) {
     super.saveAdditional(tag, reg);
-
     tag.put("augments", augments.createTag(reg));
   }
 
   @Override
-  public void getLoot(List<ItemStack> loot, boolean shouldDropSelf) {
-    super.getLoot(loot, shouldDropSelf);
+  public ItemStack createSelfStack() {
+    assert level != null;
 
-    for (int i = 0; i < augments.getSlots(); i++) {
-      if (augments.getStackInSlot(i).isEmpty()) {
-        continue;
-      }
-      loot.add(augments.getStackInSlot(i));
+    ItemStack stack = super.createSelfStack();
+
+    if (!augments.isEmpty()) {
+      CompoundTag beTag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+      beTag.put("augments", augments.createTag(level.registryAccess()));
+      stack.set(DataComponents.CUSTOM_DATA, CustomData.of(beTag));
+    }
+
+    return stack;
+  }
+
+  @Override
+  public void onPlaced(@Nullable LivingEntity entity, ItemStack stack) {
+    super.onPlaced(entity, stack);
+
+    if (level == null || level.isClientSide() || stack.isEmpty()) {
+      return;
+    }
+    CustomData cd = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+    if (cd.contains("augments")) {
+      augments.fromTag(cd.copyTag().getCompound("augments"), level.registryAccess());
     }
   }
 

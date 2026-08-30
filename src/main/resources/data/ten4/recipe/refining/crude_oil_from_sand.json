@@ -1,0 +1,20 @@
+{
+  "type": "ten4:refining",
+  "inputs": [
+    {
+      "item": "minecraft:sand"
+    },
+    {
+      "fluid_tag": "c:water",
+      "amount": 1000
+    }
+  ],
+  "outputs": [
+    {
+      "fluid": "ten4:crude_oil",
+      "amount": 50,
+      "chance": 0.05
+    }
+  ],
+  "time": 500
+}

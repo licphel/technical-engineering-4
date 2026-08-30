@@ -40,17 +40,23 @@ public final class ModConfigs {
     SERVER_SPEC = serverB.build();
   }
 
-  public static void hook(Runnable r) { HOOKS.add(r); }
+  public static void hook(Runnable r) {
+    HOOKS.add(r);
+  }
 
   @SubscribeEvent
   static void onLoad(ModConfigEvent.Loading e) {
     IConfigSpec spec = e.getConfig().getSpec();
-    if (spec == COMMON_SPEC || spec == CLIENT_SPEC || spec == SERVER_SPEC) HOOKS.forEach(Runnable::run);
+    if (spec == COMMON_SPEC || spec == CLIENT_SPEC || spec == SERVER_SPEC) {
+      HOOKS.forEach(Runnable::run);
+    }
   }
 
   @SubscribeEvent
   static void onReload(ModConfigEvent.Reloading e) {
     IConfigSpec spec = e.getConfig().getSpec();
-    if (spec == COMMON_SPEC || spec == CLIENT_SPEC || spec == SERVER_SPEC) HOOKS.forEach(Runnable::run);
+    if (spec == COMMON_SPEC || spec == CLIENT_SPEC || spec == SERVER_SPEC) {
+      HOOKS.forEach(Runnable::run);
+    }
   }
 }

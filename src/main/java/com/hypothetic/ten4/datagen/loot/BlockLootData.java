@@ -27,8 +27,8 @@ public class BlockLootData extends BlockLootSubProvider {
     add(ModBlocks.TITANIUM_ORE.get(), createOreDrop(ModBlocks.TITANIUM_ORE.get(), ModItems.RAW_TITANIUM.get()));
     add(ModBlocks.DEEPSLATE_TITANIUM_ORE.get(), createOreDrop(ModBlocks.DEEPSLATE_TITANIUM_ORE.get(), ModItems.RAW_TITANIUM.get()));
     add(ModBlocks.MONAZITE_ORE.get(), createOreDrop(ModBlocks.MONAZITE_ORE.get(), ModItems.MONAZITE.get()));
-    add(ModBlocks.SULFUR_ORE.get(), createOreDrop(ModBlocks.SULFUR_ORE.get(), ModItems.SULFUR_DUST.get()));
-    dropSelf(ModBlocks.BORAX_BLOCK.get());
+    dropSelf(ModBlocks.SULFUR.get());
+    dropSelf(ModBlocks.BORAX.get());
     dropSelf(ModBlocks.OIL_SAND.get());
 
     // Storage blocks
@@ -38,15 +38,7 @@ public class BlockLootData extends BlockLootSubProvider {
     dropSelf(ModBlocks.RAW_TITANIUM_BLOCK.get());
 
     // Devices
-    dropSelf(ModBlocks.DEVICE_CASING.get());
-    dropSelf(ModBlocks.PULVERIZER.get());
-    dropSelf(ModBlocks.PRESS.get());
-    dropSelf(ModBlocks.SMELTER.get());
-    dropSelf(ModBlocks.REFINER.get());
-    dropSelf(ModBlocks.WATER_PUMP.get());
-    dropSelf(ModBlocks.HEAT_GENERATOR.get());
-    dropSelf(ModBlocks.FUEL_GENERATOR.get());
-    dropSelf(ModBlocks.LIQUID_UNIT.get());
+    // Handled hardcoded
 
     // Ducts
     dropSelf(ModBlocks.COPPER_ENERGY_DUCT.get());
@@ -61,13 +53,13 @@ public class BlockLootData extends BlockLootSubProvider {
   }
 
   @Override
-  protected void add(Block block, LootTable.Builder table) {
-    super.add(block, table);
-    knownBlocks.add(block);
+  protected Iterable<Block> getKnownBlocks() {
+    return knownBlocks;
   }
 
   @Override
-  protected Iterable<Block> getKnownBlocks() {
-    return knownBlocks;
+  protected void add(Block block, LootTable.Builder table) {
+    super.add(block, table);
+    knownBlocks.add(block);
   }
 }

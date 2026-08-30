@@ -24,6 +24,22 @@ public class BlockTagData extends net.minecraft.data.tags.TagsProvider<Block> {
     super(output, Registries.BLOCK, lookupProvider, Ten4.ID, existingFileHelper);
   }
 
+  private static ResourceKey<Block> key(DeferredHolder<?, ?> holder) {
+    return ResourceKey.create(Registries.BLOCK, holder.getId());
+  }
+
+  private static ResourceLocation ten4(String path) {
+    return Ten4.id(path);
+  }
+
+  private static TagKey<Block> cTag(String path) {
+    return TagKey.create(Registries.BLOCK, cLoc(path));
+  }
+
+  private static ResourceLocation cLoc(String path) {
+    return ResourceLocation.fromNamespaceAndPath("c", path);
+  }
+
   @Override
   protected void addTags(HolderLookup.Provider provider) {
     tag(DUCTS)
@@ -41,10 +57,13 @@ public class BlockTagData extends net.minecraft.data.tags.TagsProvider<Block> {
         .add(key(ModBlocks.PULVERIZER))
         .add(key(ModBlocks.PRESS))
         .add(key(ModBlocks.SMELTER))
+        .add(key(ModBlocks.REFINER))
         .add(key(ModBlocks.WATER_PUMP))
         .add(key(ModBlocks.HEAT_GENERATOR))
         .add(key(ModBlocks.FUEL_GENERATOR))
-        .add(key(ModBlocks.LIQUID_UNIT));
+        .add(key(ModBlocks.LIQUID_UNIT))
+        .add(key(ModBlocks.ENERGY_UNIT))
+        .add(key(ModBlocks.VOID_UNIT));
 
     tag(BlockTags.MINEABLE_WITH_SHOVEL)
         .add(key(ModBlocks.OIL_SAND));
@@ -54,7 +73,7 @@ public class BlockTagData extends net.minecraft.data.tags.TagsProvider<Block> {
         .add(key(ModBlocks.TIN_BLOCK)).add(key(ModBlocks.RAW_TIN_BLOCK))
         .add(key(ModBlocks.TITANIUM_ORE)).add(key(ModBlocks.DEEPSLATE_TITANIUM_ORE))
         .add(key(ModBlocks.TITANIUM_BLOCK)).add(key(ModBlocks.RAW_TITANIUM_BLOCK))
-        .add(key(ModBlocks.MONAZITE_ORE)).add(key(ModBlocks.SULFUR_ORE)).add(key(ModBlocks.BORAX_BLOCK))
+        .add(key(ModBlocks.MONAZITE_ORE)).add(key(ModBlocks.SULFUR)).add(key(ModBlocks.BORAX))
         .add(key(ModBlocks.DEVICE_CASING))
         .addTag(DEVICES).addTag(DUCTS);
 
@@ -68,34 +87,18 @@ public class BlockTagData extends net.minecraft.data.tags.TagsProvider<Block> {
     tag(BlockTags.NEEDS_STONE_TOOL)
         .add(key(ModBlocks.TIN_ORE)).add(key(ModBlocks.DEEPSLATE_TIN_ORE))
         .add(key(ModBlocks.TIN_BLOCK)).add(key(ModBlocks.RAW_TIN_BLOCK))
-        .add(key(ModBlocks.SULFUR_ORE)).add(key(ModBlocks.BORAX_BLOCK));
+        .add(key(ModBlocks.SULFUR)).add(key(ModBlocks.BORAX)).add(key(ModBlocks.ASPHALT));
 
     tag(cTag("ores/tin")).add(key(ModBlocks.TIN_ORE)).add(key(ModBlocks.DEEPSLATE_TIN_ORE));
     tag(cTag("ores/titanium")).add(key(ModBlocks.TITANIUM_ORE)).add(key(ModBlocks.DEEPSLATE_TITANIUM_ORE));
     tag(cTag("ores/monazite")).add(key(ModBlocks.MONAZITE_ORE));
-    tag(cTag("ores/sulfur")).add(key(ModBlocks.SULFUR_ORE));
+    tag(cTag("ores/sulfur")).add(key(ModBlocks.SULFUR));
     tag(cTag("ores")).addTag(cTag("ores/tin")).addTag(cTag("ores/titanium")).addTag(cTag("ores/monazite")).addTag(cTag("ores/sulfur"));
     tag(cTag("storage_blocks/tin")).add(key(ModBlocks.TIN_BLOCK));
     tag(cTag("storage_blocks/raw_tin")).add(key(ModBlocks.RAW_TIN_BLOCK));
     tag(cTag("storage_blocks/titanium")).add(key(ModBlocks.TITANIUM_BLOCK));
     tag(cTag("storage_blocks/raw_titanium")).add(key(ModBlocks.RAW_TITANIUM_BLOCK));
-    tag(cTag("storage_blocks/borax")).add(key(ModBlocks.BORAX_BLOCK));
+    tag(cTag("storage_blocks/borax")).add(key(ModBlocks.BORAX));
     tag(cTag("storage_blocks")).addTag(cTag("storage_blocks/tin")).addTag(cTag("storage_blocks/raw_tin")).addTag(cTag("storage_blocks/titanium")).addTag(cTag("storage_blocks/raw_titanium")).addTag(cTag("storage_blocks/borax"));
-  }
-
-  private static ResourceKey<Block> key(DeferredHolder<?, ?> holder) {
-    return ResourceKey.create(Registries.BLOCK, holder.getId());
-  }
-
-  private static ResourceLocation ten4(String path) {
-    return Ten4.id(path);
-  }
-
-  private static TagKey<Block> cTag(String path) {
-    return TagKey.create(Registries.BLOCK, cLoc(path));
-  }
-
-  private static ResourceLocation cLoc(String path) {
-    return ResourceLocation.fromNamespaceAndPath("c", path);
   }
 }
